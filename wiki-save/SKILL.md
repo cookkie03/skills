@@ -1,0 +1,123 @@
+---
+name: wiki-save
+description: >
+  Saves a query response, insight, or elaborated analysis as a permanent wiki page.
+  Use when the user says: "salva questa risposta", "aggiungi al wiki", "memorizza questo",
+  "crea una pagina su questo", "salva l'analisi", "voglio tenermi questa sintesi".
+---
+
+# Wiki Save
+
+Trasforma una risposta elaborata in una pagina wiki permanente.
+
+---
+
+## Contratto comune
+
+Questa skill deve funzionare sia in vault generalisti sia in vault di progetto.
+
+Il file istruzioni locale del vault può ridefinire:
+
+- dove vivono decisioni, sintesi, framework e pagine operative
+- quali tipi frontmatter sono canonici
+- se `raw_source_path` va tenuto o omesso per pagine nate da query
+
+Usa i path standard come default, ma lascia prevalere gli override locali.
+
+---
+
+## Quando salvare
+
+Salva se la risposta è:
+
+- una sintesi cross-source
+- un'analisi non ovvia
+- una decisione con motivazione
+- un framework o checklist riutilizzabile
+- un insight che merita memoria durevole
+
+Non salvare se è solo:
+
+- una risposta fattuale semplice già presente nel wiki
+- un briefing volatile
+- un output destinato a un altro sistema
+
+---
+
+## Procedura
+
+### 1. Determina il tipo di pagina
+
+| Tipo risposta | Default | `type` |
+|--------------|---------|--------|
+| Analisi / comparazione | `wiki/syntheses/<slug>.md` | `synthesis` |
+| Framework / guida | `wiki/concepts/<slug>.md` | `concept` |
+| Decisione | `wiki/decisions/<slug>.md` | `decision` |
+| Risposta su entità specifica | aggiorna `wiki/entities/<slug>.md` | `entity` |
+
+Se il vault usa cartelle o tipi diversi ma equivalenti, salva lì mantenendo la stessa intenzione semantica.
+
+### 2. Crea o aggiorna la pagina
+
+Frontmatter base suggerito:
+
+```yaml
+---
+title: ""
+type: synthesis | concept | decision
+tags: []
+sources:
+  - "[[sources/slug1]]"
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+confidence: medium
+status: reviewed
+related: []
+---
+```
+
+Per decisioni, aggiungi il campo locale appropriato, di default `decision_status`.
+
+### 3. Collega la pagina al wiki
+
+- aggiungi wikilink dalle pagine che ne beneficiano
+- aggiorna `wiki/_meta/index.md`
+- aggiorna `overview.md` solo se cambia davvero la mappa del vault
+
+### 4. Log e hot cache
+
+Appendi al log:
+
+```markdown
+## [YYYY-MM-DD] save | Titolo pagina
+- **Type**: synthesis / concept / decision
+- **Sources consulted**: [[sources/slug1]], [[concepts/slug2]]
+- **New page**: [[syntheses/slug]]
+```
+
+Aggiorna `hot-cache.md` con la nuova pagina tra le pagine toccate.
+
+---
+
+## Decisioni
+
+Una decisione può nascere da:
+
+- una query
+- una discussione di lavoro
+- un ingest precedente
+- una riflessione esplicita dell'utente
+
+Formato minimo consigliato:
+
+```markdown
+## Contesto
+
+## Opzioni valutate
+
+## Decisione
+
+## Motivazione
+
+## Conseguenze
+```
