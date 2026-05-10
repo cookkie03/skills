@@ -65,17 +65,33 @@ python .agents/skills/wiki-preprocess/scripts/preprocess-audio.py --dry-run
 
 ---
 
-## Immagini
+## Link e URL
 
-Per ora il preprocessing delle immagini è spesso manuale.
+Quando l'input è un link o un URL da ingestare, attiva la skill `crawl4ai`.
 
-Se il modello supporta vision:
+Flusso operativo:
 
-- descrivi direttamente il contenuto
+1. Riconosci i link in ingresso come risorsa web anziché file locale
+2. Attiva `crawl4ai` per il crawling e l'estrazione del contenuto
+3. Usa il contenuto estratto come base per la conversione o l'ingest successivo
 
-Altrimenti:
+---
 
-- chiedi all'utente una descrizione testuale da poter utilizzare per continuare
+## Immagini e PDF scansionati
+
+Per immagini e PDF scansionati (non-native-text), attiva la skill `glm-ocr` e delega a essa l'estrazione del testo.
+
+- Non riassumere in questa skill il comportamento interno di `glm-ocr`.
+- Usa `glm-ocr` come skill specializzata per trasformare l'immagine o il PDF scansionato in Markdown.
+- Salva il risultato in una cartella dedicata (es. `raw/ocr-output/`) o accanto al file originale come `.ocr.md`.
+- Fornisci il `.ocr.md` prodotto come source a `wiki-ingest`.
+
+Se `glm-ocr` non è configurato o Ollama non è disponibile:
+
+- se il modello corrente supporta vision: descrivi direttamente il contenuto dell'immagine
+- altrimenti: chiedi all'utente una descrizione testuale
+
+**PDF native-text** (non scansionati): leggi direttamente senza OCR — `glm-ocr` aggiunge overhead inutile.
 
 ---
 
@@ -88,3 +104,9 @@ Quando trova un file audio:
 1. cerca `.transcription.md`
 2. se esiste, usa quello
 3. se non esiste, richiede `wiki-preprocess`
+
+Quando trova un'immagine o un PDF scansionato:
+
+1. cerca `.ocr.md` accanto al file
+2. se esiste, usa quello
+3. se non esiste, usa `glm-ocr` via `wiki-preprocess` per generarlo

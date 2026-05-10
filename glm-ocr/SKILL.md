@@ -51,6 +51,8 @@ with GlmOcr(config_path=config) as ocr:
 - `result.json` — risultato strutturato con bounding box per blocco
 - `result.markdown_result` — stringa Markdown accessibile direttamente in Python
 
+> Nota: i risultati OCR devono essere salvati con lo stesso nome e lo stesso percorso dei file di origine, per mantenere la corrispondenza tra input e output.
+
 ## Troubleshooting
 
 **502 Bad Gateway**: assicurati che `config.yaml` abbia `api_path: /api/generate` e `api_mode: ollama_generate`.
