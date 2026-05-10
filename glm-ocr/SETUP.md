@@ -1,13 +1,32 @@
-# GLM-OCR — Setup
+# GLM-OCR — Setup (Ollama)
 
-Follow the official repository: **https://github.com/zai-org/GLM-OCR**
+## 1. Installa Ollama
 
-It covers installation, model download, backend choice (local PyTorch / transformers, vLLM, hosted API, or any other supported deployment), and configuration. Use whichever backend the repo recommends for the target environment; this skill does not impose one.
+```bash
+curl -fsSL https://ollama.ai/install.sh | sh
+```
 
-After setup, verify:
+## 2. Scarica il modello
+
+```bash
+ollama pull glm-ocr:latest
+```
+
+## 3. Avvia il server
+
+```bash
+ollama serve
+```
+
+Gira su `http://localhost:11434`. Di solito parte automaticamente dopo l'installazione.
+
+## 4. Verifica
 
 ```bash
 python -c "from glmocr import GlmOcr; print('ok')"
+ollama list  # glm-ocr:latest deve comparire
 ```
 
-If a custom `config.yaml` is needed for the chosen backend, place it in the working directory and pass it as `GlmOcr(config="config.yaml")`.
+---
+
+Il `config.yaml` nella stessa cartella di questa skill è già configurato per Ollama. Copialo nella working directory prima di usare la skill, oppure passane il path direttamente a `GlmOcr(config_path=...)`.

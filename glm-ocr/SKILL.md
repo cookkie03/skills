@@ -12,30 +12,49 @@ description: >
 
 # GLM-OCR
 
-Extracts text, tables, and formulas from images/PDFs. Output: clean Markdown + structured JSON.
+Extracts text, tables, and formulas from images/PDFs via a local Ollama server. Output: clean Markdown + structured JSON.
 
-Reference: https://github.com/zai-org/GLM-OCR — follow that repo for any setup, configuration, or model-backend choice. This skill stays backend-agnostic and does not pin Ollama, vLLM, or transformers.
+## Prerequisito
+
+Ollama deve girare localmente con il modello scaricato. Se non è configurato, vedi `SETUP.md`.
+
+Verifica rapida:
+```bash
+ollama list  # deve mostrare glm-ocr:latest
+```
 
 ## Usage
 
+Il `config.yaml` nella directory della skill configura il backend Ollama. Passane il path a `GlmOcr`:
+
 ```python
 from glmocr import GlmOcr
-ocr = GlmOcr()                            # or GlmOcr(config="config.yaml")
-result = ocr.parse(images=["file.pdf"])   # accepts .png .jpg .jpeg .webp .pdf, single or list
-result.save("./output")                   # writes result.md + result.json
+
+config = "/path/to/skills/glm-ocr/config.yaml"  # adatta al path reale
+
+with GlmOcr(config_path=config) as ocr:
+    result = ocr.parse("file.pdf")   # accetta .png .jpg .jpeg .webp .pdf
+    result.save("./output")          # scrive result.md + result.json
+    print(result.markdown_result)    # oppure leggi direttamente
 ```
 
-Pass a `config.yaml` only if the chosen backend requires one (see the official repo).
+Per più file:
+```python
+with GlmOcr(config_path=config) as ocr:
+    result = ocr.parse(["page1.png", "page2.png"])
+    result.save("./output")
+```
 
 ## Output
 
-- `result.md` — Markdown (tables in GFM, formulas as `$...$` / `$$...$$`)
-- `result.json` — structured result with bounding boxes per block
+- `result.md` — Markdown (tabelle GFM, formule come `$...$` / `$$...$$`)
+- `result.json` — risultato strutturato con bounding box per blocco
+- `result.markdown_result` — stringa Markdown accessibile direttamente in Python
 
-## Setup
+## Troubleshooting
 
-If `glmocr` is not installed or the model isn't available, see `SETUP.md` — it points to the official repo.
+**502 Bad Gateway**: assicurati che `config.yaml` abbia `api_path: /api/generate` e `api_mode: ollama_generate`.
 
-## When to use this skill
+**Modello non trovato**: esegui `ollama pull glm-ocr:latest`.
 
-Use it for files on the local filesystem that need OCR: scanned PDFs, photographed pages, screenshots of dense documents, handwriting. For native text PDFs that can be read directly, prefer reading the file as text — OCR adds overhead without benefit.
+**Ollama non risponde**: esegui `ollama serve`.
