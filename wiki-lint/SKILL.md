@@ -14,18 +14,9 @@ Health check del wiki. Produce un report strutturato con priorità e azioni conc
 
 ## Contratto comune
 
-Questa skill deve funzionare in qualunque profilo di vault dopo l'init.
-
-Non assumere che ogni vault abbia:
-
-- `daily-notes/`
-- `wiki/lists/`
-- la stessa struttura interna
-
 Il file istruzioni locale del vault può dichiarare:
 
 - cartelle equivalenti per ops, lists, build, artifacts
-- uso o non uso di daily notes
 - tag canonici e frontmatter minimi
 - policy su archivio raw e pending ingest
 
@@ -37,7 +28,7 @@ Il lint deve controllare prima gli invarianti comuni, poi le convenzioni specifi
 
 Leggi prima di iniziare:
 
-1. `wiki/_meta/log.md`
+1. `wiki/_meta/log.md	`
 2. `wiki/_meta/index.md`
 3. `wiki/_meta/taxonomy.md`
 4. `wiki/_meta/hot-cache.md`
@@ -92,15 +83,19 @@ Classifica ogni problema come:
 # Wiki Lint Report — [YYYY-MM-DD]
 
 ## CRITICO
+
 - [problema] -> [azione concreta]
 
 ## ATTENZIONE
+
 - [problema] -> [azione concreta]
 
 ## SUGGERIMENTO
+
 - [problema] -> [azione concreta]
 
 ## Statistiche
+
 - Pagine totali: N
 - Pagine orfane: N
 - Pending ingest: N

@@ -31,7 +31,6 @@ Il contratto locale deve dichiarare sempre:
 
 - cartelle reali
 - tipi pagina canonici
-- uso o non uso di `daily-notes/`
 - aree opzionali come `lists`, `ops`, `build`, `decisions`, `artifacts`
 - mapping locali come `raw/papers` vs `raw/pdfs`
 
@@ -55,8 +54,7 @@ Poni le domande in modo conversazionale.
 ### Blocco B — Contenuto e flusso
 
 4. Che materiale finirà in `raw/`?
-5. Userai `daily-notes/`?
-6. Ci sono aree già chiare o vuoi partire minimale?
+5. Ci sono aree già chiare o vuoi partire minimale?
 
 ### Blocco C — Operatività
 

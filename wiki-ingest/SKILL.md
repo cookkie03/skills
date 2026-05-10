@@ -26,7 +26,6 @@ Copre due scenari:
 2. **MAI fare riassunti riduttivi**: Se il source contiene 10 appunti tecnici su un esercizio, la pagina wiki deve contenere 10 appunti tecnici. Riorganizza, ordina, ma non eliminare.
 3. **Preserva la grana del dato**: Se un appunto è espresso in modo colloquiale o specifico, mantieni quella precisione. Non "ripulire" eccessivamente se questo comporta perdita di significato.
 
-
 ## Contratto comune
 
 Questa skill deve funzionare bene in vault di progetto, second brain, wiki di ricerca e setup ibridi.
@@ -82,14 +81,14 @@ Se il file ha un formato non supportato, non chiaramente leggibile, o non facilm
 
 Prima di procedere, determina il tipo logico:
 
-| Tipo logico | Esempi | Azione primaria |
-|------|-------------|-----------------|
-| Articolo / web clip | articolo, URL salvato, clipping | Source page + concepts/entities |
-| Documento / paper | PDF, paper, memo lungo | Source page + summary esteso |
-| Conversazione / call | audio, transcript, note meeting | Source page + action items verso area operativa |
-| Idea grezza | nota veloce, pensiero, sketch | Source o concept `draft` |
-| Dataset / file strutturato | CSV, export, tabella | Source page + analisi -> synthesis |
-| Documento immutabile di riferimento | allegato da citare | Link o page reference, non ingest completo se il vault lo prevede |
+| Tipo logico                         | Esempi                          | Azione primaria                                                   |
+| ----------------------------------- | ------------------------------- | ----------------------------------------------------------------- |
+| Articolo / web clip                 | articolo, URL salvato, clipping | Source page + concepts/entities                                   |
+| Documento / paper                   | PDF, paper, memo lungo          | Source page + summary esteso                                      |
+| Conversazione / call                | audio, transcript, note meeting | Source page + action items verso area operativa                   |
+| Idea grezza                         | nota veloce, pensiero, sketch   | Source o concept `draft`                                          |
+| Dataset / file strutturato          | CSV, export, tabella            | Source page + analisi -> synthesis                                |
+| Documento immutabile di riferimento | allegato da citare              | Link o page reference, non ingest completo se il vault lo prevede |
 
 Mappa poi il tipo logico ai path reali del vault.
 
@@ -97,7 +96,6 @@ Mappa poi il tipo logico ai path reali del vault.
 
 1. **Leggi il source completo.**
    - Documento lungo: testo prima, poi immagini solo se aggiungono contesto.
-   - Se il vault usa daily notes, trattale come source di pari dignità.
 
 2. **Identifica il contenuto utile.**
    Cerca:
@@ -111,6 +109,7 @@ Mappa poi il tipo logico ai path reali del vault.
 3. **Crea la source page** nell'area sources del vault, di default `wiki/sources/<slug>.md`.
 
    Frontmatter minimo:
+
    ```yaml
    ---
    title: ""
@@ -134,7 +133,7 @@ Mappa poi il tipo logico ai path reali del vault.
 
 5. **Aggiorna `wiki/_meta/index.md`** con la nuova page e le pagine toccate.
 
-6. **Archivia il source** se il vault usa `raw/archived/`. Se usa daily notes, registra l'ingest senza spostarle.
+6. **Archivia il source** se il vault usa `raw/archived/`. Registra l'ingest senza spostarle.
 
 7. **Appendi al log**.
 
@@ -197,6 +196,7 @@ Aggiorna `wiki/_meta/hot-cache.md` con:
 
 ```markdown
 ## [YYYY-MM-DD] ingest | Titolo source
+
 - **Type**: article / document / call / note / data
 - **Pages created**: [[sources/slug]], [[concepts/nome]]
 - **Pages updated**: [[entities/nome]], [[ops/pagina]]
@@ -204,6 +204,7 @@ Aggiorna `wiki/_meta/hot-cache.md` con:
 - **Notes**: osservazioni rilevanti
 
 ## [YYYY-MM-DD] update | Nome pagina aggiornata
+
 - **Change**: descrizione della modifica
 - **Pages updated**: [[pagina1]], [[pagina2]]
 ```

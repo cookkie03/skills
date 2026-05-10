@@ -6,7 +6,6 @@ description: >
   domain: "dimmi tutto su X", "confronta A e B", "cosa so di Y", "riassumi Z",
   "dammi un briefing", "cosa c'è da fare?", "stato del progetto", "trova informazioni su".
 ---
-
 # Wiki Query
 
 Risponde a domande usando come fonte primaria la conoscenza accumulata nel wiki.
@@ -15,15 +14,7 @@ Risponde a domande usando come fonte primaria la conoscenza accumulata nel wiki.
 
 ## Contratto comune
 
-Questa skill deve restare utile in qualsiasi profilo di vault.
-
-Non assumere che esistano sempre:
-
-- `daily-notes/`
-- `wiki/lists/`
-- una struttura identica tra vault
-
-Assumi invece che il file istruzioni locale del vault sia già nel contesto e possa dichiarare:
+Assumi che il file istruzioni locale del vault sia già nel contesto e possa dichiarare:
 
 - area operativa primaria
 - sezione domande aperte
@@ -61,14 +52,14 @@ Se il wiki non basta, dillo esplicitamente e proponi il passo successivo:
 
 ## Output disponibili
 
-| Formato | Quando | Skill |
-|---------|--------|------|
-| Markdown page | Risposta standard | `obsidian-markdown` |
-| Tabella comparativa | Confronti | `obsidian-markdown` |
-| Canvas `.canvas` | Mappa visiva | `json-canvas` |
-| Vista `.base` | Dati strutturati | `obsidian-bases` |
-
-Per canvas e `.base`, usa sempre la skill dedicata.
+| Formato             | Quando            | Skill                 |
+| ------------------- | ----------------- | --------------------- |
+| Markdown page       | Risposta standard | `obsidian-markdown` |
+| Tabella comparativa | Confronti         | `obsidian-markdown` |
+| Lista               | Liste             | `wiki-artifact`     |
+| Kanban              | Task              | `wiki-artifact`     |
+| Canvas `.canvas`  | Mappa visiva      | `json-canvas`       |
+| Vista `.base`     | Dati strutturati  | `obsidian-bases`    |
 
 ---
 

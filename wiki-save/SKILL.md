@@ -5,7 +5,6 @@ description: >
   Use when the user says: "salva questa risposta", "aggiungi al wiki", "memorizza questo",
   "crea una pagina su questo", "salva l'analisi", "voglio tenermi questa sintesi".
 ---
-
 # Wiki Save
 
 Trasforma una risposta elaborata in una pagina wiki permanente.
@@ -13,8 +12,6 @@ Trasforma una risposta elaborata in una pagina wiki permanente.
 ---
 
 ## Contratto comune
-
-Questa skill deve funzionare sia in vault generalisti sia in vault di progetto.
 
 Il file istruzioni locale del vault può ridefinire:
 
@@ -48,12 +45,12 @@ Non salvare se è solo:
 
 ### 1. Determina il tipo di pagina
 
-| Tipo risposta | Default | `type` |
-|--------------|---------|--------|
-| Analisi / comparazione | `wiki/syntheses/<slug>.md` | `synthesis` |
-| Framework / guida | `wiki/concepts/<slug>.md` | `concept` |
-| Decisione | `wiki/decisions/<slug>.md` | `decision` |
-| Risposta su entità specifica | aggiorna `wiki/entities/<slug>.md` | `entity` |
+| Tipo risposta                 | Default                              | `type`      |
+| ----------------------------- | ------------------------------------ | ------------- |
+| Analisi / comparazione        | `wiki/syntheses/<slug>.md`         | `synthesis` |
+| Framework / guida             | `wiki/concepts/<slug>.md`          | `concept`   |
+| Decisione                     | `wiki/decisions/<slug>.md`         | `decision`  |
+| Risposta su entità specifica | aggiorna `wiki/entities/<slug>.md` | `entity`    |
 
 Se il vault usa cartelle o tipi diversi ma equivalenti, salva lì mantenendo la stessa intenzione semantica.
 

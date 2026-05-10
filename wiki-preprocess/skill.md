@@ -17,7 +17,7 @@ Converte e prepara file multimediali per l'ingest automatico nel wiki.
 
 Questa skill deve servire vault diversi.
 
-Non assumere che l'audio viva sempre nelle stesse cartelle o che esistano sempre `daily-notes/` o `Clippings/`.
+Non assumere che l'audio viva sempre nelle stesse cartelle.
 
 Il file istruzioni locale del vault può dichiarare:
 
@@ -75,7 +75,7 @@ Se il modello supporta vision:
 
 Altrimenti:
 
-- inserisci una descrizione testuale in markdown
+- chiedi all'utente una descrizione testuale da poter utilizzare per continuare
 
 ---
 
