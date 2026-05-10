@@ -106,7 +106,19 @@ Mappa poi il tipo logico ai path reali del vault.
    - decisioni implicite o esplicite
    - contraddizioni con pagine esistenti
 
-3. **Crea la source page** nell'area sources del vault, di default `wiki/sources/<slug>.md`.
+3. **Check anti-duplicato** prima di creare qualsiasi pagina nuova.
+
+   Consulta `wiki/_meta/index.md` e cerca:
+
+   - source pages esistenti con lo stesso `raw_source_path` o con titolo molto simile → se trovata, **aggiorna quella pagina** invece di crearne una nuova (vai allo Scenario B)
+   - concetti o entità che il source introduce e che già hanno una pagina → aggiorna quelle pagine, non creare duplicati
+   - pagine in stato `draft` sullo stesso argomento → valuta se completarle invece di creare pagine parallele
+
+   Se esiste già una pagina corrispondente ma il raw è **più recente** della data `updated:` della pagina esistente, trattala come aggiornamento: segnala le differenze e proponi le modifiche all'utente prima di sovrascrivere.
+
+   Se non esiste nulla di simile, procedi a creare.
+
+4. **Crea la source page** nell'area sources del vault, di default `wiki/sources/<slug>.md`.
 
    Frontmatter minimo:
 

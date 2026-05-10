@@ -75,6 +75,36 @@ Classifica ogni problema come:
 - `hot-cache.md` datato
 - log incompleto rispetto ai file aggiornati
 
+### Freshness & Deduplication
+
+**Freshness via mtime:**
+
+Per ogni source page con `raw_source_path` nel frontmatter:
+
+- confronta la data `updated:` della wiki page con il `mtime` del file raw referenziato
+- se il raw è più recente della wiki page → segnala come `ATTENZIONE: wiki page stale`
+- se il raw non esiste più al path indicato ma non risulta archiviato → segnala come `ATTENZIONE: raw_source_path non risolvibile`
+
+Per le wiki page in generale:
+
+- se `updated:` è più di 90 giorni fa e la pagina ha wikilink in entrata attivi → `SUGGERIMENTO: verifica se il contenuto è ancora valido`
+- se `updated:` è più di 90 giorni fa e la pagina non ha wikilink in entrata → `ATTENZIONE: pagina potenzialmente obsoleta e orfana`
+
+**Deduplicazione:**
+
+Individua candidati a merge o consolidamento:
+
+- pagine con titoli molto simili (stesso termine root, varianti singolare/plurale, sinonimi evidenti)
+- pagine con set di tag identici o quasi sovrapposti e contenuto simile per lunghezza e struttura
+- concetti citati spesso via wikilink che hanno già una pagina molto simile esistente
+- stub pages (< ~200 parole) che trattano lo stesso dominio di una pagina più grande già esistente
+
+Classifica ogni candidato come:
+
+- `MERGE`: contenuto quasi identico, una delle due è ridondante
+- `CONSOLIDATE`: una è stub, l'altra è la pagina canonica dove andrebbe incorporata
+- `REVIEW`: sovrapposizione parziale, decidere manualmente
+
 ---
 
 ## Report output
@@ -93,6 +123,19 @@ Classifica ogni problema come:
 ## SUGGERIMENTO
 
 - [problema] -> [azione concreta]
+
+## Freshness
+
+- Wiki pages stale (raw più recente): N → [[elenco]]
+- Raw source_path non risolvibili: N → [[elenco]]
+- Pagine non aggiornate da >90gg con link attivi: N
+- Pagine non aggiornate da >90gg orfane: N
+
+## Deduplication
+
+| Pagina A | Pagina B | Tipo | Azione suggerita |
+|----------|----------|------|-----------------|
+| [[...]]  | [[...]]  | MERGE / CONSOLIDATE / REVIEW | ... |
 
 ## Statistiche
 
