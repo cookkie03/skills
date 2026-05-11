@@ -7,24 +7,24 @@ description: >
   "aggiorna la lista", "ho letto X", "segna che ho finito Y", "rimuovi questa info",
   "sintetizza la sezione Z", "aggiorna il todo".
   This skill handles BOTH new knowledge ingestion AND updates/edits to existing wiki pages.
+  Can operate autonomously by reading the raw/ folder without explicit user instructions.
 ---
 
 # Wiki Ingest
 
 Aggiunge o aggiorna conoscenza nel wiki.
 
-Copre due scenari:
-
-- **A — Nuovo source**: un contenuto grezzo entra nel vault e viene distillato in pagine wiki
-- **B — Aggiornamento wiki esistente**: una o più pagine vengono corrette, arricchite o ripulite
+Può operare in modo **autonomo**, leggendo la cartella `raw/` senza istruzioni esplicite dell'utente, oppure seguendo indicazioni fornite in chat.
 
 ---
 
-## 🛑 Regole d'Oro dell'Ingest
+## Regole d'Oro dell'Ingest
 
 1. **MAI saltare informazioni**: Ogni dato, appunto tecnico, o dettaglio presente nel source deve trovare posto nel wiki. Non decidere tu cosa è importante; è tutto importante.
 2. **MAI fare riassunti riduttivi**: Se il source contiene 10 appunti tecnici su un esercizio, la pagina wiki deve contenere 10 appunti tecnici. Riorganizza, ordina, ma non eliminare.
 3. **Preserva la grana del dato**: Se un appunto è espresso in modo colloquiale o specifico, mantieni quella precisione. Non "ripulire" eccessivamente se questo comporta perdita di significato.
+
+---
 
 ## Contratto comune
 
@@ -63,7 +63,53 @@ Usa sempre le skill Obsidian installate per sintassi markdown, canvas o basi.
 
 ---
 
-## Preprocessing dei source
+## Step 1 — Leggi la cartella raw
+
+Leggi tutti i file presenti in `raw/` (o nelle sottocartelle dichiarate dal vault).
+
+Se l'utente ha già indicato in chat cosa fare, usa quelle informazioni come contesto aggiuntivo — ma parti comunque da `raw/`.
+
+---
+
+## Step 2 — Classifica il contenuto trovato
+
+Per ogni file letto, determina a quale categoria appartiene:
+
+### Contenuto da ingestire
+Informazioni, documenti, note, articoli, audio, dataset — materiale da cui estrarre conoscenza e portare nel wiki.
+
+Il contenuto da ingestire può richiedere due tipi di intervento diversi:
+
+- **Contenuto genuinamente nuovo**: introduce concetti, entità o informazioni non ancora presenti nel wiki → richiede la creazione di nuove pagine
+- **Contenuto aggiornato**: tratta argomenti già coperti nel wiki ma con dati più recenti, corretti o ampliati → richiede l'aggiornamento di pagine esistenti, senza creare nuovi file
+
+Determina quale dei due casi si applica consultando `wiki/_meta/index.md` e cercando pagine con titolo simile o stesso `raw_source_path`.
+
+### Istruzioni per il wiki
+Testo scritto dall'utente che indica esplicitamente cosa fare sul wiki: "rimuovi X", "aggiorna Y", "sintetizza la sezione Z", "segna come fatto W". Queste istruzioni vengono scritte in `raw/` per comodità, come promemoria asincrono, e sono equivalenti a dirle direttamente in chat.
+
+Non hanno un formato o naming speciale: il coding agent deve riconoscerle leggendo il contenuto. Un file è composto da istruzioni quando il suo scopo principale è **dirti cosa modificare** nel wiki, non **fornirti nuove informazioni**.
+
+### Contenuto misto
+Un file (o più file insieme) contiene sia informazioni da ingestire sia istruzioni su come modificare il wiki. Si gestisce in sequenza: prima l'ingest del contenuto, poi l'esecuzione delle istruzioni.
+
+---
+
+## Step 3 — Piano degli interventi e validazione
+
+Dopo la classificazione, costruisci un piano che elenca:
+
+- quali file contengono contenuto da ingestire (e se richiedono nuove pagine o aggiornamenti)
+- quali file contengono istruzioni e un riassunto degli interventi richiesti
+- l'ordine di esecuzione (contenuto misto: prima ingest, poi istruzioni)
+
+**Validazione obbligatoria**: se il piano include l'esecuzione di istruzioni, presenta il piano all'utente e chiedi conferma prima di procedere. Usa una formulazione tipo: "Ho trovato queste istruzioni in raw/ — ho capito bene cosa fare?"
+
+Se il piano contiene solo contenuto da ingestire senza istruzioni, puoi procedere direttamente.
+
+---
+
+## Step 4 — Preprocessing dei source
 
 Prima di leggere un source, verifica se richiede preprocessing:
 
@@ -75,7 +121,7 @@ Se il file ha un formato non supportato, non chiaramente leggibile, o non facilm
 
 ---
 
-## Scenario A — Ingest di nuovo source
+## Step 5 — Ingest del contenuto
 
 ### Classificazione logica del source
 
@@ -106,11 +152,11 @@ Mappa poi il tipo logico ai path reali del vault.
    - decisioni implicite o esplicite
    - contraddizioni con pagine esistenti
 
-3. **Check anti-duplicato** prima di creare qualsiasi pagina nuova.
+3. **Check anti-duplicato.**
 
    Consulta `wiki/_meta/index.md` e cerca:
 
-   - source pages esistenti con lo stesso `raw_source_path` o con titolo molto simile → se trovata, **aggiorna quella pagina** invece di crearne una nuova (vai allo Scenario B)
+   - source pages esistenti con lo stesso `raw_source_path` o con titolo molto simile → se trovata, **aggiorna quella pagina** invece di crearne una nuova
    - concetti o entità che il source introduce e che già hanno una pagina → aggiorna quelle pagine, non creare duplicati
    - pagine in stato `draft` sullo stesso argomento → valuta se completarle invece di creare pagine parallele
 
@@ -118,7 +164,7 @@ Mappa poi il tipo logico ai path reali del vault.
 
    Se non esiste nulla di simile, procedi a creare.
 
-4. **Crea la source page** nell'area sources del vault, di default `wiki/sources/<slug>.md`.
+4. **Crea la source page** se il contenuto è nuovo, nell'area sources del vault, di default `wiki/sources/<slug>.md`.
 
    Frontmatter minimo:
 
@@ -136,34 +182,28 @@ Mappa poi il tipo logico ai path reali del vault.
    ---
    ```
 
-4. **Aggiorna le pagine correlate**.
+5. **Aggiorna le pagine correlate**.
    Di solito:
    - entità rilevanti
    - concetti chiave
    - area operativa o liste, se emergono task
    - overview, solo se cambia lo stato generale del vault
 
-5. **Aggiorna `wiki/_meta/index.md`** con la nuova page e le pagine toccate.
+6. **Aggiorna `wiki/_meta/index.md`** con la nuova page e le pagine toccate.
 
-6. **Archivia il source** se il vault usa `raw/archived/`. Registra l'ingest senza spostarle.
+7. **Archivia il source** se il vault usa `raw/archived/`. Registra l'ingest senza spostarle.
 
-7. **Appendi al log**.
+8. **Appendi al log**.
 
 ---
 
-## Scenario B — Aggiornamento wiki esistente
+## Step 6 — Esecuzione delle istruzioni
 
-Per richieste tipo:
-
-- "aggiorna il todo"
-- "rimuovi X dalla wishlist"
-- "sintetizza la sezione Y"
-- "elimina questa informazione"
-- "segna come fatto Z"
+Da eseguire solo dopo aver ricevuto validazione dall'utente (vedi Step 3).
 
 ### Flusso
 
-1. Identifica le pagine target dall'`index.md` o dalla richiesta dell'utente.
+1. Identifica le pagine target dall'`index.md` o dalla richiesta.
 2. Leggi le pagine interessate prima di modificarle.
 3. Esegui la modifica richiesta.
 4. Aggiorna `index.md` se cambia lo stato di pagine importanti.
