@@ -12,38 +12,59 @@ description: >
 
 # GLM-OCR
 
-Extracts text, tables, and formulas from images/PDFs via a local Ollama server. Output: clean Markdown + structured JSON.
+Estrae testo, tabelle e formule da immagini/PDF via Ollama in locale, con layout detection strutturato tramite PP-DocLayoutV3. Output: Markdown pulito + JSON con bounding box.
 
-## Prerequisito
+## Prerequisiti
 
-Ollama deve girare localmente con il modello scaricato. Se non è configurato, vedi `SETUP.md`.
+Ollama deve girare con il modello scaricato, e PP-DocLayoutV3 deve essere disponibile (auto-download al primo uso). Se non è configurato, vedi `SETUP.md`.
 
-Verifica rapida:
 ```bash
 ollama list  # deve mostrare glm-ocr:latest
 ```
 
-## Usage
+Dipendenza Python richiesta:
 
-Il `config.yaml` nella directory della skill configura il backend Ollama. Passane il path a `GlmOcr`:
+```bash
+pip install 'glmocr[layout]'
+```
+
+## Utilizzo
 
 ```python
+import os
 from glmocr import GlmOcr
 
-config = "/path/to/skills/glm-ocr/config.yaml"  # adatta al path reale
+SKILL_DIR = "/path/to/skills/glm-ocr"   # adatta al path reale
+CONFIG_PATH = os.path.join(SKILL_DIR, "config.yaml")
 
-with GlmOcr(config_path=config) as ocr:
-    result = ocr.parse("file.pdf")   # accetta .png .jpg .jpeg .webp .pdf
-    result.save("./output")          # scrive result.md + result.json
-    print(result.markdown_result)    # oppure leggi direttamente
+with GlmOcr(config_path=CONFIG_PATH) as ocr:
+    result = ocr.parse("documento.pdf")   # accetta .png .jpg .jpeg .webp .pdf
+    result.save("./output")               # scrive result.md + result.json
+    print(result.markdown_result)
 ```
 
 Per più file:
+
 ```python
-with GlmOcr(config_path=config) as ocr:
+with GlmOcr(config_path=CONFIG_PATH) as ocr:
     result = ocr.parse(["page1.png", "page2.png"])
     result.save("./output")
 ```
+
+Al primo run la pipeline scaricherà PP-DocLayoutV3 da Hugging Face (~2 GB, una sola volta) nella cache HF locale. I run successivi partono immediatamente.
+
+## Parametri di qualità nel config.yaml
+
+Il `config.yaml` della skill è già ottimizzato per qualità su deployment Ollama:
+
+| Parametro | Valore | Effetto |
+|-----------|--------|---------|
+| `layout.model_dir` | `PaddlePaddle/PP-DocLayoutV3_safetensors` | Layout detector strutturato (colonne, tabelle, figure, formule) |
+| `page_loader.dpi` | 300 | Risoluzione rendering PDF → immagini (più alto = migliore qualità, più lento) |
+| `ocr_api.request_timeout` | 300 | Timeout per richiesta a Ollama (300 s per immagini grandi) |
+| `page_loader.task_prompt_mapping` | testo/tabella/formula | Prompt che guidano GLM-OCR per ciascun tipo di blocco rilevato |
+
+Per documenti con testo molto piccolo o scansioni di bassa qualità, alza a `dpi: 400` nel config.yaml. Per documenti puliti puoi ridurre a `dpi: 200` per velocizzare.
 
 ## Output
 
@@ -55,8 +76,18 @@ with GlmOcr(config_path=config) as ocr:
 
 ## Troubleshooting
 
-**502 Bad Gateway**: assicurati che `config.yaml` abbia `api_path: /api/generate` e `api_mode: ollama_generate`.
+**ImportError: PPDocLayoutV3ForObjectDetection** → `pip install 'glmocr[layout]'`
 
-**Modello non trovato**: esegui `ollama pull glm-ocr:latest`.
+**ValueError: pipeline.layout.model_dir is required** → il `config.yaml` della skill lo include già (`PaddlePaddle/PP-DocLayoutV3_safetensors`). Verifica di stare passando il path corretto a `GlmOcr(config_path=...)`.
 
-**Ollama non risponde**: esegui `ollama serve`.
+**Primo run molto lento / blocco a "downloading"** → normale: PP-DocLayoutV3 sta scaricando ~2 GB. Aspetta che la cache HF si popoli (`~/.cache/huggingface/hub/`). I run successivi sono immediati.
+
+**Output vuoto (0 chars)** → il `task_prompt_mapping` manca dal config.yaml. Il `config.yaml` della skill lo include già; verifica di stare usando quello corretto.
+
+**Timeout / risposta lenta** → normale per immagini grandi. Il timeout è a 300 s. Se scade ancora, riduci il DPI o processa meno pagine per volta.
+
+**502 Bad Gateway** → verifica che `api_path: /api/generate` e `api_mode: ollama_generate` siano nel config.yaml (già configurati).
+
+**Modello GLM non trovato** → `ollama pull glm-ocr:latest`
+
+**Ollama non risponde** → `ollama serve`

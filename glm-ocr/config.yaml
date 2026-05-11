@@ -2,9 +2,20 @@ pipeline:
   maas:
     enabled: false
 
+  layout:
+    model_dir: PaddlePaddle/PP-DocLayoutV3_safetensors
+
   ocr_api:
     api_host: localhost
     api_port: 11434
     api_path: /api/generate
     model: glm-ocr:latest
     api_mode: ollama_generate
+    request_timeout: 300
+
+  page_loader:
+    dpi: 300
+    task_prompt_mapping:
+      text: "Text Recognition:"
+      table: "Table Recognition:"
+      formula: "Formula Recognition:"
