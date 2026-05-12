@@ -45,6 +45,8 @@ Classifica ogni problema come:
 
 ### Struttura e navigabilità
 
+- File istruzioni agente mancante: verifica che esista almeno uno tra `CLAUDE.md`, `AGENTS.md`, `GEMINI.md` nella root del vault
+- `taxonomy.md` mancante o incompleto: verifica che tutti i ruoli semantici siano dichiarati e che i path attivi esistano davvero nel vault
 - pagine orfane
 - wikilink rotti
 - `index.md` incompleto

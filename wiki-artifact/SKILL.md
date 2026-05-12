@@ -23,7 +23,7 @@ Il file istruzioni locale del vault può ridefinire:
 - dove vive l'area operativa
 - se esistono liste, board, dashboard o build docs
 
-Usa come default `wiki/artifacts/`, `wiki/ops/` e l'area più vicina al contenuto, ma lascia prevalere i path locali dichiarati dal vault.
+Risolvi sempre i path leggendo `wiki/_meta/taxonomy.md`: il ruolo `artifact` indica dove salvare gli artifact, il ruolo `operation` indica l'area operativa. Non usare path hardcodati.
 
 ---
 
@@ -51,11 +51,11 @@ Usa per:
 
 Usa sempre `json-canvas`.
 
-Salvataggio:
+Salvataggio (path reali da `taxonomy.md`):
 
-- architettura / sistema -> area build o artifacts del vault
-- mappa concettuale -> syntheses/artifacts del vault
-- overview visiva -> posizione dichiarata dal vault per artifact top-level
+- architettura / sistema → ruolo `build` se attivo, altrimenti ruolo `artifact`
+- mappa concettuale → ruolo `artifact`
+- overview visiva → ruolo `artifact`
 
 ---
 
@@ -71,10 +71,10 @@ Usa per:
 Usa `obsidian-bases` per `.base`.
 Per query inline in markdown, usa `obsidian-markdown`.
 
-Salvataggio:
+Salvataggio (path reali da `taxonomy.md`):
 
-- query inline -> nella pagina rilevante
-- dashboard standalone -> `_meta/`, `ops/` o area equivalente del vault
+- query inline → nella pagina rilevante
+- dashboard standalone → ruolo `operation` o `_meta/`
 
 ---
 
@@ -82,10 +82,7 @@ Salvataggio:
 
 Usa per work in progress con stati multipli.
 
-Salvataggio:
-
-- area operativa del vault
-- default: `wiki/ops/kanban-<nome>.md`
+Salvataggio: ruolo `operation` da `taxonomy.md`.
 
 Raccogli i task dall'area operativa, dalle task list e dalle pagine recenti rilevanti.
 

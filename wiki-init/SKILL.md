@@ -40,21 +40,18 @@ Il contratto locale deve dichiarare sempre:
 
 Poni le domande in modo conversazionale.
 
-### Blocco A — Identità del vault
+### Blocco A — Identità e scopo
 
-1. Cosa traccia questo vault?
-2. Che tipo di vault è?
-   - progetto software
-   - progetto business
-   - ricerca
-   - secondo cervello
-   - ibrido
-3. Lavori da solo o con collaboratori?
+1. Per cosa verrà usato questo vault? Qual è il suo scopo principale?
+2. Chi lo usa? Lavori da solo o con collaboratori?
 
-### Blocco B — Contenuto e flusso
+### Blocco B — Contenuto e vocabolario
 
-4. Che materiale finirà in `raw/`?
-5. Ci sono aree già chiare o vuoi partire minimale?
+3. Cosa pensi di metterci dentro? Che tipo di materiale elaborerai?
+4. Come chiami il materiale grezzo che elabori? (es. articoli, paper, appunti, clip, documenti, note...)
+5. Come chiami le cose che vuoi ricordare e consultare nel tempo?
+6. Ci sono termini tecnici o di settore che usi regolarmente nel tuo dominio?
+7. Ci sono aree già chiare o vuoi partire minimale?
 
 ### Blocco C — Operatività
 
@@ -69,56 +66,93 @@ Poni le domande in modo conversazionale.
 12. Preferenze linguistiche?
 13. Livello di complessità desiderato?
 
+### Proposta collaborativa
+
+Dopo aver raccolto le risposte, **prima di generare**:
+
+1. Proponi i nomi di cartella derivati dal vocabolario dell'utente. Usa i default dove il vocabolario non suggerisce nomi più precisi.
+2. Spiega brevemente il ragionamento dietro le scelte non ovvie (es. "ho usato `papers/` invece di `sources/` perché hai detto che lavori solo con articoli accademici").
+3. Chiedi conferma o modifica prima di procedere alla generazione.
+
 ---
 
 ## Fase 2 — Generazione
 
 ### 2.1 Struttura cartelle
 
-Parti da una base universale:
+La base invariante è sempre:
 
 ```text
 vault-root/
-├── AGENTS.md o CLAUDE.md
+├── CLAUDE.md | AGENTS.md | GEMINI.md
 ├── raw/
 │   └── archived/
 └── wiki/
     ├── _meta/
     │   ├── index.md
     │   ├── log.md
-    │   ├── taxonomy.md
+    │   ├── taxonomy.md   ← fonte di verità per tutte le skill wiki-*
     │   └── hot-cache.md
     ├── overview.md
-    ├── sources/
-    ├── entities/
-    ├── concepts/
-    ├── syntheses/
-    └── questions/
+    ├── sources/       # ruolo source    — default, rinominabile
+    ├── entities/      # ruolo entity    — default, rinominabile
+    ├── concepts/      # ruolo knowledge — default, rinominabile
+    ├── syntheses/     # ruolo synthesis — default, rinominabile
+    └── questions/     # ruolo question  — default, rinominabile
 ```
 
-Poi aggiungi solo le aree davvero necessarie al profilo del vault, per esempio:
+I nomi delle sottocartelle mostrati sopra sono **default validi per la maggior parte dei vault**. Si rinominano solo quando il dominio ha un vocabolario più preciso e riconoscibile — vedi la sezione **Principi guida** per sapere quando e come.
 
-- `wiki/build/`
-- `wiki/ops/`
-- `wiki/decisions/`
-- `wiki/lists/`
-- `wiki/artifacts/`
+Aree aggiuntive (`ops/`, `decisions/`, `lists/`, `artifacts/`, `build/`) si aggiungono solo se il vault le usa davvero.
 
 ### 2.2 File istruzioni locale
 
-Genera `AGENTS.md` o `CLAUDE.md` in base al sistema usato dal vault.
+Genera il file in base al sistema dell'agente principale dichiarato nell'intervista:
 
-Deve contenere:
+- `CLAUDE.md` per ambienti Claude / Claude Code
+- `GEMINI.md` per ambienti Gemini
+- `AGENTS.md` per setup multi-agent o sistemi non specificati (default neutro)
 
-1. identità del vault
-2. struttura cartelle
-3. regole fondamentali
-4. frontmatter standard
-5. query operative
-6. skill rilevanti
-7. override locali che le altre skill devono rispettare
+Il file deve essere abbastanza conciso da stare in contesto all'inizio di ogni sessione senza sprecare token. Non includere le procedure operative complete delle skill.
 
-Non includere lì dentro le procedure operative complete delle skill.
+**Template:**
+
+````markdown
+# [Nome Vault]
+
+[1-2 righe su cosa traccia questo vault e chi lo usa.]
+
+## Struttura
+
+```
+wiki/
+├── [cartella]/    # [ruolo semantico] — [cosa contiene]
+├── ...
+```
+
+Per il mapping completo ruoli → path, vedi `wiki/_meta/taxonomy.md`.
+
+## Regole operative
+
+- Mai saltare informazioni: ogni dato nel source deve trovare posto nel wiki
+- Mai fare riassunti riduttivi: preserva la grana del dato
+- Se il source più recente contraddice una pagina esistente, il source vince (salvo `confidence: high`)
+
+## Skill
+
+| Operazione                  | Skill           |
+|-----------------------------|-----------------|
+| Ingest / aggiornamento      | `wiki-ingest`   |
+| Query / briefing            | `wiki-query`    |
+| Salva risposta elaborata    | `wiki-save`     |
+| Artifact visivi             | `wiki-artifact` |
+| Health check                | `wiki-lint`     |
+| Preprocessing audio/img     | `wiki-preprocess` |
+
+## Override locali
+
+[Eventuali regole specifiche di questo vault che sovrascrivono il comportamento default delle skill.]
+````
 
 ### 2.3 `_meta/` iniziali
 
@@ -126,8 +160,54 @@ Genera:
 
 - `wiki/_meta/index.md`
 - `wiki/_meta/log.md`
-- `wiki/_meta/taxonomy.md`
 - `wiki/_meta/hot-cache.md`
+- `wiki/_meta/taxonomy.md` ← il più importante: tutte le skill lo leggono per risolvere i path
+
+`taxonomy.md` deve seguire questo formato esatto:
+
+````markdown
+---
+vault_type: software-project | research | second-brain | business | hybrid
+vault_name: ""
+language: it | en
+---
+
+# Taxonomy
+
+## Ruoli semantici → Path
+
+I ruoli semantici sono fissi. I path sono specifici di questo vault.
+Le skill wiki-* non usano mai path hardcodati: leggono sempre questa tabella.
+
+| Ruolo       | Path              | Attivo |
+|-------------|-------------------|--------|
+| `source`    | `wiki/<path>/`    | sì/no  |
+| `knowledge` | `wiki/<path>/`    | sì/no  |
+| `entity`    | `wiki/<path>/`    | sì/no  |
+| `synthesis` | `wiki/<path>/`    | sì/no  |
+| `decision`  | `wiki/<path>/`    | sì/no  |
+| `question`  | `wiki/<path>/`    | sì/no  |
+| `operation` | `wiki/<path>/`    | sì/no  |
+| `list`      | `wiki/<path>/`    | sì/no  |
+| `artifact`  | `wiki/<path>/`    | sì/no  |
+| `build`     | `wiki/<path>/`    | sì/no  |
+
+## Cartelle raw → Path
+
+| Tipo      | Path              |
+|-----------|-------------------|
+| default   | `raw/`            |
+| audio     | `raw/audio/`      |
+| documents | `raw/...`         |
+| archived  | `raw/archived/`   |
+
+## Page types canonici
+
+I valori ammessi per `type:` nel frontmatter di questo vault:
+`source`, `knowledge`, `entity`, `synthesis`, `decision`, `question`
+````
+
+Compila la tabella dei ruoli in base al profilo scelto. Dichiara tutti i ruoli anche quelli con `Attivo: no`, così le skill non devono inferire l'assenza.
 
 ### 2.4 `overview.md`
 
@@ -135,18 +215,27 @@ Genera una pagina overview leggera ma utile come punto di ingresso.
 
 ---
 
-## Tipi di vault
+## Principi guida per la scelta delle cartelle
 
-I profili di vault servono soprattutto qui, in init.
-Le altre skill devono poi restare profile-agnostic.
+I nomi default (`sources/`, `entities/`, `concepts/`, `syntheses/`, `questions/`) sono validi per la maggior parte dei vault. Usa questi principi per decidere quando tenerli e quando rinominarli.
 
-Profili tipici:
+**Usa i default quando:**
+- Il dominio è generico o ibrido e non impone un lessico specifico
+- L'utente non ha espresso preferenze di naming durante l'intervista
+- Rinominare aggiungerebbe confusione invece di chiarezza
 
-- software project
-- business project
-- research vault
-- second brain
-- hybrid vault
+**Rinomina quando:**
+- Esiste un termine di dominio più preciso e immediatamente riconoscibile (es. `papers/` invece di `sources/` per chi lavora solo con articoli accademici; `people/` invece di `entities/` per un vault centrato sulle relazioni)
+- Il nome default risulta ambiguo nel contesto specifico
+
+**Come derivare i nomi:**
+Usa il vocabolario emerso nell'intervista — è il segnale più forte. Se l'utente ha detto "i miei paper" e "le mie annotazioni", quei termini sono candidati migliori dei default.
+
+**Stabilità nel tempo:**
+Preferisci nomi che non diventino obsoleti al cambiare del progetto. Nomi astratti (`entities/`, `concepts/`) reggono meglio di nomi troppo specifici (`microservices/`, `sprints/`).
+
+**Minimalismo:**
+Non creare cartelle per ruoli che il vault non usa ancora. Si aggiungono quando servono, non per anticipazione.
 
 ---
 

@@ -45,14 +45,16 @@ Non salvare se è solo:
 
 ### 1. Determina il tipo di pagina
 
-| Tipo risposta                 | Default                              | `type`      |
-| ----------------------------- | ------------------------------------ | ------------- |
-| Analisi / comparazione        | `wiki/syntheses/<slug>.md`         | `synthesis` |
-| Framework / guida             | `wiki/concepts/<slug>.md`          | `concept`   |
-| Decisione                     | `wiki/decisions/<slug>.md`         | `decision`  |
-| Risposta su entità specifica | aggiorna `wiki/entities/<slug>.md` | `entity`    |
+Leggi `wiki/_meta/taxonomy.md` e ricava il path reale per il ruolo semantico corretto prima di creare o aggiornare la pagina.
 
-Se il vault usa cartelle o tipi diversi ma equivalenti, salva lì mantenendo la stessa intenzione semantica.
+| Tipo risposta                 | Ruolo semantico | `type`      |
+| ----------------------------- | --------------- | ----------- |
+| Analisi / comparazione        | `synthesis`     | `synthesis` |
+| Framework / guida             | `knowledge`     | `knowledge` |
+| Decisione                     | `decision`      | `decision`  |
+| Risposta su entità specifica  | `entity`        | `entity`    |
+
+Il path effettivo (`wiki/findings/`, `wiki/architecture/`, `wiki/notes/`, ecc.) è dichiarato nella taxonomy del vault, non in questa skill.
 
 ### 2. Crea o aggiorna la pagina
 

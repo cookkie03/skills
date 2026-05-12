@@ -14,14 +14,9 @@ Risponde a domande usando come fonte primaria la conoscenza accumulata nel wiki.
 
 ## Contratto comune
 
-Assumi che il file istruzioni locale del vault sia già nel contesto e possa dichiarare:
+Assumi che il file istruzioni locale del vault sia già nel contesto e possa dichiarare policy locali.
 
-- area operativa primaria
-- sezione domande aperte
-- cartelle equivalenti per sources, build, lists, artifacts
-- policy su briefing e pending ingest
-
-Usa le categorie logiche del vault prima dei path specifici.
+Per risolvere i path delle aree del vault (operativa, domande aperte, lists, artifacts, ecc.) leggi sempre `wiki/_meta/taxonomy.md` — non usare path hardcodati. Il ruolo `operation` punta all'area operativa, il ruolo `question` all'area delle domande aperte, e così via.
 
 ---
 

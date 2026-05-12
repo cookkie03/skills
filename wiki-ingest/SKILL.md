@@ -127,14 +127,16 @@ Se il file ha un formato non supportato, non chiaramente leggibile, o non facilm
 
 Prima di procedere, determina il tipo logico:
 
-| Tipo logico                         | Esempi                          | Azione primaria                                                   |
-| ----------------------------------- | ------------------------------- | ----------------------------------------------------------------- |
-| Articolo / web clip                 | articolo, URL salvato, clipping | Source page + concepts/entities                                   |
-| Documento / paper                   | PDF, paper, memo lungo          | Source page + summary esteso                                      |
-| Conversazione / call                | audio, transcript, note meeting | Source page + action items verso area operativa                   |
-| Idea grezza                         | nota veloce, pensiero, sketch   | Source o concept `draft`                                          |
-| Dataset / file strutturato          | CSV, export, tabella            | Source page + analisi -> synthesis                                |
-| Documento immutabile di riferimento | allegato da citare              | Link o page reference, non ingest completo se il vault lo prevede |
+I path reali si ricavano da `wiki/_meta/taxonomy.md`. La tabella usa i ruoli semantici.
+
+| Tipo logico                         | Esempi                          | Azione primaria                                                              |
+| ----------------------------------- | ------------------------------- | ---------------------------------------------------------------------------- |
+| Articolo / web clip                 | articolo, URL salvato, clipping | Pagina ruolo `source` + pagine ruolo `knowledge` / `entity`                  |
+| Documento / paper                   | PDF, paper, memo lungo          | Pagina ruolo `source` + summary esteso                                       |
+| Conversazione / call                | audio, transcript, note meeting | Pagina ruolo `source` + action items verso ruolo `operation`                 |
+| Idea grezza                         | nota veloce, pensiero, sketch   | Pagina ruolo `source` o `knowledge` in stato `draft`                         |
+| Dataset / file strutturato          | CSV, export, tabella            | Pagina ruolo `source` + analisi verso ruolo `synthesis`                      |
+| Documento immutabile di riferimento | allegato da citare              | Link o page reference, non ingest completo se il vault lo prevede            |
 
 Mappa poi il tipo logico ai path reali del vault.
 
@@ -164,7 +166,7 @@ Mappa poi il tipo logico ai path reali del vault.
 
    Se non esiste nulla di simile, procedi a creare.
 
-4. **Crea la source page** se il contenuto è nuovo, nell'area sources del vault, di default `wiki/sources/<slug>.md`.
+4. **Crea la source page** se il contenuto è nuovo, nel path del ruolo `source` dichiarato in `wiki/_meta/taxonomy.md`.
 
    Frontmatter minimo:
 
@@ -182,11 +184,11 @@ Mappa poi il tipo logico ai path reali del vault.
    ---
    ```
 
-5. **Aggiorna le pagine correlate**.
+5. **Aggiorna le pagine correlate** (path da `taxonomy.md`).
    Di solito:
-   - entità rilevanti
-   - concetti chiave
-   - area operativa o liste, se emergono task
+   - pagine ruolo `entity` rilevanti
+   - pagine ruolo `knowledge` rilevanti
+   - ruolo `operation` o `list`, se emergono task
    - overview, solo se cambia lo stato generale del vault
 
 6. **Aggiorna `wiki/_meta/index.md`** con la nuova page e le pagine toccate.
