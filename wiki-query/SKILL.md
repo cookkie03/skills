@@ -12,11 +12,7 @@ Risponde a domande usando come fonte primaria la conoscenza accumulata nel wiki.
 
 ---
 
-## Contratto comune
-
-Assumi che il file istruzioni locale del vault sia già nel contesto e possa dichiarare policy locali.
-
-Per risolvere i path delle aree del vault (operativa, domande aperte, lists, artifacts, ecc.) leggi sempre `wiki/_meta/taxonomy.md` — non usare path hardcodati. Il ruolo `operation` punta all'area operativa, il ruolo `question` all'area delle domande aperte, e così via.
+Leggi `wiki/_meta/taxonomy.md` per i path. Il file istruzioni locale del vault può dichiarare policy locali.
 
 ---
 
@@ -66,9 +62,9 @@ Leggi in sequenza:
 
 1. `wiki/_meta/hot-cache.md`
 2. `wiki/overview.md`
-3. area operativa primaria del vault
-4. sezione delle domande aperte
-5. pending ingest dichiarati dal vault
+3. path del ruolo `operation` da `taxonomy.md`
+4. path del ruolo `question` da `taxonomy.md`
+5. `raw/` per file non ancora ingestiti
 
 Produce:
 
@@ -108,4 +104,4 @@ Segnala sempre quando una risposta include conoscenza arrivata dal web.
 
 ## Domande aperte
 
-Se la domanda rivela un gap nel wiki, crea o aggiorna una pagina nell'area `questions` o nell'equivalente dichiarato dal vault, con lo stato coerente con le convenzioni locali.
+Se la domanda rivela un gap nel wiki, crea o aggiorna una pagina nel path del ruolo `question` da `taxonomy.md`, con lo stato coerente con le convenzioni locali.

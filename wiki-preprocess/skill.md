@@ -32,9 +32,7 @@ Usa quei path come fonte di verità. In assenza di override, cerca i file audio 
 
 ## Audio
 
-Tool preferito di default:
-
-- `Second-Brain/scripts/preprocess-audio.py`
+Tool disponibile: lo script `scripts/preprocess-audio.py` incluso in questa skill. Cercalo nella directory di installazione della skill. Se non è raggiungibile, usa whisper o tool equivalente disponibile nell'ambiente.
 
 Formati tipici:
 
@@ -51,16 +49,16 @@ Flusso:
 
 1. converte in formato utile per speech
 2. trascrive con whisper o tool equivalente
-3. salva `.transcription.md` accanto al file originale
+3. salva `<nome-audio>.transcription.md` accanto al file originale — questo è il nome canonico che `wiki-ingest` si aspetta
 
-Se `.transcription.md` esiste già ed è più recente dell'audio, salta.
+Se il file `.transcription.md` esiste già e ha `updated:` più recente dell'audio, salta.
 
 Uso:
 
 ```bash
-python .agents/skills/wiki-preprocess/scripts/preprocess-audio.py
-python .agents/skills/wiki-preprocess/scripts/preprocess-audio.py <cartella>
-python .agents/skills/wiki-preprocess/scripts/preprocess-audio.py --dry-run
+python <path-skill>/scripts/preprocess-audio.py
+python <path-skill>/scripts/preprocess-audio.py <cartella>
+python <path-skill>/scripts/preprocess-audio.py --dry-run
 ```
 
 ---
@@ -83,7 +81,7 @@ Per immagini e PDF scansionati (non-native-text), attiva la skill `glm-ocr` e de
 
 - Non riassumere in questa skill il comportamento interno di `glm-ocr`.
 - Usa `glm-ocr` come skill specializzata per trasformare l'immagine o il PDF scansionato in Markdown.
-- Salva il risultato in una cartella dedicata (es. `raw/ocr-output/`) o accanto al file originale come `.ocr.md`.
+- Salva il risultato accanto al file originale come `<nome-file>.ocr.md` — questo è il nome canonico che `wiki-ingest` si aspetta.
 - Fornisci il `.ocr.md` prodotto come source a `wiki-ingest`.
 
 Se `glm-ocr` non è configurato o Ollama non è disponibile:

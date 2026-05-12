@@ -26,28 +26,7 @@ Può operare in modo **autonomo**, leggendo la cartella `raw/` senza istruzioni 
 
 ---
 
-## Contratto comune
-
-Questa skill deve funzionare bene in vault di progetto, second brain, wiki di ricerca e setup ibridi.
-
-Assumi sempre che il file istruzioni locale del vault sia già nel contesto e possa dichiarare:
-
-- mapping cartelle raw (`raw/papers` vs `raw/pdfs`, `raw/audio` vs `raw/calls`)
-- uso o non uso di `daily-notes/`
-- presenza di `wiki/lists/`, `wiki/ops/`, `wiki/build/`, `wiki/artifacts/`
-- tipi pagina canonici e policy locali
-
-Se il comportamento standard della skill e il contratto locale del vault sono in conflitto, vince il contratto locale.
-
-Ragiona prima per categorie logiche:
-
-- source grezzi
-- pagine knowledge
-- area operativa
-- decisioni
-- artifact
-
-Solo dopo mappa queste categorie ai path reali del vault.
+Leggi `wiki/_meta/taxonomy.md` per i path. Il file istruzioni locale del vault può dichiarare override — prevale sempre sul comportamento default di questa skill.
 
 ---
 
@@ -113,7 +92,7 @@ Se il piano contiene solo contenuto da ingestire senza istruzioni, puoi proceder
 
 Prima di leggere un source, verifica se richiede preprocessing:
 
-- **Audio**: se esiste un file `.transcription.md` accanto all'audio, usa quello. Se non esiste, usa `wiki-preprocess` o segnala che serve il preprocessing audio dichiarato dal vault.
+- **Audio**: cerca il file di trascrizione dichiarato dal vault (default: `<nome-audio>.transcription.md` accanto al file). Se esiste, usa quello. Se non esiste, attiva `wiki-preprocess`.
 - **Immagini**: descrivi il contenuto se il modello ha vision; altrimenti segnala che serve descrizione manuale.
 - **Tutti gli altri formati**: leggili direttamente o usa la skill specializzata più adatta, come `pdf`.
 
@@ -215,7 +194,7 @@ Da eseguire solo dopo aver ricevuto validazione dall'utente (vedi Step 3).
 
 Se il nuovo contenuto contraddice una pagina esistente:
 
-- il source più recente vince per default
+- il source con `updated:` più recente nel frontmatter vince per default
 - se la pagina esistente ha `confidence: high`, segnala il conflitto prima di sovrascrivere
 - registra ogni contraddizione risolta nel log
 
@@ -223,14 +202,12 @@ Se il nuovo contenuto contraddice una pagina esistente:
 
 ## Liste e area operativa
 
-Se il vault ha `wiki/lists/`, tratta le liste come pagine first-class.
-Se il vault non ha `wiki/lists/`, instrada gli item pratici verso l'area operativa equivalente, di solito `wiki/ops/`.
+Controlla in `taxonomy.md` se i ruoli `list` e `operation` sono attivi.
 
 Durante l'ingest:
-
-- desideri o raccolte -> liste dedicate se esistono
-- task e follow-up -> lista task o area ops del vault
-- contenuti da leggere/vedere -> reading list se esiste
+- desideri o raccolte → ruolo `list` se attivo, altrimenti ruolo `operation`
+- task e follow-up → ruolo `operation`
+- contenuti da leggere/vedere → ruolo `list` se attivo
 
 Se una lista usa `last_reviewed`, aggiornalo a ogni modifica.
 

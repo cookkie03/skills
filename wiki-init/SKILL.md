@@ -22,16 +22,14 @@ Il processo è in due fasi: **intervista** -> **generazione**.
 `wiki-init` deve produrre:
 
 - struttura iniziale del vault
-- file istruzioni locale (`AGENTS.md` o `CLAUDE.md`)
+- file istruzioni locale (`CLAUDE.md`, `AGENTS.md` o `GEMINI.md`)
 - `_meta/` bootstrap
 - overview iniziale
-- contratto locale che le altre skill possano seguire senza ambiguità
 
-Il contratto locale deve dichiarare sempre:
+Il file istruzioni locale deve dichiarare sempre:
 
-- cartelle reali
+- cartelle reali e loro ruolo semantico
 - tipi pagina canonici
-- aree opzionali come `lists`, `ops`, `build`, `decisions`, `artifacts`
 - mapping locali come `raw/papers` vs `raw/pdfs`
 
 ---
@@ -55,9 +53,9 @@ Poni le domande in modo conversazionale.
 
 ### Blocco C — Operatività
 
-7. Qual è l'agent principale?
-8. Che output ti aspetti dal wiki?
-9. Vuoi tracciare decisioni nel tempo?
+8. Qual è l'agent principale? (Claude, Gemini, altro — determina quale file istruzioni generare)
+9. Che output ti aspetti dal wiki?
+10. Vuoi tracciare decisioni nel tempo?
 
 ### Blocco D — Dettagli opzionali
 
@@ -103,7 +101,7 @@ vault-root/
 
 I nomi delle sottocartelle mostrati sopra sono **default validi per la maggior parte dei vault**. Si rinominano solo quando il dominio ha un vocabolario più preciso e riconoscibile — vedi la sezione **Principi guida** per sapere quando e come.
 
-Aree aggiuntive (`ops/`, `decisions/`, `lists/`, `artifacts/`, `build/`) si aggiungono solo se il vault le usa davvero.
+Aree aggiuntive si aggiungono solo se il vault le usa davvero. Per l'area operativa, vedi i **Principi guida** sulla consolidazione di `ops/`, `decisions/` e `build/`.
 
 ### 2.2 File istruzioni locale
 
@@ -167,7 +165,6 @@ Genera:
 
 ````markdown
 ---
-vault_type: software-project | research | second-brain | business | hybrid
 vault_name: ""
 language: it | en
 ---
@@ -179,27 +176,27 @@ language: it | en
 I ruoli semantici sono fissi. I path sono specifici di questo vault.
 Le skill wiki-* non usano mai path hardcodati: leggono sempre questa tabella.
 
-| Ruolo       | Path              | Attivo |
-|-------------|-------------------|--------|
-| `source`    | `wiki/<path>/`    | sì/no  |
-| `knowledge` | `wiki/<path>/`    | sì/no  |
-| `entity`    | `wiki/<path>/`    | sì/no  |
-| `synthesis` | `wiki/<path>/`    | sì/no  |
-| `decision`  | `wiki/<path>/`    | sì/no  |
-| `question`  | `wiki/<path>/`    | sì/no  |
-| `operation` | `wiki/<path>/`    | sì/no  |
-| `list`      | `wiki/<path>/`    | sì/no  |
-| `artifact`  | `wiki/<path>/`    | sì/no  |
-| `build`     | `wiki/<path>/`    | sì/no  |
+| Ruolo       | Path           | Attivo |
+|-------------|----------------|--------|
+| `source`    | `wiki/<path>/` | sì/no  |
+| `knowledge` | `wiki/<path>/` | sì/no  |
+| `entity`    | `wiki/<path>/` | sì/no  |
+| `synthesis` | `wiki/<path>/` | sì/no  |
+| `question`  | `wiki/<path>/` | sì/no  |
+| `operation` | `wiki/<path>/` | sì/no  |
+| `list`      | `wiki/<path>/` | sì/no  |
+| `artifact`  | `wiki/<path>/` | sì/no  |
+
+Nota: `decision` e `build` non sono ruoli-cartella separati per default. Le pagine di tipo `decision` vivono nel path `operation`. Se il vault ha volumi che giustificano cartelle dedicate, aggiungile con i loro ruoli qui.
 
 ## Cartelle raw → Path
 
-| Tipo      | Path              |
-|-----------|-------------------|
-| default   | `raw/`            |
-| audio     | `raw/audio/`      |
-| documents | `raw/...`         |
-| archived  | `raw/archived/`   |
+| Tipo      | Path            |
+|-----------|-----------------|
+| default   | `raw/`          |
+| audio     | `raw/audio/`    |
+| documents | `raw/`          |
+| archived  | `raw/archived/` |
 
 ## Page types canonici
 
@@ -207,7 +204,7 @@ I valori ammessi per `type:` nel frontmatter di questo vault:
 `source`, `knowledge`, `entity`, `synthesis`, `decision`, `question`
 ````
 
-Compila la tabella dei ruoli in base al profilo scelto. Dichiara tutti i ruoli anche quelli con `Attivo: no`, così le skill non devono inferire l'assenza.
+Compila la tabella con i path reali emersi dall'intervista. Dichiara tutti i ruoli, anche quelli con `Attivo: no`, così le skill non devono inferire l'assenza.
 
 ### 2.4 `overview.md`
 
@@ -237,8 +234,5 @@ Preferisci nomi che non diventino obsoleti al cambiare del progetto. Nomi astrat
 **Minimalismo:**
 Non creare cartelle per ruoli che il vault non usa ancora. Si aggiungono quando servono, non per anticipazione.
 
----
-
-## Regola chiave
-
-Il file istruzioni locale generato da `wiki-init` deve dichiarare sempre i mapping strutturali che evitano assunzioni hardcoded sbagliate nelle altre skill.
+**Consolidazione dell'area operativa:**
+Per la maggior parte dei vault, un'unica cartella `ops/` (ruolo `operation`) è sufficiente per task, decisioni e build docs. Crea `decisions/` o `build/` come cartelle separate solo se i volumi o i workflow sono chiaramente distinti. Le pagine di tipo `decision` possono vivere in `ops/` con `type: decision` nel frontmatter.
