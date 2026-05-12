@@ -45,6 +45,7 @@ Classifica ogni problema come:
 
 ### Struttura e navigabilità
 
+- `taxonomy.md` mancante o incompleto: verifica che tutti i ruoli semantici siano dichiarati e che i path attivi esistano davvero nel vault
 - pagine orfane
 - wikilink rotti
 - `index.md` incompleto

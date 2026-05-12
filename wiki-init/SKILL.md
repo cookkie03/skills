@@ -75,7 +75,9 @@ Poni le domande in modo conversazionale.
 
 ### 2.1 Struttura cartelle
 
-Parti da una base universale:
+La struttura non è universale: dipende dal profilo del vault emerso nell'intervista.
+
+La base invariante è sempre:
 
 ```text
 vault-root/
@@ -86,23 +88,16 @@ vault-root/
     ├── _meta/
     │   ├── index.md
     │   ├── log.md
-    │   ├── taxonomy.md
+    │   ├── taxonomy.md   ← fonte di verità per tutte le skill wiki-*
     │   └── hot-cache.md
-    ├── overview.md
-    ├── sources/
-    ├── entities/
-    ├── concepts/
-    ├── syntheses/
-    └── questions/
+    └── overview.md
 ```
 
-Poi aggiungi solo le aree davvero necessarie al profilo del vault, per esempio:
+Le sottocartelle di `wiki/` sono determinate dal profilo. Vedi la sezione **Tipi di vault** per le strutture per profilo.
 
-- `wiki/build/`
-- `wiki/ops/`
-- `wiki/decisions/`
-- `wiki/lists/`
-- `wiki/artifacts/`
+Usa nomi di cartelle che riflettono il dominio del vault: per un vault di ricerca ha senso `papers/` e `findings/`, non `sources/` e `syntheses/`. Per un second brain ha senso `people/` e `ideas/`, non `entities/` e `syntheses/`.
+
+Includi solo le aree che il vault usa davvero. Non generare cartelle vuote di riserva.
 
 ### 2.2 File istruzioni locale
 
@@ -126,8 +121,54 @@ Genera:
 
 - `wiki/_meta/index.md`
 - `wiki/_meta/log.md`
-- `wiki/_meta/taxonomy.md`
 - `wiki/_meta/hot-cache.md`
+- `wiki/_meta/taxonomy.md` ← il più importante: tutte le skill lo leggono per risolvere i path
+
+`taxonomy.md` deve seguire questo formato esatto:
+
+````markdown
+---
+vault_type: software-project | research | second-brain | business | hybrid
+vault_name: ""
+language: it | en
+---
+
+# Taxonomy
+
+## Ruoli semantici → Path
+
+I ruoli semantici sono fissi. I path sono specifici di questo vault.
+Le skill wiki-* non usano mai path hardcodati: leggono sempre questa tabella.
+
+| Ruolo       | Path              | Attivo |
+|-------------|-------------------|--------|
+| `source`    | `wiki/<path>/`    | sì/no  |
+| `knowledge` | `wiki/<path>/`    | sì/no  |
+| `entity`    | `wiki/<path>/`    | sì/no  |
+| `synthesis` | `wiki/<path>/`    | sì/no  |
+| `decision`  | `wiki/<path>/`    | sì/no  |
+| `question`  | `wiki/<path>/`    | sì/no  |
+| `operation` | `wiki/<path>/`    | sì/no  |
+| `list`      | `wiki/<path>/`    | sì/no  |
+| `artifact`  | `wiki/<path>/`    | sì/no  |
+| `build`     | `wiki/<path>/`    | sì/no  |
+
+## Cartelle raw → Path
+
+| Tipo      | Path              |
+|-----------|-------------------|
+| default   | `raw/`            |
+| audio     | `raw/audio/`      |
+| documents | `raw/...`         |
+| archived  | `raw/archived/`   |
+
+## Page types canonici
+
+I valori ammessi per `type:` nel frontmatter di questo vault:
+`source`, `knowledge`, `entity`, `synthesis`, `decision`, `question`
+````
+
+Compila la tabella dei ruoli in base al profilo scelto. Dichiara tutti i ruoli anche quelli con `Attivo: no`, così le skill non devono inferire l'assenza.
 
 ### 2.4 `overview.md`
 
@@ -137,16 +178,72 @@ Genera una pagina overview leggera ma utile come punto di ingresso.
 
 ## Tipi di vault
 
-I profili di vault servono soprattutto qui, in init.
-Le altre skill devono poi restare profile-agnostic.
+I profili determinano le sottocartelle di `wiki/` e i path da compilare in `taxonomy.md`.
+Le altre skill restano profile-agnostic leggendo la taxonomy.
 
-Profili tipici:
+### software-project
 
-- software project
-- business project
-- research vault
-- second brain
-- hybrid vault
+```text
+wiki/
+├── sources/       # ruolo source    (doc lette, RFC, articoli tecnici)
+├── components/    # ruolo entity    (moduli, servizi, librerie, API)
+├── concepts/      # ruolo knowledge (pattern, pratiche, tecnologie)
+├── architecture/  # ruolo synthesis (analisi, decisioni architetturali)
+├── decisions/     # ruolo decision
+├── questions/     # ruolo question
+├── ops/           # ruolo operation (task, sprint, bug tracking)
+└── artifacts/     # ruolo artifact
+```
+
+Opzionale: `wiki/build/` (ruolo `build`) per documentazione di build e deploy.
+
+### research
+
+```text
+wiki/
+├── papers/        # ruolo source    (articoli letti, dataset, esperimenti)
+├── subjects/      # ruolo entity    (autori, strumenti, aree tematiche)
+├── theories/      # ruolo knowledge (teorie, modelli, framework)
+├── findings/      # ruolo synthesis (risultati, conclusioni, ipotesi)
+├── decisions/     # ruolo decision
+└── questions/     # ruolo question
+```
+
+Opzionale: `wiki/ops/` (ruolo `operation`) se la ricerca ha un flusso operativo attivo.
+
+### second-brain
+
+```text
+wiki/
+├── sources/       # ruolo source    (libri, podcast, articoli)
+├── people/        # ruolo entity    (persone, community, autori)
+├── notes/         # ruolo knowledge (appunti, conoscenza)
+├── ideas/         # ruolo synthesis (connessioni, sintesi personali)
+├── decisions/     # ruolo decision
+├── questions/     # ruolo question
+├── lists/         # ruolo list      (reading list, watchlist, raccolte)
+└── ops/           # ruolo operation
+```
+
+### business-project
+
+```text
+wiki/
+├── sources/       # ruolo source    (documenti, meeting notes, research)
+├── stakeholders/  # ruolo entity    (clienti, partner, team)
+├── processes/     # ruolo knowledge (processi, metodologie, guide)
+├── strategies/    # ruolo synthesis (strategie, analisi, report)
+├── decisions/     # ruolo decision
+├── questions/     # ruolo question
+├── ops/           # ruolo operation
+└── artifacts/     # ruolo artifact
+```
+
+Opzionale: `wiki/lists/` (ruolo `list`).
+
+### hybrid
+
+Struttura personalizzata basata sull'intervista. Scegli nomi di cartella che rispecchiano il dominio specifico. Usa i ruoli semantici come guida concettuale, non come nomi obbligatori.
 
 ---
 
