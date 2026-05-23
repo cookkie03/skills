@@ -12,15 +12,7 @@ Health check del wiki. Produce un report strutturato con priorità e azioni conc
 
 ---
 
-## Contratto comune
-
-Il file istruzioni locale del vault può dichiarare:
-
-- cartelle equivalenti per ops, lists, build, artifacts
-- tag canonici e frontmatter minimi
-- policy su archivio raw e pending ingest
-
-Il lint deve controllare prima gli invarianti comuni, poi le convenzioni specifiche del vault.
+Leggi `wiki/_meta/taxonomy.md` per i path attivi. Controlla prima gli invarianti comuni, poi le convenzioni del vault dichiarate nel file istruzioni locale.
 
 ---
 
@@ -79,12 +71,12 @@ Classifica ogni problema come:
 
 ### Freshness & Deduplication
 
-**Freshness via mtime:**
+**Freshness via `updated:`:**
 
 Per ogni source page con `raw_source_path` nel frontmatter:
 
-- confronta la data `updated:` della wiki page con il `mtime` del file raw referenziato
-- se il raw è più recente della wiki page → segnala come `ATTENZIONE: wiki page stale`
+- confronta il campo `updated:` della wiki page con il campo `updated:` del raw referenziato (se presente)
+- se il raw ha `updated:` più recente → segnala come `ATTENZIONE: wiki page stale`
 - se il raw non esiste più al path indicato ma non risulta archiviato → segnala come `ATTENZIONE: raw_source_path non risolvibile`
 
 Per le wiki page in generale:
@@ -128,7 +120,7 @@ Classifica ogni candidato come:
 
 ## Freshness
 
-- Wiki pages stale (raw più recente): N → [[elenco]]
+- Wiki pages stale (raw aggiornato dopo): N → [[elenco]]
 - Raw source_path non risolvibili: N → [[elenco]]
 - Pagine non aggiornate da >90gg con link attivi: N
 - Pagine non aggiornate da >90gg orfane: N

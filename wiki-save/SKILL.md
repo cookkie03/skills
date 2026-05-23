@@ -11,15 +11,7 @@ Trasforma una risposta elaborata in una pagina wiki permanente.
 
 ---
 
-## Contratto comune
-
-Il file istruzioni locale del vault può ridefinire:
-
-- dove vivono decisioni, sintesi, framework e pagine operative
-- quali tipi frontmatter sono canonici
-- se `raw_source_path` va tenuto o omesso per pagine nate da query
-
-Usa i path standard come default, ma lascia prevalere gli override locali.
+Leggi `wiki/_meta/taxonomy.md` per i path. Il file istruzioni locale può ridefinire tipi frontmatter canonici e policy locali — prevale sempre sul comportamento default.
 
 ---
 
@@ -63,7 +55,7 @@ Frontmatter base suggerito:
 ```yaml
 ---
 title: ""
-type: synthesis | concept | decision
+type: synthesis | knowledge | decision | entity
 tags: []
 sources:
   - "[[sources/slug1]]"

@@ -13,17 +13,7 @@ Genera artefatti visivi e strutturati dal wiki.
 
 ---
 
-## Contratto comune
-
-Questa skill deve funzionare in vault diversi senza assumere che esistano sempre gli stessi folder.
-
-Il file istruzioni locale del vault può ridefinire:
-
-- dove salvare artifact visuali
-- dove vive l'area operativa
-- se esistono liste, board, dashboard o build docs
-
-Risolvi sempre i path leggendo `wiki/_meta/taxonomy.md`: il ruolo `artifact` indica dove salvare gli artifact, il ruolo `operation` indica l'area operativa. Non usare path hardcodati.
+Leggi `wiki/_meta/taxonomy.md` per i path — non usare path hardcodati. Il file istruzioni locale del vault può dichiarare override.
 
 ---
 
