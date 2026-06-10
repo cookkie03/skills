@@ -13,7 +13,7 @@ Genera artefatti visivi e strutturati dal wiki.
 
 ---
 
-Leggi `wiki/_meta/taxonomy.md` per i path — non usare path hardcodati. Il file istruzioni locale del vault può dichiarare override.
+Leggi `_meta/taxonomy.md` per i path — non usare path hardcodati. Il file istruzioni locale del vault può dichiarare override.
 
 ---
 

@@ -85,18 +85,18 @@ vault-root/
 ├── CLAUDE.md | AGENTS.md | GEMINI.md
 ├── raw/
 │   └── archived/
-└── wiki/
-    ├── _meta/
-    │   ├── index.md
-    │   ├── log.md
-    │   ├── taxonomy.md   ← fonte di verità per tutte le skill wiki-*
-    │   └── hot-cache.md
-    ├── overview.md
-    ├── sources/       # ruolo source    — default, rinominabile
-    ├── entities/      # ruolo entity    — default, rinominabile
-    ├── concepts/      # ruolo knowledge — default, rinominabile
-    ├── syntheses/     # ruolo synthesis — default, rinominabile
-    └── questions/     # ruolo question  — default, rinominabile
+├── _meta/
+│   ├── index.md
+│   ├── log.md
+│   ├── taxonomy.md   ← fonte di verità per tutte le skill wiki-*
+│   └── hot-cache.md
+├── overview.md
+├── sources/       # ruolo source    — default, rinominabile
+├── entities/      # ruolo entity    — default, rinominabile
+├── concepts/      # ruolo knowledge — default, rinominabile
+├── syntheses/     # ruolo synthesis — default, rinominabile
+├── questions/     # ruolo question  — default, rinominabile
+└── master/        # ruolo master    — default, rinominabile
 ```
 
 I nomi delle sottocartelle mostrati sopra sono **default validi per la maggior parte dei vault**. Si rinominano solo quando il dominio ha un vocabolario più preciso e riconoscibile — vedi la sezione **Principi guida** per sapere quando e come.
@@ -123,12 +123,11 @@ Il file deve essere abbastanza conciso da stare in contesto all'inizio di ogni s
 ## Struttura
 
 ```
-wiki/
 ├── [cartella]/    # [ruolo semantico] — [cosa contiene]
 ├── ...
 ```
 
-Per il mapping completo ruoli → path, vedi `wiki/_meta/taxonomy.md`.
+Per il mapping completo ruoli → path, vedi `_meta/taxonomy.md`.
 
 ## Regole operative
 
@@ -156,10 +155,10 @@ Per il mapping completo ruoli → path, vedi `wiki/_meta/taxonomy.md`.
 
 Genera:
 
-- `wiki/_meta/index.md`
-- `wiki/_meta/log.md`
-- `wiki/_meta/hot-cache.md`
-- `wiki/_meta/taxonomy.md` ← il più importante: tutte le skill lo leggono per risolvere i path
+- `_meta/index.md`
+- `_meta/log.md`
+- `_meta/hot-cache.md`
+- `_meta/taxonomy.md` ← il più importante: tutte le skill lo leggono per risolvere i path
 
 `taxonomy.md` deve seguire questo formato esatto:
 
@@ -178,14 +177,14 @@ Le skill wiki-* non usano mai path hardcodati: leggono sempre questa tabella.
 
 | Ruolo       | Path           | Attivo |
 |-------------|----------------|--------|
-| `source`    | `wiki/<path>/` | sì/no  |
-| `knowledge` | `wiki/<path>/` | sì/no  |
-| `entity`    | `wiki/<path>/` | sì/no  |
-| `synthesis` | `wiki/<path>/` | sì/no  |
-| `question`  | `wiki/<path>/` | sì/no  |
-| `operation` | `wiki/<path>/` | sì/no  |
-| `list`      | `wiki/<path>/` | sì/no  |
-| `artifact`  | `wiki/<path>/` | sì/no  |
+| `source`    | `<path>/` | sì/no  |
+| `knowledge` | `<path>/` | sì/no  |
+| `entity`    | `<path>/` | sì/no  |
+| `synthesis` | `<path>/` | sì/no  |
+| `question`  | `<path>/` | sì/no  |
+| `operation` | `<path>/` | sì/no  |
+| `list`      | `<path>/` | sì/no  |
+| `artifact`  | `<path>/` | sì/no  |
 
 Nota: `decision` e `build` non sono ruoli-cartella separati per default. Le pagine di tipo `decision` vivono nel path `operation`. Se il vault ha volumi che giustificano cartelle dedicate, aggiungile con i loro ruoli qui.
 

@@ -12,7 +12,7 @@ Risponde a domande usando come fonte primaria la conoscenza accumulata nel wiki.
 
 ---
 
-Leggi `wiki/_meta/taxonomy.md` per i path. Il file istruzioni locale del vault può dichiarare policy locali.
+Leggi `_meta/taxonomy.md` per i path. Il file istruzioni locale del vault può dichiarare policy locali.
 
 ---
 
@@ -20,8 +20,8 @@ Leggi `wiki/_meta/taxonomy.md` per i path. Il file istruzioni locale del vault p
 
 Leggi sempre prima di rispondere:
 
-1. `wiki/_meta/hot-cache.md`
-2. `wiki/_meta/index.md`
+1. `_meta/hot-cache.md`
+2. `_meta/index.md`
 3. le pagine rilevanti e i loro wikilink pertinenti
 
 ---
@@ -60,8 +60,8 @@ Se il wiki non basta, dillo esplicitamente e proponi il passo successivo:
 
 Leggi in sequenza:
 
-1. `wiki/_meta/hot-cache.md`
-2. `wiki/overview.md`
+1. `_meta/hot-cache.md`
+2. `overview.md`
 3. path del ruolo `operation` da `taxonomy.md`
 4. path del ruolo `question` da `taxonomy.md`
 5. `raw/` per file non ancora ingestiti

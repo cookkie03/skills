@@ -26,7 +26,7 @@ Può operare in modo **autonomo**, leggendo la cartella `raw/` senza istruzioni 
 
 ---
 
-Leggi `wiki/_meta/taxonomy.md` per i path. Il file istruzioni locale del vault può dichiarare override — prevale sempre sul comportamento default di questa skill.
+Leggi `_meta/taxonomy.md` per i path. Il file istruzioni locale del vault può dichiarare override — prevale sempre sul comportamento default di questa skill.
 
 ---
 
@@ -34,9 +34,9 @@ Leggi `wiki/_meta/taxonomy.md` per i path. Il file istruzioni locale del vault p
 
 Prima di operare, leggi:
 
-1. `wiki/_meta/hot-cache.md`
-2. `wiki/_meta/index.md`
-3. `wiki/_meta/taxonomy.md`
+1. `_meta/hot-cache.md`
+2. `_meta/index.md`
+3. `_meta/taxonomy.md`
 
 Usa sempre le skill Obsidian installate per sintassi markdown, canvas o basi.
 
@@ -62,7 +62,7 @@ Il contenuto da ingestire può richiedere due tipi di intervento diversi:
 - **Contenuto genuinamente nuovo**: introduce concetti, entità o informazioni non ancora presenti nel wiki → richiede la creazione di nuove pagine
 - **Contenuto aggiornato**: tratta argomenti già coperti nel wiki ma con dati più recenti, corretti o ampliati → richiede l'aggiornamento di pagine esistenti, senza creare nuovi file
 
-Determina quale dei due casi si applica consultando `wiki/_meta/index.md` e cercando pagine con titolo simile o stesso `raw_source_path`.
+Determina quale dei due casi si applica consultando `_meta/index.md` e cercando pagine con titolo simile o stesso `raw_source_path`.
 
 ### Istruzioni per il wiki
 Testo scritto dall'utente che indica esplicitamente cosa fare sul wiki: "rimuovi X", "aggiorna Y", "sintetizza la sezione Z", "segna come fatto W". Queste istruzioni vengono scritte in `raw/` per comodità, come promemoria asincrono, e sono equivalenti a dirle direttamente in chat.
@@ -88,15 +88,15 @@ Se il piano contiene solo contenuto da ingestire senza istruzioni, puoi proceder
 
 ---
 
-## Step 4 — Analisi e preprocessing dei source
+## Step 4 — Preprocessing dei source
 
-Prova sempre ad analizzare ogni file direttamente, qualunque sia il formato. La sequenza di fallback è:
+Prima di leggere un source, verifica se richiede preprocessing:
 
-1. **Analisi diretta**: apri e leggi il file. Se riesci a estrarre il contenuto (testo, tabelle, dati strutturati), procedi con l'ingest.
-2. **wiki-preprocess**: se il formato non è analizzabile direttamente (audio, immagini senza vision, binari opachi), usa `wiki-preprocess` per trasformarlo in un formato leggibile. Per l'audio, cerca prima `<nome-audio>.transcription.md` accanto al file — se esiste, usa quello senza richiamare wiki-preprocess.
-3. **Notifica all'utente**: se anche wiki-preprocess fallisce o non è in grado di trattare il formato, notifica l'utente spiegando quale file non è stato processato e perché. Non saltare mai un file silenziosamente.
+- **Audio**: cerca il file di trascrizione dichiarato dal vault (default: `<nome-audio>.transcription.md` accanto al file). Se esiste, usa quello. Se non esiste, attiva `wiki-preprocess`.
+- **Immagini**: descrivi il contenuto se il modello ha vision; altrimenti segnala che serve descrizione manuale.
+- **Tutti gli altri formati**: leggili direttamente o usa la skill specializzata più adatta, come `pdf`.
 
-L'ingest degli altri file continua normalmente — un singolo file non processabile non blocca l'intero batch.
+Se il file ha un formato non supportato, non chiaramente leggibile, o non facilmente ingestabile in modo affidabile, non forzare l'ingest diretto: passa prima da `wiki-preprocess`.
 
 ---
 
@@ -106,7 +106,7 @@ L'ingest degli altri file continua normalmente — un singolo file non processab
 
 Prima di procedere, determina il tipo logico:
 
-I path reali si ricavano da `wiki/_meta/taxonomy.md`. La tabella usa i ruoli semantici.
+I path reali si ricavano da `_meta/taxonomy.md`. La tabella usa i ruoli semantici.
 
 | Tipo logico                         | Esempi                          | Azione primaria                                                              |
 | ----------------------------------- | ------------------------------- | ---------------------------------------------------------------------------- |
@@ -135,7 +135,7 @@ Mappa poi il tipo logico ai path reali del vault.
 
 3. **Check anti-duplicato.**
 
-   Consulta `wiki/_meta/index.md` e cerca:
+   Consulta `_meta/index.md` e cerca:
 
    - source pages esistenti con lo stesso `raw_source_path` o con titolo molto simile → se trovata, **aggiorna quella pagina** invece di crearne una nuova
    - concetti o entità che il source introduce e che già hanno una pagina → aggiorna quelle pagine, non creare duplicati
@@ -145,7 +145,7 @@ Mappa poi il tipo logico ai path reali del vault.
 
    Se non esiste nulla di simile, procedi a creare.
 
-4. **Crea la source page** se il contenuto è nuovo, nel path del ruolo `source` dichiarato in `wiki/_meta/taxonomy.md`.
+4. **Crea la source page** se il contenuto è nuovo, nel path del ruolo `source` dichiarato in `_meta/taxonomy.md`.
 
    Frontmatter minimo:
 
@@ -170,21 +170,11 @@ Mappa poi il tipo logico ai path reali del vault.
    - ruolo `operation` o `list`, se emergono task
    - overview, solo se cambia lo stato generale del vault
 
-6. **Aggiorna `wiki/_meta/index.md`** con la nuova page e le pagine toccate.
+6. **Aggiorna `_meta/index.md`** con la nuova page e le pagine toccate.
 
-7. **Archivia il source**: sposta il file raw in `raw/archived/` (o nel path archivio dichiarato in `taxonomy.md`). Se il vault non dichiara un path archivio, crea `raw/archived/`. Aggiorna `raw_source_path` nel frontmatter della source page al nuovo path.
+7. **Archivia il source** se il vault usa `raw/archived/`. Registra l'ingest senza spostarle.
 
-   La source page nel wiki **non è una copia del raw** — è una scheda strutturata che estrae, organizza e collega l'informazione. Il raw archiviato serve come riferimento al documento originale.
-
-8. **Verifica conflitti**: forma un mini-cluster con le pagine appena create/aggiornate e le loro pagine collegate (wikilink diretti, `related:`, tag condivisi). Cerca conflitti di tipo FACTUAL, STATUS e QUANTITATIVE (vedi wiki-lint per le definizioni). Se trovi conflitti, segnalali all'utente prima di chiudere l'ingest.
-
-9. **Verifica post-ingest**: prima di chiudere, controlla che:
-   - ogni pagina creata esista al path dichiarato e abbia frontmatter valido
-   - `index.md` sia aggiornato con tutte le pagine create e modificate
-   - i wikilink inseriti nelle pagine nuove/aggiornate puntino a pagine esistenti
-   Se qualcosa non torna, sistemalo.
-
-10. **Appendi al log**.
+8. **Appendi al log**.
 
 ---
 
@@ -202,10 +192,10 @@ Da eseguire solo dopo aver ricevuto validazione dall'utente (vedi Step 3).
 
 ### Conflict Policy
 
-Per la procedura completa di rilevamento conflitti, vedi wiki-lint. Durante l'ingest si applica la verifica leggera dello Step 5.8. Le regole di risoluzione:
+Se il nuovo contenuto contraddice una pagina esistente:
 
 - il source con `updated:` più recente nel frontmatter vince per default
-- se la pagina esistente ha `confidence: high`, segnala il conflitto all'utente prima di sovrascrivere
+- se la pagina esistente ha `confidence: high`, segnala il conflitto prima di sovrascrivere
 - registra ogni contraddizione risolta nel log
 
 ---
@@ -225,11 +215,11 @@ Se una lista usa `last_reviewed`, aggiornalo a ogni modifica.
 
 ## Fine ingest
 
-Aggiorna `wiki/_meta/hot-cache.md` con:
+Aggiorna `_meta/hot-cache.md` con:
 
 - pagine create e aggiornate
-- conflitti trovati: quelli risolti automaticamente (source più recente vince) e quelli segnalati all'utente
-- file raw non processati (con motivo) ancora in attesa di ingest
+- contraddizioni risolte
+- pending ingest ancora aperti
 
 ---
 
@@ -239,15 +229,13 @@ Aggiorna `wiki/_meta/hot-cache.md` con:
 ## [YYYY-MM-DD] ingest | Titolo source
 
 - **Type**: article / document / call / note / data
-- **Pages created**: [[slug-pagina1]], [[slug-pagina2]]
-- **Pages updated**: [[slug-pagina3]]
-- **Archived**: raw/archived/filename
-- **Conflicts**: nessuno / descrizione (risolto / segnalato)
-- **Skipped**: nessuno / file non processati con motivo
+- **Pages created**: [[sources/slug]], [[concepts/nome]]
+- **Pages updated**: [[entities/nome]], [[ops/pagina]]
+- **Contradictions**: nessuna / descrizione
 - **Notes**: osservazioni rilevanti
 
 ## [YYYY-MM-DD] update | Nome pagina aggiornata
 
 - **Change**: descrizione della modifica
-- **Pages updated**: [[slug-pagina1]], [[slug-pagina2]]
+- **Pages updated**: [[pagina1]], [[pagina2]]
 ```

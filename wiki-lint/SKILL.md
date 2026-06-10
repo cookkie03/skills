@@ -12,7 +12,7 @@ Health check del wiki. Produce un report strutturato con priorità e azioni conc
 
 ---
 
-Leggi `wiki/_meta/taxonomy.md` per i path attivi. Controlla prima gli invarianti comuni, poi le convenzioni del vault dichiarate nel file istruzioni locale.
+Leggi `_meta/taxonomy.md` per i path attivi. Controlla prima gli invarianti comuni, poi le convenzioni del vault dichiarate nel file istruzioni locale.
 
 ---
 
@@ -20,10 +20,10 @@ Leggi `wiki/_meta/taxonomy.md` per i path attivi. Controlla prima gli invarianti
 
 Leggi prima di iniziare:
 
-1. `wiki/_meta/log.md	`
-2. `wiki/_meta/index.md`
-3. `wiki/_meta/taxonomy.md`
-4. `wiki/_meta/hot-cache.md`
+1. `_meta/log.md	`
+2. `_meta/index.md`
+3. `_meta/taxonomy.md`
+4. `_meta/hot-cache.md`
 
 ---
 

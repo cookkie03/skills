@@ -11,7 +11,7 @@ Trasforma una risposta elaborata in una pagina wiki permanente.
 
 ---
 
-Leggi `wiki/_meta/taxonomy.md` per i path. Il file istruzioni locale può ridefinire tipi frontmatter canonici e policy locali — prevale sempre sul comportamento default.
+Leggi `_meta/taxonomy.md` per i path. Il file istruzioni locale può ridefinire tipi frontmatter canonici e policy locali — prevale sempre sul comportamento default.
 
 ---
 
@@ -37,7 +37,7 @@ Non salvare se è solo:
 
 ### 1. Determina il tipo di pagina
 
-Leggi `wiki/_meta/taxonomy.md` e ricava il path reale per il ruolo semantico corretto prima di creare o aggiornare la pagina.
+Leggi `_meta/taxonomy.md` e ricava il path reale per il ruolo semantico corretto prima di creare o aggiornare la pagina.
 
 | Tipo risposta                 | Ruolo semantico | `type`      |
 | ----------------------------- | --------------- | ----------- |
@@ -46,7 +46,7 @@ Leggi `wiki/_meta/taxonomy.md` e ricava il path reale per il ruolo semantico cor
 | Decisione                     | `decision`      | `decision`  |
 | Risposta su entità specifica  | `entity`        | `entity`    |
 
-Il path effettivo (`wiki/findings/`, `wiki/architecture/`, `wiki/notes/`, ecc.) è dichiarato nella taxonomy del vault, non in questa skill.
+Il path effettivo (`findings/`, `architecture/`, `notes/`, ecc.) è dichiarato nella taxonomy del vault, non in questa skill.
 
 ### 2. Crea o aggiorna la pagina
 
@@ -72,7 +72,7 @@ Per decisioni, aggiungi il campo locale appropriato, di default `decision_status
 ### 3. Collega la pagina al wiki
 
 - aggiungi wikilink dalle pagine che ne beneficiano
-- aggiorna `wiki/_meta/index.md`
+- aggiorna `_meta/index.md`
 - aggiorna `overview.md` solo se cambia davvero la mappa del vault
 
 ### 4. Log e hot cache
