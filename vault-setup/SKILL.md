@@ -110,7 +110,16 @@ git remote add origin git@github.com:<user>/nome-vault.git
 git remote add origin git@<gitea-host>:<user>/nome-vault.git
 ```
 
-### 5. Primo commit e push
+### 5. Genera il CLAUDE.md
+
+Genera il file istruzioni per l'AI nella root del vault usando il template
+nella sezione "File istruzioni per l'AI" più in basso.
+
+Compila ogni campo con i dati reali del vault: nome, cartelle, lingua.
+Non lasciare placeholder non compilati — il CLAUDE.md viene letto dall'AI
+ad ogni sessione ed è inutile se generico.
+
+### 6. Primo commit e push
 
 ```bash
 git add .
@@ -118,7 +127,7 @@ git commit -m "init: vault setup"
 git push -u origin main
 ```
 
-### 6. Configura Obsidian Git
+### 7. Configura Obsidian Git
 
 In Obsidian → Settings → Obsidian Git:
 
@@ -155,12 +164,16 @@ git remote add origin <url>
 git push -u origin main
 ```
 
-Se manca solo la configurazione del plugin: segui il punto 6 sopra.
+Se manca solo la configurazione del plugin: segui il punto 7 sopra.
+
+Se manca o è obsoleto il CLAUDE.md: generalo o aggiornalo usando il template
+nella sezione "File istruzioni per l'AI". Questo è il passaggio più importante
+per far funzionare l'orientamento AI automatico.
 
 Se il vault ha già `wiki/` e `raw/` (paradigma wiki-init):
 Non è necessario migrare. I due paradigmi coesistono. Aggiungi il git
-setup e usa `workspace-context` per l'orientamento AI mantenendo la struttura
-esistente.
+setup e aggiorna il CLAUDE.md includendo la procedura di orientamento a inizio
+sessione (vedi template).
 
 ---
 
@@ -189,6 +202,28 @@ creare qualsiasi file nuovo.
 
 ---
 
+## Convenzione commit
+
+Il vault usa due tipi di commit distinguibili nel `git log`:
+
+| Prefisso | Chi | Quando |
+|---|---|---|
+| `vault: {{date}}` | Obsidian Git (utente) | Auto-commit ogni 10 min |
+| `ai: <descrizione>` | AI (Claude Code) | Quando l'AI modifica file |
+
+L'AI deve sempre usare `ai: ` come prefisso quando commette modifiche,
+mai `vault:`. Questo rende il `git log` leggibile: si vede immediatamente
+cosa ha fatto l'utente e cosa ha fatto l'AI.
+
+Esempi di commit AI corretti:
+```
+ai: aggiorna note su progetto X con nuove specifiche
+ai: crea riepilogo meeting del 2025-06-12 in progetti/
+ai: correggi link rotti in _meta/taxonomy.md
+```
+
+---
+
 ## File istruzioni per l'AI
 
 Genera il file in base all'agente principale usato nel vault:
@@ -197,17 +232,19 @@ Genera il file in base all'agente principale usato nel vault:
 - `AGENTS.md` per setup multi-agent o agenti non specificati
 - `GEMINI.md` per Gemini
 
+Il CLAUDE.md è il file più importante del vault: viene caricato ad ogni
+sessione e deve contenere tutto quello che serve all'AI per operare
+autonomamente senza spiegazioni extra. Non rimandare alle skill per le
+procedure operative — includile direttamente.
+
 **Template:**
 
-```markdown
+````markdown
 # [Nome Vault]
 
-[1-2 righe: cosa contiene, chi lo usa.]
+[1-2 righe: cosa contiene, chi lo usa, in che lingua si lavora.]
 
 ## Struttura
-
-Vault workspace con cartelle tematiche flat (no wiki/raw).
-Mappa completa in `_meta/taxonomy.md`.
 
 ```
 <cartella-1>/    # [contenuto]
@@ -216,25 +253,51 @@ daily-notes/     # note giornaliere YYYY-MM-DD.md
 _meta/           # taxonomy e metadati
 ```
 
-## Orientamento a inizio sessione
+Mappa completa con ruoli in `_meta/taxonomy.md`.
 
-Usa la skill `workspace-context` per leggere git log + daily note di oggi
-prima di iniziare a lavorare.
+## A inizio sessione — sempre
+
+Esegui questi comandi dalla root del vault prima di fare qualsiasi altra cosa:
+
+```bash
+# Cosa è cambiato di recente
+git log --oneline -20
+
+# File toccati negli ultimi 3 commit
+git diff HEAD~3 --stat
+
+# Modifiche non committate (lavoro in corso)
+git status --short
+
+# Daily note di oggi
+cat daily-notes/$(date +%Y-%m-%d).md
+```
+
+Leggi l'output e usa queste euristiche:
+- commit `vault: ...` = lavoro dell'utente (Obsidian Git auto-commit)
+- commit `ai: ...` = lavoro AI delle sessioni precedenti
+- file in `git status` = modifiche non ancora committate, probabilmente in corso
+- daily note = focus dichiarato dell'utente per oggi
 
 ## Regole operative
 
-- Prima di creare nuovi file, leggi `_meta/taxonomy.md` per scegliere la cartella.
-- Non creare cartelle nuove senza accordo con l'utente.
+- **Prima di creare file**: leggi `_meta/taxonomy.md` per scegliere la cartella giusta.
+- **Non creare cartelle** senza accordo esplicito con l'utente.
+- **Commit AI**: usa sempre `git commit -m "ai: <descrizione>"` — mai `vault:`.
+- **Non modificare file** senza richiesta esplicita o accordo nella sessione.
 - Preferisci modificare file esistenti piuttosto che crearne di nuovi.
 
 ## Skill disponibili
 
 | Operazione | Skill |
 |---|---|
-| Orientamento a inizio sessione | `workspace-context` |
 | Preprocessing audio/immagini/Office | `wiki-preprocess` |
-| Crawling URL | `crawl4ai` |
-```
+| Crawling e ingest URL | `crawl4ai` |
+
+## Override locali
+
+[Regole specifiche di questo vault che sovrascrivono i comportamenti sopra.]
+````
 
 ---
 
