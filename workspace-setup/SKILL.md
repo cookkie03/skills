@@ -120,15 +120,18 @@ manualmente con il pulsante nella ribbon.
 vault/
 ├── CLAUDE.md        ← generato nel passo successivo
 ├── .gitignore
+├── _meta/
+│   └── taxonomy.md  ← mappa dettagliata cartelle (fonte di verità per l'AI)
 ├── daily-notes/     ← YYYY-MM-DD.md, una per giorno
 ├── <tema-1>/
 ├── <tema-2>/
 └── ...
 ```
 
-Nessuna cartella `_meta/` richiesta: la mappa delle cartelle vive nel CLAUDE.md.
-Se il vault è grande e la mappa diventa lunga, puoi estrarre le descrizioni
-dettagliate in un file separato e rimandare a esso dal CLAUDE.md.
+`_meta/taxonomy.md` contiene la mappa estesa delle cartelle con ruoli e note.
+Il CLAUDE.md include la struttura in forma compatta e rimanda a taxonomy.md
+per i dettagli — così il file istruzioni resta conciso ma l'AI ha sempre
+una fonte di verità completa da consultare.
 
 ---
 
@@ -158,7 +161,10 @@ Nome del file in base all'agent dichiarato nell'intervista:
 <cartella-1>/    # [cosa contiene]
 <cartella-2>/    # [cosa contiene]
 daily-notes/     # note giornaliere YYYY-MM-DD.md
+_meta/           # taxonomy e metadati del vault
 ```
+
+Mappa estesa con ruoli e note in `_meta/taxonomy.md`.
 
 ## Convenzione commit
 
@@ -239,6 +245,33 @@ senza richiesta esplicita.
 
 [Rimuovi le righe non rilevanti per questo vault.]
 ````
+
+---
+
+## Template `_meta/taxonomy.md`
+
+Genera questo file insieme al CLAUDE.md. È la fonte di verità estesa per la
+struttura del vault — il CLAUDE.md la richiama, l'AI la legge prima di creare
+file in cartelle non ovvie.
+
+```markdown
+---
+vault_name: ""
+language: it | en
+---
+
+# Taxonomy
+
+| Cartella | Contenuto | Note |
+|---|---|---|
+| daily-notes/ | Note giornaliere (YYYY-MM-DD.md) | |
+| <tema-1>/ | ... | |
+| <tema-2>/ | ... | |
+| _meta/ | Taxonomy e metadati del vault | Non creare note di lavoro qui |
+```
+
+Compila con le cartelle reali emerse dall'intervista. Aggiorna quando si
+aggiungono cartelle nuove.
 
 ---
 
