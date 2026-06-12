@@ -231,4 +231,26 @@ senza richiesta esplicita.
 |---|---|
 | Preprocessing audio, immagini, documenti Office | `wiki-preprocess` |
 | Crawling e ingest di URL | `crawl4ai` |
+| Sintassi Obsidian (wikilinks, callout, frontmatter) | `obsidian-markdown` |
+| File .base (database view di note) | `obsidian-bases` |
+| File .canvas (mappe, diagrammi) | `json-canvas` |
+| Artefatti visivi (canvas, Dataview, kanban) | `wiki-artifact` |
+| Health check del vault | `wiki-lint` |
+
+[Rimuovi le righe non rilevanti per questo vault.]
 ````
+
+---
+
+## Script di orientamento
+
+Lo script `scripts/workspace-status.sh` (incluso in questa skill) esegue
+i comandi di orientamento in un colpo solo e può essere invocato dal CLAUDE.md:
+
+```bash
+bash <percorso-skill>/scripts/workspace-status.sh
+```
+
+Stampa: commit recenti con legenda vault/ai, file toccati, modifiche non
+committate, daily note di oggi. Funziona su vault con qualsiasi struttura
+di cartelle.
