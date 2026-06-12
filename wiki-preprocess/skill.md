@@ -1,10 +1,11 @@
 ---
 name: wiki-preprocess
 description: >
-  Preprocessa file multimediali prima dell'ingest nel wiki.
-  Usa questa skill quando ci sono file audio, immagini o altri formati non testuali
-  nelle cartelle raw/ o in altre inbox del vault che devono essere convertiti o
-  descritti prima che wiki-ingest possa leggerli.
+  Preprocessa file multimediali e documenti prima dell'ingest nel wiki.
+  Usa questa skill quando ci sono file audio, immagini, documenti Office
+  (docx, pptx, xlsx) o altri formati non leggibili come testo nelle cartelle
+  raw/ o in altre inbox del vault, che devono essere convertiti o descritti
+  prima che wiki-ingest possa leggerli.
 ---
 
 # Wiki Preprocess
@@ -75,6 +76,44 @@ Flusso operativo:
 
 ---
 
+## Office e documenti strutturati
+
+Per i documenti Office e i formati strutturati (Word, PowerPoint, Excel e affini) usa **markitdown**, che li converte in Markdown preservando titoli, tabelle, liste e struttura.
+
+Tool disponibile: lo script `scripts/preprocess-office.py` incluso in questa skill. **Non riscrivere la conversione da zero**: usa lo script. Cercalo nella directory di installazione della skill.
+
+Formati gestiti:
+
+- `.docx`, `.doc` (Word)
+- `.pptx`, `.ppt` (PowerPoint)
+- `.xlsx`, `.xls` (Excel)
+- `.odt`, `.odp`, `.ods` (OpenDocument)
+- `.rtf`, `.epub`
+- `.csv`, `.tsv`, `.html`, `.htm`, `.xml`, `.json`, `.ipynb`
+
+Flusso:
+
+1. lo script scansiona i file/cartelle passati (default `raw/`)
+2. converte ogni documento con markitdown
+3. salva il risultato come `<nome-file-completo>.md` accanto all'originale (es. `Report Q3.docx` → `Report Q3.docx.md`) — questo è il nome canonico che `wiki-ingest` si aspetta
+
+È idempotente: se il `.md` esiste ed è più recente del documento, salta.
+
+Uso:
+
+```bash
+python <path-skill>/scripts/preprocess-office.py                 # scansiona ./raw
+python <path-skill>/scripts/preprocess-office.py raw inbox       # più cartelle
+python <path-skill>/scripts/preprocess-office.py report.docx     # singolo file
+python <path-skill>/scripts/preprocess-office.py --dry-run        # anteprima
+```
+
+Prerequisito: `pip install 'markitdown[all]'`.
+
+I formati binari legacy (`.doc`, `.ppt`, `.xls`) a volte non sono leggibili direttamente da markitdown: in quel caso convertili prima con LibreOffice (`libreoffice --headless --convert-to docx <file>`) e poi rilancia lo script. Lo script segnala questi casi.
+
+---
+
 ## Immagini e PDF scansionati
 
 Per immagini e PDF scansionati (non-native-text), attiva la skill `glm-ocr` e delega a essa l'estrazione del testo.
@@ -108,3 +147,9 @@ Quando trova un'immagine o un PDF scansionato:
 1. cerca `.ocr.md` accanto al file
 2. se esiste, usa quello
 3. se non esiste, usa `glm-ocr` via `wiki-preprocess` per generarlo
+
+Quando trova un documento Office o strutturato (docx, pptx, xlsx, …):
+
+1. cerca `<nome-file-completo>.md` accanto al file
+2. se esiste, usa quello
+3. se non esiste, lancia `scripts/preprocess-office.py` via `wiki-preprocess` per generarlo
