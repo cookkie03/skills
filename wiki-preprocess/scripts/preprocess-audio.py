@@ -71,7 +71,7 @@ def transcribe(mp3: Path, out_dir: Path) -> str | None:
         "whisper",
         str(mp3),
         "--model",
-        "medium",
+        "turbo",
         "--output_format",
         "txt",
         "--output_dir",
@@ -124,7 +124,7 @@ def process(audio: Path, dry_run: bool = False) -> bool:
             f'source_audio: "{audio.name}"\n'
             f"transcribed_at: {datetime.datetime.now().isoformat()}\n"
             "tool: whisper\n"
-            "model: medium\n"
+            "model: turbo\n"
             "---\n\n"
             f"# Transcription: {audio.stem}\n\n"
             f"{text}\n"
