@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# workspace-status.sh — stato del vault per l'orientamento dell'AI a inizio sessione.
-# Eseguire dalla directory radice del vault.
-# Convenzione commit: "vault: ..." = utente (Obsidian Git), "ai: ..." = AI.
+# workspace-status.sh — stato del vault per l'orientamento AI a inizio sessione.
+# Eseguire dalla root del vault.
+# Convenzione: "vault: ..." = Obsidian Git (utente) | "ai: ..." = AI
 
 set -euo pipefail
 
 echo "=== Commit recenti (ultimi 20) ==="
-echo "  vault: ... → Obsidian Git (utente)   |   ai: ... → AI sessioni precedenti"
+echo "  vault: ... = utente (Obsidian Git)   |   ai: ... = AI (sessioni precedenti)"
 echo ""
 git log --oneline -20
 
@@ -23,6 +23,8 @@ echo "=== Modifiche non committate (lavoro in corso) ==="
 STATUS=$(git status --short)
 if [ -n "$STATUS" ]; then
     echo "$STATUS"
+    echo ""
+    echo "⚠️  questi file sono in modifica attiva — non editarli senza chiedere"
 else
     echo "(nessuna)"
 fi
@@ -49,5 +51,4 @@ if [ -n "$FOUND" ]; then
     cat "$FOUND"
 else
     echo "(nessuna daily note per oggi: $TODAY)"
-    echo "Percorsi cercati: daily-notes/, Daily Notes/, Journal/, Diario/, root"
 fi
