@@ -5,6 +5,22 @@
 
 set -euo pipefail
 
+echo "=== Hot cache (contesto caldo: dove eravamo) ==="
+if [ -f "_meta/hot-cache.md" ]; then
+    cat "_meta/hot-cache.md"
+else
+    echo "(nessun _meta/hot-cache.md)"
+fi
+
+echo ""
+echo "=== Index (catalogo contenuti) ==="
+if [ -f "_meta/index.md" ]; then
+    cat "_meta/index.md"
+else
+    echo "(nessun _meta/index.md)"
+fi
+
+echo ""
 echo "=== Commit recenti (ultimi 20) ==="
 echo "  vault: ... = utente (Obsidian Git)   |   ai: ... = AI (sessioni precedenti)"
 echo ""
