@@ -272,13 +272,6 @@ Per vault esistenti che hanno già `AGENTS.md` o `GEMINI.md` come file reali:
 controlla se il contenuto è equivalente a CLAUDE.md. Se sì, sostituisci con
 il symlink. Se no, unisci prima i contenuti, poi sostituisci.
 
-**Caveat mobile**: Obsidian su iOS non segue i symlink. Se il vault viene
-usato su iOS, usa invece una delle due alternative:
-- File singolo `CLAUDE.md`, documenta nel vault che gli altri agent trovano
-  le istruzioni lì.
-- Hardlink invece di symlink: `ln CLAUDE.md AGENTS.md` (stesso inode, stesso
-  contenuto, ma non si aggiornano automaticamente se si sostituisce il file).
-
 Aggiungi i symlink al commit iniziale del vault (git li versiona correttamente
 come symlink, non come copie).
 
