@@ -256,10 +256,31 @@ stato che invecchiano — quelli vivono in `_meta/` e li aggiorna l'AI durante
 il lavoro. Se in futuro serve cambiare *le regole*, allora sì si tocca il
 CLAUDE.md; ma il flusso normale di lavoro non lo modifica mai.
 
-Nome del file in base all'agent dichiarato nell'intervista:
-- `CLAUDE.md` → Claude / Claude Code
-- `AGENTS.md` → setup multi-agent o agent non specificato
-- `GEMINI.md` → Gemini
+Genera sempre **`CLAUDE.md`** come file canonico, indipendentemente dall'agent
+principale. Poi crea `AGENTS.md` e `GEMINI.md` come symlink che puntano a esso:
+
+```bash
+ln -sf CLAUDE.md AGENTS.md
+ln -sf CLAUDE.md GEMINI.md
+```
+
+In questo modo i tre file sono sempre sincronizzati automaticamente: qualsiasi
+agent (Claude, Gemini, multi-agent) trova le istruzioni nel suo file, e c'è
+una sola fonte di verità da mantenere.
+
+Per vault esistenti che hanno già `AGENTS.md` o `GEMINI.md` come file reali:
+controlla se il contenuto è equivalente a CLAUDE.md. Se sì, sostituisci con
+il symlink. Se no, unisci prima i contenuti, poi sostituisci.
+
+**Caveat mobile**: Obsidian su iOS non segue i symlink. Se il vault viene
+usato su iOS, usa invece una delle due alternative:
+- File singolo `CLAUDE.md`, documenta nel vault che gli altri agent trovano
+  le istruzioni lì.
+- Hardlink invece di symlink: `ln CLAUDE.md AGENTS.md` (stesso inode, stesso
+  contenuto, ma non si aggiornano automaticamente se si sostituisce il file).
+
+Aggiungi i symlink al commit iniziale del vault (git li versiona correttamente
+come symlink, non come copie).
 
 ---
 
