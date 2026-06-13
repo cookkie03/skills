@@ -13,18 +13,10 @@ else
 fi
 
 echo ""
-echo "=== Index (catalogo contenuti) ==="
-if [ -f "_meta/index.md" ]; then
-    cat "_meta/index.md"
-else
-    echo "(nessun _meta/index.md)"
-fi
-
-echo ""
-echo "=== Commit recenti (ultimi 20) ==="
+echo "=== Commit recenti (ultimi 15) ==="
 echo "  vault: ... = utente (Obsidian Git)   |   ai: ... = AI (sessioni precedenti)"
 echo ""
-git log --oneline -20
+git log --oneline -15
 
 echo ""
 echo "=== File modificati (ultimi 3 commit) ==="

@@ -265,6 +265,12 @@ Nome del file in base all'agent dichiarato nell'intervista:
 
 ### Template CLAUDE.md
 
+Questo file si scrive **una volta sola** e non si tocca nel flusso normale.
+Contiene solo quello che serve ad ogni messaggio: struttura, convenzioni, comandi
+di orientamento, regole. Le procedure dettagliate e i formati dei file meta
+vivono in `_meta/procedures.md` — l'AI le legge su richiesta, non le carica
+ogni turno.
+
 ````markdown
 # [Nome Vault]
 
@@ -275,141 +281,59 @@ Nome del file in base all'agent dichiarato nell'intervista:
 ```
 <cartella-1>/    # [cosa contiene]
 <cartella-2>/    # [cosa contiene]
-daily-notes/     # note giornaliere YYYY-MM-DD.md
-_meta/           # file di stato vivi (vedi sotto)
+daily-notes/     # YYYY-MM-DD.md
+_meta/           # taxonomy · index · hot-cache · log · procedures · sync.py
 ```
 
-Mappa estesa con ruoli e note in `_meta/taxonomy.md`.
-
-## File di stato vivi — leggere e tenere aggiornati
-
-Sono la memoria del vault. Consultali per orientarti, aggiornali quando lavori.
-
-| File | A cosa serve | Quando aggiornarlo |
-|---|---|---|
-| `_meta/taxonomy.md` | Dove vivono i contenuti (cartella → ruolo) | quando aggiungi una cartella |
-| `_meta/index.md` | Catalogo: quali contenuti esistono e di cosa trattano | quando crei un file o ne modifichi uno in modo rilevante |
-| `_meta/hot-cache.md` | Contesto caldo: su cosa si sta lavorando ora | a fine sessione, con le aree toccate |
-| `_meta/log.md` | Storia del *perché*: decisioni, milestone | dopo un cambiamento significativo |
-
-Questi file, non il CLAUDE.md, sono la fonte di verità sullo stato corrente.
+Mappa estesa in `_meta/taxonomy.md`. Procedure operative in `_meta/procedures.md`.
 
 ## Convenzione commit
 
 | Prefisso | Autore |
 |---|---|
-| `vault: {{date}}` | Obsidian Git — auto-commit utente ogni ~10 min |
-| `ai: <descrizione>` | AI (Claude Code) — ogni modifica fatta dall'AI |
+| `vault: {{date}}` | Obsidian Git — utente |
+| `ai: <descrizione>` | AI (questa sessione) |
 
-L'AI usa sempre `ai: ` — mai `vault:`.
+Usa sempre `ai:` — mai `vault:`.
 
-## A inizio sessione — sempre, prima di tutto
+## A inizio sessione
 
 ```bash
-git pull                                  # 1. allinea allo stato più recente
-cat _meta/hot-cache.md                    # 2. contesto caldo: dove eravamo
-cat _meta/index.md                        # 3. catalogo dei contenuti del vault
-git log --oneline -20                     # 4. chi ha fatto cosa e quando
-git diff HEAD~3 --stat                    # 5. file toccati di recente
-git status --short                        # 6. lavoro non committato (in corso adesso)
-cat daily-notes/$(date +%Y-%m-%d).md     # 7. focus dichiarato dall'utente oggi
+git pull
+cat _meta/hot-cache.md
+git log --oneline -15
+git status --short
+cat daily-notes/$(date +%Y-%m-%d).md
 ```
 
-`hot-cache.md` ti dà il filo del discorso in pochi token; `index.md` ti dice
-cosa esiste nel vault; git e la daily note ti dicono cosa è cambiato di recente.
-
-Dopo aver letto l'output, sintetizza ad alta voce:
-- dove eravamo rimasti (da `hot-cache.md`)
-- cosa ha fatto l'utente (`vault:` commits) dall'ultima sessione AI
-- cosa è già stato fatto dall'AI (`ai:` commits) nelle sessioni precedenti
-- task aperti (`- [ ]`) e menzioni rilevanti nella daily note di oggi
-- se l'utente è attivo adesso: `git status` non vuoto → file aperti in Obsidian
-
-Poi aspetta la richiesta, oppure proponi un'azione concreta basata su quanto trovato.
-
-**Come leggere l'output:**
-- `vault:` nel log → lavoro utente; i file toccati mostrano il focus recente
-- `ai:` nel log → lavoro AI precedente; la descrizione dice cosa è già fatto
-- file in `git status --short` → in modifica negli ultimi minuti, probabilmente
-  aperti in Obsidian adesso — non toccarli senza chiedere
-- daily note assente per oggi → chiedi all'utente su cosa vuole lavorare
-
-## Durante la sessione
-
-**Prima di leggere qualsiasi file:**
-```bash
-git pull   # incorpora gli auto-commit di Obsidian Git degli ultimi minuti
-```
-
-**Prima di ogni commit:**
-```bash
-git pull                            # evita conflitti con auto-commit Obsidian
-git add <file>
-git commit -m "ai: <descrizione>"
-git push
-```
-
-Se il pull genera un conflitto: risolvi preferendo la versione con mtime
-più recente, salvo indicazioni diverse dell'utente.
-
-**Se durante la sessione compaiono nuovi file in `git status --short`:**
-L'utente ha iniziato a editare qualcosa in Obsidian — non toccare quei file
-senza richiesta esplicita.
-
-**Quando crei o modifichi contenuti in modo rilevante:**
-- aggiorna `_meta/index.md` con la voce nuova/cambiata
-- se hai preso una decisione o raggiunto una milestone, appendi a `_meta/log.md`
+Sintetizza: dov'eravamo (hot-cache) · cosa è cambiato (log ai: vs vault:) · task aperti.
+`_meta/index.md` solo se cerchi un file specifico. Procedure in `_meta/procedures.md`.
 
 ## A fine sessione
 
-`_meta/index.md` e la sezione "File toccati" di `hot-cache.md` vengono
-aggiornati **automaticamente** dallo Stop hook (sync.py + auto-commit).
-
-**Quello che devi fare tu (parte semantica):**
-
-**1. Aggiorna `_meta/hot-cache.md` — Focus e Thread:**
-```markdown
-## Focus corrente
-- [su cosa si è lavorato / dove siamo arrivati]
-
-## Thread aperti
-- [ ] [cosa resta aperto per la prossima sessione]
-```
-Sovrascrivi le voci superate — tienilo corto, è una finestra mobile.
-
-**2. Se è successo qualcosa di significativo, appendi a `_meta/log.md`:**
-```markdown
-## [YYYY-MM-DD] <tipo> | <titolo breve>
-- [cosa è successo e perché, 1-2 righe]
-```
-Tipi comuni: `decision`, `milestone`, `conflict-resolved`, `refactor`.
-
-**3. Se hai creato una nuova cartella, aggiorna `_meta/taxonomy.md`.**
-
-Il commit finale è automatico: lo Stop hook committa e pusha tutto, incluse
-le modifiche ai meta file appena fatti.
+- Aggiorna `_meta/hot-cache.md`: Focus corrente + Thread aperti (formato in procedures.md).
+- Se evento significativo: appendi a `_meta/log.md` (formato in procedures.md).
+- Se nuova cartella: aggiorna `_meta/taxonomy.md`.
+- Index, commit e push: automatici via Stop hook.
 
 ## Regole operative
 
-- Prima di creare file: leggi `_meta/taxonomy.md` e scegli la cartella giusta.
-- Non creare cartelle senza accordo esplicito con l'utente.
-- Non modificare file senza richiesta esplicita o accordo nella sessione.
-- File in `git status --short` = in uso attivo dall'utente.
-- Preferisci modificare file esistenti piuttosto che crearne di nuovi.
-- Tieni aggiornati i file `_meta/` — sono la memoria condivisa con l'utente.
-- [Regole specifiche di questo vault — aggiungere qui]
+- Prima di creare file: leggi `_meta/taxonomy.md`.
+- Non creare cartelle senza accordo esplicito.
+- File in `git status` = in uso dall'utente — non toccare senza chiedere.
+- Preferisci modificare file esistenti.
+- [Regole specifiche di questo vault]
 
-## Skill per operazioni specializzate
+## Skill
 
 | Operazione | Skill |
 |---|---|
-| Preprocessing audio, immagini, documenti Office | `wiki-preprocess` |
-| Crawling e ingest di URL | `crawl4ai` |
-| Sintassi Obsidian (wikilinks, callout, frontmatter) | `obsidian-markdown` |
-| File .base (database view di note) | `obsidian-bases` |
-| File .canvas (mappe, diagrammi) | `json-canvas` |
-| Artefatti visivi (canvas, Dataview, kanban) | `wiki-artifact` |
-| Health check del vault | `wiki-lint` |
+| Preprocessing audio, immagini, Office | `wiki-preprocess` |
+| Crawling URL | `crawl4ai` |
+| Sintassi Obsidian | `obsidian-markdown` |
+| File .base / .canvas | `obsidian-bases` · `json-canvas` |
+| Artefatti visivi | `wiki-artifact` |
+| Health check | `wiki-lint` |
 
 [Rimuovi le righe non rilevanti per questo vault.]
 ````
@@ -440,6 +364,68 @@ language: it | en
 
 Compila con le cartelle reali emerse dall'intervista. Aggiorna quando si
 aggiungono cartelle nuove.
+
+---
+
+## Template `_meta/procedures.md`
+
+Contiene tutto quello che è stato tolto dal CLAUDE.md per tenerlo compatto.
+L'AI la legge su richiesta — non viene caricata ad ogni sessione.
+
+```markdown
+# Procedures
+
+## File di stato vivi
+
+| File | Ruolo | Aggiornato da |
+|---|---|---|
+| `taxonomy.md` | Mappa cartelle → contenuto | AI (manuale) |
+| `index.md` | Catalogo contenuti del vault | sync.py (auto) |
+| `hot-cache.md` | Contesto caldo: focus e thread aperti | AI (parte semantica) + sync.py (file toccati) |
+| `log.md` | Storia del perché: decisioni, milestone | AI (manuale, append-only) |
+
+## Come leggere il git log
+
+- `vault: ...` → auto-commit Obsidian (utente ha lavorato in quell'intervallo)
+- `ai: ...` → turno AI completato; la descrizione dice cosa è stato fatto
+- File in `git status --short` → in modifica adesso — non toccare senza chiedere
+
+## Durante la sessione
+
+- Prima di leggere un file: `git pull` (incorpora auto-commit Obsidian recenti).
+- Prima di committare manualmente: `git pull` per evitare conflitti.
+- Se il pull genera conflitti: preferisci la versione con mtime più recente.
+
+## Formato `_meta/hot-cache.md`
+
+Finestra mobile: sovrascrivi le voci superate, tienilo corto.
+
+~~~markdown
+# Hot Cache
+
+**Aggiornato**: YYYY-MM-DD
+
+## Focus corrente
+- [su cosa si sta lavorando / dove si è arrivati]
+
+## Thread aperti
+- [ ] [cosa resta aperto per la prossima sessione]
+
+## File toccati di recente
+- [[...]]    ← auto-aggiornato da sync.py
+~~~
+
+## Formato `_meta/log.md`
+
+Append-only. Una voce per evento significativo.
+
+~~~markdown
+## [YYYY-MM-DD] <tipo> | <titolo breve>
+- [cosa è successo e perché, 1-2 righe]
+~~~
+
+Tipi: `decision` · `milestone` · `conflict-resolved` · `refactor` · `init`
+```
 
 ---
 
