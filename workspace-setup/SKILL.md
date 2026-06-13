@@ -18,15 +18,11 @@ Configura il vault e genera due cose distinte:
    È il file che l'AI carica ad ogni sessione: dice come lavorare, dove guardare,
    come committare.
 2. **File di stato vivi** in `_meta/` — la memoria del vault, che l'AI **tiene
-   sempre aggiornata** mentre lavora (come nel paradigma wiki).
+   sempre aggiornata** mentre lavora.
 
 Questa separazione è il cuore della skill: CLAUDE.md è immutabile e contiene
 le *regole*; i file in `_meta/` sono lo *stato* e cambiano nel tempo. CLAUDE.md
 non contiene cataloghi o liste che invecchiano — rimanda ai file vivi.
-
-Questo paradigma è indipendente da LLM Wiki: nessuna struttura `wiki/` + `raw/`,
-nessuna pipeline di ingest. Le cartelle sono tematiche flat, git traccia chi ha
-fatto cosa, i file `_meta/` danno la mappa semantica e il contesto che git non ha.
 
 ---
 
@@ -57,14 +53,6 @@ registra *cosa* è cambiato e *quando*, questi file dicono *perché*, *dov'è* e
 | `index.md` | Catalogo dei contenuti: file/note → di cosa trattano. Evita duplicati, fa trovare il file giusto senza scansionare tutto. | per orientarsi sui contenuti | a ogni file creato/rilevante modificato |
 | `hot-cache.md` | Contesto caldo: aree toccate di recente, thread aperti, focus corrente. Letto **per primo** a inizio sessione per orientarsi in fretta. | a inizio sessione | a fine sessione |
 | `log.md` | Registro cronologico append-only degli eventi significativi (decisioni, milestone, conflitti risolti). Leggibile da umano e AI. | quando serve la storia del *perché* | dopo ogni cambiamento significativo |
-
-Razionale dell'adattamento dal paradigma wiki:
-
-- `index.md` e `hot-cache.md` hanno lo stesso scopo che hanno in `wiki-query`
-  e `wiki-ingest`: orientarsi velocemente senza rileggere tutto il vault.
-- `log.md` complementa i commit automatici `vault: {{date}}` di Obsidian Git,
-  che sono mute timestamp: il log dice il *perché* dietro i cambiamenti.
-- `taxonomy.md` è la stessa fonte di verità sui path usata da tutte le skill wiki-*.
 
 Tieni i file leggeri: `hot-cache.md` è una finestra mobile (sovrascrivi le voci
 vecchie), `log.md` è append-only ma sintetico, `index.md` una riga per voce.
