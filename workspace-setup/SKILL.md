@@ -154,27 +154,27 @@ Claude Code supporta un hook `Stop` che scatta alla fine di ogni turno.
 Con questo hook il vault si auto-committa dopo ogni risposta dell'AI, con
 prefisso `ai:` — senza che l'AI debba ricordarselo.
 
-Crea questi due file nella root del vault:
+Copia i file dalla cartella `vault-template/` di questa skill nel vault:
 
-**`.claude/hooks/auto-commit.sh`** — copia il file da
-`vault-template/.claude/hooks/auto-commit.sh` in questa skill:
+```
+vault-template/
+├── _meta/
+│   └── sync.py                     → _meta/sync.py
+└── .claude/
+    ├── settings.json               → .claude/settings.json
+    └── hooks/
+        └── auto-commit.sh          → .claude/hooks/auto-commit.sh
+```
 
+Oppure crea i file manualmente seguendo i template in `vault-template/`.
+
+Dopo la copia:
 ```bash
-#!/usr/bin/env bash
-# Committa le modifiche AI a fine turno. Esce silenziosamente se non ci sono
-# modifiche. Pull --rebase prima di committare per incorporare auto-commit Obsidian.
-
-set -euo pipefail
-git rev-parse --git-dir &>/dev/null || exit 0
-git diff --quiet && git diff --cached --quiet && exit 0
-git pull --rebase --autostash 2>/dev/null || true
-git add -A
-git commit -m "ai: auto-commit $(date +%Y-%m-%dT%H:%M)"
-git remote get-url origin &>/dev/null && git push || true
+chmod +x .claude/hooks/auto-commit.sh
 ```
 
 **`.claude/settings.json`** — se il file esiste già, aggiungi solo il blocco
-`Stop` dentro `hooks`; altrimenti crea:
+`Stop` dentro `hooks` senza sovrascrivere le altre impostazioni:
 
 ```json
 {
@@ -194,17 +194,23 @@ git remote get-url origin &>/dev/null && git push || true
 }
 ```
 
-Poi rendi lo script eseguibile:
-```bash
-chmod +x .claude/hooks/auto-commit.sh
-```
+Aggiungi `.claude/` e `_meta/sync.py` al commit iniziale del vault.
 
-Aggiungi `.claude/` al commit iniziale del vault (i file hooks sono parte
-del progetto e vanno versionati).
+**Cosa ottieni a fine ogni turno AI (in automatico):**
 
-**Cosa ottieni:** ogni turno Claude Code termina con un auto-commit `ai:`.
-L'AI non deve più ricordare di committare a fine sessione. Il pull `--rebase
---autostash` gestisce i conflitti con gli auto-commit Obsidian Git.
+| Operazione | Come |
+|---|---|
+| `_meta/index.md` ricostruito | `sync.py` scansiona tutti i .md del vault |
+| `_meta/hot-cache.md` "File toccati" aggiornato | `sync.py` legge gli ultimi commit `ai:` |
+| Modifiche committate con `ai:` | `auto-commit.sh` dopo sync |
+| Push sul remote | `auto-commit.sh` |
+
+**Cosa rimane all'AI (non automatizzabile meccanicamente):**
+
+- `_meta/hot-cache.md` — sezioni "Focus corrente" e "Thread aperti": l'AI le
+  aggiorna dopo ogni cambiamento di focus (vedi istruzioni nel CLAUDE.md)
+- `_meta/log.md` — l'AI appende una voce dopo decisioni e milestone
+- `_meta/taxonomy.md` — aggiornato quando si crea una nuova cartella
 
 ---
 
@@ -220,9 +226,10 @@ vault/
 │       └── auto-commit.sh
 ├── _meta/             ← file di stato vivi, mantenuti dall'AI
 │   ├── taxonomy.md    ← mappa cartelle → ruolo/contenuto
-│   ├── index.md       ← catalogo dei contenuti
-│   ├── hot-cache.md   ← contesto caldo di sessione
-│   └── log.md         ← registro eventi significativi
+│   ├── index.md       ← catalogo dei contenuti (auto-rebuild da sync.py)
+│   ├── hot-cache.md   ← contesto caldo (file toccati auto, focus manuale)
+│   ├── log.md         ← registro eventi significativi (manuale)
+│   └── sync.py        ← aggiorna index e hot-cache (chiamato dallo Stop hook)
 ├── daily-notes/       ← YYYY-MM-DD.md, una per giorno
 ├── <tema-1>/
 ├── <tema-2>/
@@ -355,20 +362,32 @@ senza richiesta esplicita.
 
 ## A fine sessione
 
-Prima di chiudere, aggiorna lo stato vivo così la prossima sessione riparte
-con contesto:
+`_meta/index.md` e la sezione "File toccati" di `hot-cache.md` vengono
+aggiornati **automaticamente** dallo Stop hook (sync.py + auto-commit).
 
-```bash
-# 1. Aggiorna hot-cache.md con dove siamo arrivati e i thread aperti
-# 2. Verifica che index.md rifletta i file creati/modificati
-# 3. Appendi a log.md gli eventi significativi della sessione
-git pull
-git add _meta/ <altri-file>
-git commit -m "ai: <riepilogo sessione>"
-git push
+**Quello che devi fare tu (parte semantica):**
+
+**1. Aggiorna `_meta/hot-cache.md` — Focus e Thread:**
+```markdown
+## Focus corrente
+- [su cosa si è lavorato / dove siamo arrivati]
+
+## Thread aperti
+- [ ] [cosa resta aperto per la prossima sessione]
 ```
+Sovrascrivi le voci superate — tienilo corto, è una finestra mobile.
 
-`hot-cache.md` è una finestra mobile: sovrascrivi le voci superate, tienilo corto.
+**2. Se è successo qualcosa di significativo, appendi a `_meta/log.md`:**
+```markdown
+## [YYYY-MM-DD] <tipo> | <titolo breve>
+- [cosa è successo e perché, 1-2 righe]
+```
+Tipi comuni: `decision`, `milestone`, `conflict-resolved`, `refactor`.
+
+**3. Se hai creato una nuova cartella, aggiorna `_meta/taxonomy.md`.**
+
+Il commit finale è automatico: lo Stop hook committa e pusha tutto, incluse
+le modifiche ai meta file appena fatti.
 
 ## Regole operative
 
