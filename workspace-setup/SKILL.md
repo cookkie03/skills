@@ -148,12 +148,76 @@ manualmente con il pulsante nella ribbon.
 
 ---
 
+## Fase 3b — Hook Claude Code (auto-commit AI)
+
+Claude Code supporta un hook `Stop` che scatta alla fine di ogni turno.
+Con questo hook il vault si auto-committa dopo ogni risposta dell'AI, con
+prefisso `ai:` — senza che l'AI debba ricordarselo.
+
+Crea questi due file nella root del vault:
+
+**`.claude/hooks/auto-commit.sh`** — copia il file da
+`vault-template/.claude/hooks/auto-commit.sh` in questa skill:
+
+```bash
+#!/usr/bin/env bash
+# Committa le modifiche AI a fine turno. Esce silenziosamente se non ci sono
+# modifiche. Pull --rebase prima di committare per incorporare auto-commit Obsidian.
+
+set -euo pipefail
+git rev-parse --git-dir &>/dev/null || exit 0
+git diff --quiet && git diff --cached --quiet && exit 0
+git pull --rebase --autostash 2>/dev/null || true
+git add -A
+git commit -m "ai: auto-commit $(date +%Y-%m-%dT%H:%M)"
+git remote get-url origin &>/dev/null && git push || true
+```
+
+**`.claude/settings.json`** — se il file esiste già, aggiungi solo il blocco
+`Stop` dentro `hooks`; altrimenti crea:
+
+```json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/auto-commit.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Poi rendi lo script eseguibile:
+```bash
+chmod +x .claude/hooks/auto-commit.sh
+```
+
+Aggiungi `.claude/` al commit iniziale del vault (i file hooks sono parte
+del progetto e vanno versionati).
+
+**Cosa ottieni:** ogni turno Claude Code termina con un auto-commit `ai:`.
+L'AI non deve più ricordare di committare a fine sessione. Il pull `--rebase
+--autostash` gestisce i conflitti con gli auto-commit Obsidian Git.
+
+---
+
 ## Fase 4 — Struttura cartelle
 
 ```
 vault/
 ├── CLAUDE.md          ← istruzioni immutabili (generato nel passo successivo)
 ├── .gitignore
+├── .claude/
+│   ├── settings.json  ← Stop hook per auto-commit AI
+│   └── hooks/
+│       └── auto-commit.sh
 ├── _meta/             ← file di stato vivi, mantenuti dall'AI
 │   ├── taxonomy.md    ← mappa cartelle → ruolo/contenuto
 │   ├── index.md       ← catalogo dei contenuti
