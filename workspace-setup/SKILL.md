@@ -14,38 +14,16 @@ description: >
 
 Configura il vault e genera due cose distinte:
 
-1. **CLAUDE.md** — istruzioni operative, scritte una volta e **non più modificate**.
-   È il file che l'AI carica ad ogni sessione: dice come lavorare, dove guardare,
-   come committare.
-2. **File di stato vivi** in `_meta/` — la memoria del vault, che l'AI **tiene
-   sempre aggiornata** mentre lavora.
+1. **CLAUDE.md** — istruzioni operative, scritte una volta e **non più modificate**.È il file che l'AI carica ad ogni sessione: dice come lavorare, dove guardare, come committare.
+2. **File di stato vivi** in `_meta/` — la memoria del vault, che l'AI **tiene sempre aggiornata** mentre lavora.
 
-Questa separazione è il cuore della skill: CLAUDE.md è immutabile e contiene
-le *regole*; i file in `_meta/` sono lo *stato* e cambiano nel tempo. CLAUDE.md
-non contiene cataloghi o liste che invecchiano — rimanda ai file vivi.
-
----
-
-## Differenza con wiki-init
-
-`wiki-init` crea vault con struttura `wiki/` + `raw/` ottimizzata per l'ingest
-di materiale grezzo e la generazione di pagine strutturate.
-
-`workspace-setup` crea vault dove si lavora direttamente sui file: cartelle
-tematiche flat, git come strumento operativo quotidiano, CLAUDE.md come centro
-di coordinamento AI+utente.
-
-I due paradigmi coesistono: un vault può avere sia la struttura wiki che le
-cartelle workspace. In quel caso, aggiorna il CLAUDE.md esistente aggiungendo
-le sezioni di questa skill.
+Questa separazione è il cuore della skill: CLAUDE.md è immutabile e contiene le *regole*; i file in `_meta/` sono lo *stato* e cambiano nel tempo. CLAUDE.md non contiene cataloghi o liste che invecchiano — rimanda ai file vivi.
 
 ---
 
 ## I file di stato vivi (`_meta/`)
 
-Quattro file che l'AI consulta e mantiene. Sono la memoria del vault: git
-registra *cosa* è cambiato e *quando*, questi file dicono *perché*, *dov'è* e
-*qual è il filo del discorso*.
+Quattro file che l'AI consulta e mantiene. Sono la memoria del vault: git registra *cosa* è cambiato e *quando*, questi file dicono *perché*, *dov'è* e *qual è il filo del discorso*.
 
 | File | Ruolo | Chi legge | Chi aggiorna |
 |---|---|---|---|
@@ -54,8 +32,7 @@ registra *cosa* è cambiato e *quando*, questi file dicono *perché*, *dov'è* e
 | `hot-cache.md` | Contesto caldo: aree toccate di recente, thread aperti, focus corrente. Letto **per primo** a inizio sessione per orientarsi in fretta. | a inizio sessione | a fine sessione |
 | `log.md` | Registro cronologico append-only degli eventi significativi (decisioni, milestone, conflitti risolti). Leggibile da umano e AI. | quando serve la storia del *perché* | dopo ogni cambiamento significativo |
 
-Tieni i file leggeri: `hot-cache.md` è una finestra mobile (sovrascrivi le voci
-vecchie), `log.md` è append-only ma sintetico, `index.md` una riga per voce.
+Tieni i file leggeri: `hot-cache.md` è una finestra mobile (sovrascrivi le vocivecchie), `log.md` è append-only ma sintetico, `index.md` una riga per voce.
 
 ---
 
@@ -131,16 +108,12 @@ git push -u origin main
 | Pull updates on startup | ✅ | scarica modifiche AI prima di iniziare |
 | Commit message | `vault: {{date}}` | prefisso riconoscibile dall'AI |
 
-Su mobile: se la batteria è un vincolo, usa `0` come intervallo e commita
-manualmente con il pulsante nella ribbon.
-
 ---
 
 ## Fase 3b — Hook Claude Code (auto-commit AI)
 
 Claude Code supporta un hook `Stop` che scatta alla fine di ogni turno.
-Con questo hook il vault si auto-committa dopo ogni risposta dell'AI, con
-prefisso `ai:` — senza che l'AI debba ricordarselo.
+Con questo hook il vault si auto-committa dopo ogni risposta dell'AI, con prefisso `ai:` — senza che l'AI debba ricordarselo.
 
 Copia i file dalla cartella `vault-template/` di questa skill nel vault:
 
@@ -161,8 +134,7 @@ Dopo la copia:
 chmod +x .claude/hooks/auto-commit.sh
 ```
 
-**`.claude/settings.json`** — se il file esiste già, aggiungi solo il blocco
-`Stop` dentro `hooks` senza sovrascrivere le altre impostazioni:
+**`.claude/settings.json`** — se il file esiste già, aggiungi solo il blocco `Stop` dentro `hooks` senza sovrascrivere le altre impostazioni:
 
 ```json
 {
@@ -195,8 +167,7 @@ Aggiungi `.claude/` e `_meta/sync.py` al commit iniziale del vault.
 
 **Cosa rimane all'AI (non automatizzabile meccanicamente):**
 
-- `_meta/hot-cache.md` — sezioni "Focus corrente" e "Thread aperti": l'AI le
-  aggiorna dopo ogni cambiamento di focus (vedi istruzioni nel CLAUDE.md)
+- `_meta/hot-cache.md` — sezioni "Focus corrente" e "Thread aperti": l'AI le aggiorna dopo ogni cambiamento di focus (vedi istruzioni nel CLAUDE.md)
 - `_meta/log.md` — l'AI appende una voce dopo decisioni e milestone
 - `_meta/taxonomy.md` — aggiornato quando si crea una nuova cartella
 
@@ -225,53 +196,37 @@ vault/
 ```
 
 I quattro file in `_meta/` sono descritti nella sezione "I file di stato vivi".
-Il CLAUDE.md non duplica il loro contenuto: vi rimanda. Così resta immutabile
-mentre lo stato del vault evolve nei file vivi.
+Il CLAUDE.md non duplica il loro contenuto: vi rimanda. Così resta immutabile mentre lo stato del vault evolve nei file vivi.
 
 ---
 
 ## Fase 5 — Genera il CLAUDE.md e i file di stato
 
-Genera il CLAUDE.md **e** i quattro file `_meta/` insieme: il CLAUDE.md fa
-riferimento ai file vivi, quindi devono esistere fin dall'inizio (anche se
-inizialmente quasi vuoti).
+Genera il CLAUDE.md **e** i quattro file `_meta/` insieme: il CLAUDE.md fa riferimento ai file vivi, quindi devono esistere fin dall'inizio (anche se inizialmente quasi vuoti).
 
-Compila il template con i dati reali del vault. Nessun placeholder non compilato:
-il file è caricato ad ogni sessione AI e deve essere immediatamente operativo.
+Compila il template con i dati reali del vault. Nessun placeholder non compilato: il file è caricato ad ogni sessione AI e deve essere immediatamente operativo.
 
-Il CLAUDE.md va scritto **una volta sola**. Non contiene cataloghi, liste o
-stato che invecchiano — quelli vivono in `_meta/` e li aggiorna l'AI durante
-il lavoro. Se in futuro serve cambiare *le regole*, allora sì si tocca il
-CLAUDE.md; ma il flusso normale di lavoro non lo modifica mai.
+Il CLAUDE.md va scritto **una volta sola**. Non contiene cataloghi, liste o stato che invecchiano — quelli vivono in `_meta/` e li aggiorna l'AI durante il lavoro. Se in futuro serve cambiare *le regole*, allora sì si tocca il CLAUDE.md; ma il flusso normale di lavoro non lo modifica mai.
 
-Genera sempre **`CLAUDE.md`** come file canonico, indipendentemente dall'agent
-principale. Poi crea `AGENTS.md` e `GEMINI.md` come symlink che puntano a esso:
+Genera sempre **`CLAUDE.md`** come file canonico, indipendentemente dall'agent principale. Poi crea `AGENTS.md` e `GEMINI.md` come symlink che puntano a esso:
 
 ```bash
 ln -sf CLAUDE.md AGENTS.md
 ln -sf CLAUDE.md GEMINI.md
 ```
 
-In questo modo i tre file sono sempre sincronizzati automaticamente: qualsiasi
-agent (Claude, Gemini, multi-agent) trova le istruzioni nel suo file, e c'è
-una sola fonte di verità da mantenere.
+In questo modo i tre file sono sempre sincronizzati automaticamente: qualsiasi agent (Claude, Gemini, multi-agent) trova le istruzioni nel suo file, e c'è una sola fonte di verità da mantenere.
 
-Per vault esistenti che hanno già `AGENTS.md` o `GEMINI.md` come file reali:
-controlla se il contenuto è equivalente a CLAUDE.md. Se sì, sostituisci con
-il symlink. Se no, unisci prima i contenuti, poi sostituisci.
+Per vault esistenti che hanno già `AGENTS.md` o `GEMINI.md` come file reali: controlla se il contenuto è equivalente a CLAUDE.md. Se sì, sostituisci con il symlink. Se no, unisci prima i contenuti, poi sostituisci.
 
-Aggiungi i symlink al commit iniziale del vault (git li versiona correttamente
-come symlink, non come copie).
+Aggiungi i symlink al commit iniziale del vault (git li versiona correttamente come symlink, non come copie).
 
 ---
 
 ### Template CLAUDE.md
 
 Questo file si scrive **una volta sola** e non si tocca nel flusso normale.
-Contiene solo quello che serve ad ogni messaggio: struttura, convenzioni, comandi
-di orientamento, regole. Le procedure dettagliate e i formati dei file meta
-vivono in `_meta/procedures.md` — l'AI le legge su richiesta, non le carica
-ogni turno.
+Contiene solo quello che serve ad ogni messaggio: struttura, convenzioni, comandi di orientamento, regole. Le procedure dettagliate e i formati dei file meta vivono in `_meta/procedures.md` — l'AI le legge su richiesta, non le carica ogni turno.
 
 ````markdown
 # [Nome Vault]
@@ -308,7 +263,7 @@ git status --short
 cat daily-notes/$(date +%Y-%m-%d).md
 ```
 
-Sintetizza: dov'eravamo (hot-cache) · cosa è cambiato (log ai: vs vault:) · task aperti.
+Sintetizza: dov'eravamo (hot-cache) · cosa è cambiato (log ai: vs vault:) · task aperti. 
 `_meta/index.md` solo se cerchi un file specifico. Procedure in `_meta/procedures.md`.
 
 ## A fine sessione
@@ -344,9 +299,7 @@ Sintetizza: dov'eravamo (hot-cache) · cosa è cambiato (log ai: vs vault:) · t
 
 ## Template `_meta/taxonomy.md`
 
-Genera questo file insieme al CLAUDE.md. È la fonte di verità estesa per la
-struttura del vault — il CLAUDE.md la richiama, l'AI la legge prima di creare
-file in cartelle non ovvie.
+Genera questo file insieme al CLAUDE.md. È la fonte di verità estesa per la struttura del vault — il CLAUDE.md la richiama, l'AI la legge prima di creare file in cartelle non ovvie.
 
 ```markdown
 ---
@@ -364,8 +317,7 @@ language: it | en
 | _meta/ | Taxonomy e metadati del vault | Non creare note di lavoro qui |
 ```
 
-Compila con le cartelle reali emerse dall'intervista. Aggiorna quando si
-aggiungono cartelle nuove.
+Compila con le cartelle reali emerse dall'intervista. Aggiorna quando si aggiungono cartelle nuove.
 
 ---
 
@@ -433,14 +385,12 @@ Tipi: `decision` · `milestone` · `conflict-resolved` · `refactor` · `init`
 
 ## Template `_meta/index.md`
 
-Catalogo dei contenuti. A setup è quasi vuoto; cresce man mano che il vault
-si popola. Una riga per voce, raggruppata per cartella.
+Catalogo dei contenuti. A setup è quasi vuoto; cresce man mano che il vault si popola. Una riga per voce, raggruppata per cartella.
 
 ```markdown
 # Index
 
-Catalogo dei contenuti del vault. Aggiornato dall'AI a ogni file rilevante
-creato o modificato. Una riga per voce.
+Catalogo dei contenuti del vault. Aggiornato dall'AI a ogni file rilevante creato o modificato. Una riga per voce.
 
 ## <tema-1>/
 - [[<tema-1>/nota-esempio]] — di cosa tratta in una riga
@@ -453,14 +403,12 @@ creato o modificato. Una riga per voce.
 
 ## Template `_meta/hot-cache.md`
 
-Contesto caldo: finestra mobile su dove si sta lavorando. Sovrascrivibile,
-sempre corto.
+Contesto caldo: finestra mobile su dove si sta lavorando. Sovrascrivibile, sempre corto.
 
 ```markdown
 # Hot Cache
 
-Contesto di lavoro recente. Finestra mobile: le voci vecchie si sovrascrivono.
-Letto a inizio sessione per riprendere il filo.
+Contesto di lavoro recente. Finestra mobile: le voci vecchie si sovrascrivono. Letto a inizio sessione per riprendere il filo.
 
 **Aggiornato**: YYYY-MM-DD
 
@@ -483,8 +431,7 @@ Registro append-only degli eventi significativi. Non si riscrive: si appende.
 ```markdown
 # Log
 
-Registro cronologico degli eventi significativi del vault (decisioni,
-milestone, conflitti risolti). Append-only, sintetico.
+Registro cronologico degli eventi significativi del vault (decisioni, milestone, conflitti risolti). Append-only, sintetico.
 
 ## [YYYY-MM-DD] init
 - Vault creato con workspace-setup.
@@ -501,13 +448,10 @@ Voci successive seguono lo stesso formato:
 
 ## Script di orientamento
 
-Lo script `scripts/workspace-status.sh` (incluso in questa skill) esegue
-i comandi di orientamento in un colpo solo e può essere invocato dal CLAUDE.md:
+Lo script `scripts/workspace-status.sh` (incluso in questa skill) esegue i comandi di orientamento in un colpo solo e può essere invocato dal CLAUDE.md:
 
 ```bash
 bash <percorso-skill>/scripts/workspace-status.sh
 ```
 
-Stampa: commit recenti con legenda vault/ai, file toccati, modifiche non
-committate, daily note di oggi. Funziona su vault con qualsiasi struttura
-di cartelle.
+Stampa: commit recenti con legenda vault/ai, file toccati, modifiche non committate, daily note di oggi. Funziona su vault con qualsiasi strutturadi cartelle.
