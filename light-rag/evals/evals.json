@@ -1,0 +1,36 @@
+{
+  "skill_name": "light-rag",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Mostra l'elenco e lo stato di tutte le knowledge base configurate con ragcli.",
+      "expected_output": "Elenco delle KB con stato (UP/down), porte, provider e sorgenti.",
+      "files": [],
+      "expectations": [
+        "The output lists the knowledge base names and their statuses (UP/down/port).",
+        "The output displays the correct CLI paths or commands using ragcli."
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "Crea una KB di test chiamata 'test-rag' associata alla cartella '~/Desktop/skills/light-rag/evals/test_inputs' usando come ocr 'glmocr' e come provider 'ollama'.",
+      "expected_output": "La KB 'test-rag' viene creata con successo nel registro e viene generato il suo file .env.",
+      "files": [],
+      "expectations": [
+        "The output confirms the creation of 'test-rag'.",
+        "The registry.yaml file contains 'test-rag'.",
+        "The configuration file .env was generated in the test-rag folder."
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Controlla lo stato della KB 'riciclo'. Se è spenta, avviala e fai una query in modalità mix per chiedere 'Qual è l'obiettivo del riciclo dei rifiuti?'.",
+      "expected_output": "La KB viene avviata (se spenta) e viene eseguita la query usando lo strumento query mcp o l'API.",
+      "files": [],
+      "expectations": [
+        "The output contains the answer to the query 'Qual è l'obiettivo del riciclo dei rifiuti?'.",
+        "The server for 'riciclo' is confirmed to be running or was started."
+      ]
+    }
+  ]
+}
