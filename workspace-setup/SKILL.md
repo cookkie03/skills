@@ -110,66 +110,77 @@ git push -u origin main
 
 ---
 
-## Fase 3b — Hook Claude Code (auto-commit AI)
+## Fase 3b — Hook auto-commit (multi-agent)
 
-Claude Code supporta un hook `Stop` che scatta alla fine di ogni turno.
-Con questo hook il vault si auto-committa dopo ogni risposta dell'AI, con prefisso `ai:` — senza che l'AI debba ricordarselo.
+Ogni agent ha la propria directory di configurazione (`.claude/`, `.agents/`,
+`.gemini/`) con un proprio formato di hook. Il pattern è unico:
 
-Copia i file dalla cartella `vault-template/` di questa skill nel vault:
+- **un solo script** in posizione neutrale: `hooks/auto-commit.sh` alla root
+  del vault
+- **ogni agent config** punta a quello stesso script
+- aggiungere il supporto a un nuovo agent = creare il suo file di config
+  puntando a `hooks/auto-commit.sh`
+
+### Script canonico
+
+Copia `vault-template/hooks/auto-commit.sh` in `hooks/auto-commit.sh`
+nella root del vault, poi rendilo eseguibile:
+
+```bash
+chmod +x hooks/auto-commit.sh
+```
+
+Lo script (avvia `_meta/sync.py`, pull, commit `ai:`, push) non dipende
+dall'agent che lo invoca — è agnostico.
+
+### Config per agent
+
+Copia i file dalla cartella `vault-template/` di questa skill:
 
 ```
 vault-template/
-├── _meta/
-│   └── sync.py                     → _meta/sync.py
-└── .claude/
-    ├── settings.json               → .claude/settings.json
-    └── hooks/
-        └── auto-commit.sh          → .claude/hooks/auto-commit.sh
+├── hooks/
+│   └── auto-commit.sh        → hooks/auto-commit.sh   ← script unico
+├── .claude/
+│   └── settings.json         → .claude/settings.json
+├── .agents/
+│   └── settings.json         → .agents/settings.json
+└── .gemini/
+    └── settings.json         → .gemini/settings.json
 ```
 
-Oppure crea i file manualmente seguendo i template in `vault-template/`.
+Se il file di config di un agent esiste già, aggiungi solo il blocco hook
+senza sovrascrivere le altre impostazioni.
 
-Dopo la copia:
-```bash
-chmod +x .claude/hooks/auto-commit.sh
-```
+**Formato hook per agent** — ogni agent usa la sua chiave e struttura.
+I template in `vault-template/` riportano il formato corrente; se un agent
+aggiorna la sua specifica, aggiorna il template corrispondente.
+Per trovare il formato aggiornato: cerca nella documentazione ufficiale
+dell'agent il termine `hooks` + `stop` o `afterTurn`.
 
-**`.claude/settings.json`** — se il file esiste già, aggiungi solo il blocco `Stop` dentro `hooks` senza sovrascrivere le altre impostazioni:
+| Agent | Config file | Chiave hook | Evento |
+|---|---|---|---|
+| Claude Code | `.claude/settings.json` | `hooks.Stop` | fine turno |
+| Agents SDK | `.agents/settings.json` | `hooks.stop` | fine turno |
+| Gemini CLI | `.gemini/settings.json` | `hooks.afterTurn` | fine turno |
 
-```json
-{
-  "hooks": {
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/auto-commit.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
+Per aggiungere un agent non in lista: crea `.<agent>/settings.json` (o il
+file di config che usa) con la chiave hook appropriata che invoca
+`bash hooks/auto-commit.sh`. Poi aggiungi una riga alla tabella sopra.
 
-Aggiungi `.claude/` e `_meta/sync.py` al commit iniziale del vault.
-
-**Cosa ottieni a fine ogni turno AI (in automatico):**
+### Cosa ottieni a fine ogni turno AI
 
 | Operazione | Come |
 |---|---|
 | `_meta/index.md` ricostruito | `sync.py` scansiona tutti i .md del vault |
-| `_meta/hot-cache.md` "File toccati" aggiornato | `sync.py` legge gli ultimi commit `ai:` |
+| `_meta/hot-cache.md` "File toccati" aggiornato | `sync.py` legge ultimi commit `ai:` |
 | Modifiche committate con `ai:` | `auto-commit.sh` dopo sync |
 | Push sul remote | `auto-commit.sh` |
 
-**Cosa rimane all'AI (non automatizzabile meccanicamente):**
-
-- `_meta/hot-cache.md` — sezioni "Focus corrente" e "Thread aperti": l'AI le aggiorna dopo ogni cambiamento di focus (vedi istruzioni nel CLAUDE.md)
-- `_meta/log.md` — l'AI appende una voce dopo decisioni e milestone
-- `_meta/taxonomy.md` — aggiornato quando si crea una nuova cartella
+**Cosa rimane all'AI:**
+- `_meta/hot-cache.md` — "Focus corrente" e "Thread aperti"
+- `_meta/log.md` — decisioni e milestone
+- `_meta/taxonomy.md` — quando si crea una nuova cartella
 
 ---
 
@@ -179,10 +190,14 @@ Aggiungi `.claude/` e `_meta/sync.py` al commit iniziale del vault.
 vault/
 ├── CLAUDE.md          ← istruzioni immutabili (generato nel passo successivo)
 ├── .gitignore
+├── hooks/
+│   └── auto-commit.sh     ← script unico condiviso tra tutti gli agent
 ├── .claude/
-│   ├── settings.json  ← Stop hook per auto-commit AI
-│   └── hooks/
-│       └── auto-commit.sh
+│   └── settings.json      ← Stop hook → hooks/auto-commit.sh
+├── .agents/
+│   └── settings.json      ← hook → hooks/auto-commit.sh
+├── .gemini/
+│   └── settings.json      ← hook → hooks/auto-commit.sh
 ├── _meta/             ← file di stato vivi, mantenuti dall'AI
 │   ├── taxonomy.md    ← mappa cartelle → ruolo/contenuto
 │   ├── index.md       ← catalogo dei contenuti (auto-rebuild da sync.py)
