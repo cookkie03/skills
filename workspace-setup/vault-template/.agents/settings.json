@@ -1,0 +1,9 @@
+{
+  "hooks": {
+    "stop": [
+      {
+        "command": "bash hooks/auto-commit.sh"
+      }
+    ]
+  }
+}

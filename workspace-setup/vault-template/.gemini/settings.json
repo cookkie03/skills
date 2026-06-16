@@ -1,0 +1,9 @@
+{
+  "hooks": {
+    "afterTurn": [
+      {
+        "command": "bash hooks/auto-commit.sh"
+      }
+    ]
+  }
+}
