@@ -1,94 +1,42 @@
 ---
 name: wiki-artifact
 description: >
-  Creates visual and structured artifacts from wiki knowledge: canvas maps, Dataview
-  queries, kanban boards, and task lists. Use when the user asks for something visual
-  or structured: "crea uno schema", "fai una mappa", "visualizza le relazioni",
-  "crea una board", "dammi una tabella dinamica", "organizza i task", "fai un kanban".
+  Creates visual and structured artifacts from wiki knowledge: canvas maps,
+  Dataview/Bases queries, kanban boards, and task lists. Use when the user asks for
+  something visual or structured: "crea uno schema", "fai una mappa", "visualizza le
+  relazioni", "crea una board", "dammi una tabella dinamica", "organizza i task", "fai un kanban".
 ---
 
 # Wiki Artifact
 
-Genera artefatti visivi e strutturati dal wiki.
+Genera artefatti visivi e strutturati dal wiki. I path reali si ricavano da
+`_meta/taxonomy.md` (mai hardcodati); il file istruzioni locale del vault può fare override.
 
----
+## Skill da usare
 
-Leggi `_meta/taxonomy.md` per i path — non usare path hardcodati. Il file istruzioni locale del vault può dichiarare override.
+Le skill Obsidian sono di [kepano](https://github.com/kepano/obsidian-skills/tree/main/skills):
 
----
+- `json-canvas` → file `.canvas`
+- `obsidian-bases` → file `.base`
+- `obsidian-markdown` → query inline e sintassi markdown
 
-## Scegli l'artefatto giusto
+**Kanban**: nessuna skill kepano — gestione manuale (markdown + plugin Kanban; le
+colonne sono heading `##`, i task checkbox sotto).
 
-| Esigenza | Artifact |
-|---------|----------|
-| Relazioni tra concetti, entità o pagine | Canvas |
-| Task con stati | Kanban |
-| Vista dinamica su frontmatter | Dataview o `.base` |
-| Checklist semplice | Task list markdown |
+## Scegli l'artefatto
 
-Se l'utente è indeciso, chiedi se vuole qualcosa da guardare o qualcosa con cui interagire.
+| Esigenza | Artifact | Skill | Dove salvare (ruolo in `taxonomy.md`) |
+|---|---|---|---|
+| Relazioni tra concetti/entità/pagine; schemi, mappe concettuali, flow | **Canvas** | `json-canvas` | `build` se attivo, altrimenti `artifact` |
+| Vista dinamica su frontmatter; dashboard, tabelle, report di stato | **Dataview / .base** | `obsidian-bases`; inline → `obsidian-markdown` | inline → nella pagina rilevante; standalone → `operation` o `_meta/` |
+| Task con stati multipli (work in progress) | **Kanban** | manuale (vedi sopra) | `operation` |
+| Checklist semplice | **Task list** | — | task list del vault · `operation` · sezione in una pagina |
 
----
+Se l'utente è indeciso, chiedi se vuole qualcosa **da guardare** (canvas) o **con cui
+interagire** (kanban/base).
 
-## Canvas
-
-Usa per:
-
-- schemi architetturali
-- mappe concettuali
-- graph di relazioni
-- diagrammi di flusso
-
-Usa sempre `json-canvas`.
-
-Salvataggio (path reali da `taxonomy.md`):
-
-- architettura / sistema → ruolo `build` se attivo, altrimenti ruolo `artifact`
-- mappa concettuale → ruolo `artifact`
-- overview visiva → ruolo `artifact`
-
----
-
-## Dataview e Bases
-
-Usa per:
-
-- dashboard
-- tabelle dinamiche
-- liste filtrate
-- report sullo stato delle pagine
-
-Usa `obsidian-bases` per `.base`.
-Per query inline in markdown, usa `obsidian-markdown`.
-
-Salvataggio (path reali da `taxonomy.md`):
-
-- query inline → nella pagina rilevante
-- dashboard standalone → ruolo `operation` o `_meta/`
-
----
-
-## Kanban
-
-Usa per work in progress con stati multipli.
-
-Salvataggio: ruolo `operation` da `taxonomy.md`.
-
-Raccogli i task dall'area operativa, dalle task list e dalle pagine recenti rilevanti.
-
----
-
-## Task list
-
-Usa per checklist semplici.
-
-Salvataggio:
-
-- task list del vault
-- area operativa
-- sezione in una pagina rilevante
-
----
+Per Kanban e Task list, raccogli i task dall'area operativa, dalle task list e dalle
+pagine recenti rilevanti.
 
 ## Dopo ogni artifact
 
