@@ -389,65 +389,11 @@ Compila con le cartelle reali emerse dall'intervista. Aggiorna quando si aggiung
 Contiene tutto quello che è stato tolto dal CLAUDE.md per tenerlo compatto.
 L'AI la legge su richiesta — non viene caricata ad ogni sessione.
 
-> La versione **completa e aggiornata** si copia da `vault-template/_meta/procedures.md`:
-> include anche le sezioni "Mantenere CLAUDE.md immutabile", "Rinominare o spostare
-> una cartella" e "File toccati di recente (NON editare a mano)". Lo scheletro qui
-> sotto è la base minima da personalizzare.
-
-```markdown
-# Procedures
-
-## File di stato vivi
-
-| File | Ruolo | Aggiornato da |
-|---|---|---|
-| `taxonomy.md` | Mappa cartelle → contenuto | AI (manuale) |
-| `index.md` | Catalogo contenuti del vault | sync.py (auto) |
-| `hot-cache.md` | Contesto caldo: focus e thread aperti | AI (parte semantica) + sync.py (file toccati) |
-| `log.md` | Storia del perché: decisioni, milestone | AI (manuale, append-only) |
-
-## Come leggere il git log
-
-- `vault: ...` → auto-commit Obsidian (utente ha lavorato in quell'intervallo)
-- `ai: ...` → turno AI completato; la descrizione dice cosa è stato fatto
-- File in `git status --short` → in modifica adesso — non toccare senza chiedere
-
-## Durante la sessione
-
-- Prima di leggere un file: `git pull` (incorpora auto-commit Obsidian recenti).
-- Prima di committare manualmente: `git pull` per evitare conflitti.
-- Se il pull genera conflitti: preferisci la versione con mtime più recente.
-
-## Formato `_meta/hot-cache.md`
-
-Finestra mobile: sovrascrivi le voci superate, tienilo corto.
-
-~~~markdown
-# Hot Cache
-
-**Aggiornato**: YYYY-MM-DD
-
-## Focus corrente
-- [su cosa si sta lavorando / dove si è arrivati]
-
-## Thread aperti
-- [ ] [cosa resta aperto per la prossima sessione]
-
-## File toccati di recente
-- [[...]]    ← auto-aggiornato da sync.py
-~~~
-
-## Formato `_meta/log.md`
-
-Append-only. Una voce per evento significativo.
-
-~~~markdown
-## [YYYY-MM-DD] <tipo> | <titolo breve>
-- [cosa è successo e perché, 1-2 righe]
-~~~
-
-Tipi: `decision` · `milestone` · `conflict-resolved` · `refactor` · `init`
-```
+Non duplicare qui il contenuto: si copia **integralmente** da
+`vault-template/_meta/procedures.md` (unica fonte di verità). Quel file include i
+formati di `hot-cache.md`/`log.md`, le note su git log/conflitti e le sezioni
+"Mantenere CLAUDE.md immutabile", "Rinominare o spostare una cartella" e "File
+toccati di recente (NON editare a mano)". Personalizza dopo la copia se serve.
 
 ---
 

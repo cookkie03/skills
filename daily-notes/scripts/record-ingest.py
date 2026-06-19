@@ -88,10 +88,13 @@ def update_ledger(commit: str, note: str) -> None:
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Archivia source e avanza il ledger di ingest")
+    ap = argparse.ArgumentParser(description="Archivia source, committa l'ingest e avanza il ledger")
     ap.add_argument("--note", default="", help="descrizione breve dell'ingest")
-    ap.add_argument("--commit", default=None, help="SHA baseline (default: HEAD attuale)")
+    ap.add_argument("--commit", default=None,
+                    help="forza una baseline SHA precisa invece del commit appena creato")
     ap.add_argument("--archive", nargs="*", default=[], help="source da spostare in _raw/archived/")
+    ap.add_argument("--no-commit", action="store_true",
+                    help="non committare (per test): il ledger punta a HEAD attuale")
     args = ap.parse_args()
 
     if not (ROOT / ".git").exists():
@@ -99,10 +102,33 @@ def main() -> int:
         return 1
 
     moved, skipped = archive(args.archive)
-    commit = args.commit or git("rev-parse", "HEAD").stdout.strip()
+
+    # Determina la baseline. IMPORTANTE: deve puntare a un commit che INCLUDE il
+    # contenuto appena ingestato. Se il contenuto utente era ancora non committato
+    # al momento della detection, fissare il ledger a HEAD pre-commit lo farebbe
+    # ri-rilevare al giro dopo. Per questo, di default, committiamo qui (sweep di
+    # edits + archiviazioni + contenuto utente via `git add -A`) e poi puntiamo il
+    # ledger a QUEL commit.
+    committed = False
+    if args.commit:
+        commit = args.commit
+    elif args.no_commit:
+        commit = git("rev-parse", "HEAD").stdout.strip()
+    else:
+        git("add", "-A")
+        has_changes = git("diff", "--cached", "--quiet").returncode != 0
+        if has_changes:
+            ts = datetime.now().strftime("%Y-%m-%dT%H:%M")
+            msg = f"ai: daily-notes ingest {ts}" + (f" — {args.note}" if args.note else "")
+            git("commit", "-m", msg)
+            committed = True
+        commit = git("rev-parse", "HEAD").stdout.strip()
+
     update_ledger(commit, args.note)
 
     print(f"✅ ledger aggiornato → baseline {commit[:8]} ({args.note or 'senza nota'})")
+    if committed:
+        print("📌 ingest committato (il ledger include il contenuto processato)")
     if moved:
         print(f"📦 archiviati ({len(moved)}):")
         for m in moved:

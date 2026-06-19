@@ -116,11 +116,14 @@ python3 .claude/skills/daily-notes/scripts/record-ingest.py \
 - `--archive`: elenca **solo** i source davvero processati (articoli/note). Lo script
   ignora di proposito le daily note e qualsiasi path fuori da `articles/`/`notes/`.
 - Senza source da archiviare (solo daily note), ometti `--archive`.
-- Il ledger registra `last_ingest_commit = HEAD` corrente: i contenuti appena
-  ingestati sono ≤ HEAD, quindi la detection successiva li escluderà.
 
-Il commit `ai:` finale (con le pagine aggiornate, gli spostamenti in archived/ e il
-ledger) lo fa da solo lo Stop hook a fine turno. Non serve committare a mano.
+Lo script di default **committa l'ingest** (`git add -A` → commit `ai:`) e poi punta
+il ledger a *quel* commit. Questo è essenziale per l'idempotenza: se il contenuto
+utente era ancora non committato al momento della detection, fissare il ledger a HEAD
+*prima* del commit lo farebbe ri-rilevare al giro successivo. Committando qui, la
+baseline include sempre ciò che è stato appena processato. (Il file ledger, scritto
+dopo il commit, lo sweepa lo Stop hook a fine turno: è fuori da `_raw/`, quindi non
+genera falsi pending.)
 
 ---
 

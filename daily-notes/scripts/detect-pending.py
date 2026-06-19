@@ -77,11 +77,18 @@ def in_scope(path: str) -> bool:
     return any(path.startswith(d) for d in SCOPE_DIRS)
 
 
-def added_lines(baseline: str, path: str) -> list[str]:
-    """Righe aggiunte a `path` dalla baseline (solo `+`, esclusi gli header)."""
-    diff = git("diff", "--unified=0", baseline, "HEAD", "--", path)
+def added_lines(baseline: str, path: str, include_uncommitted: bool) -> list[str]:
+    """Righe aggiunte a `path` dalla baseline (solo `+`, esclusi gli header).
+
+    Con include_uncommitted il diff arriva fino al working tree (così cattura anche
+    le righe non ancora committate da Obsidian); altrimenti si ferma a HEAD.
+    """
+    args = ["diff", "--unified=0", baseline]
+    if not include_uncommitted:
+        args.append("HEAD")
+    args += ["--", path]
     out = []
-    for line in diff.splitlines():
+    for line in git(*args).splitlines():
         if line.startswith("+") and not line.startswith("+++"):
             out.append(line[1:])
     return out
@@ -131,7 +138,11 @@ def collect(baseline: str | None, include_uncommitted: bool) -> dict:
         elif is_daily(path):
             note = {"path": path, "status": status}
             if status == "M" and baseline:
-                note["added_lines"] = added_lines(baseline, path)
+                lines = added_lines(baseline, path, include_uncommitted)
+                if lines:
+                    note["added_lines"] = lines
+                else:
+                    note["full"] = True  # delta non calcolabile: leggi tutto
             else:
                 note["full"] = True  # nuova o senza baseline: leggi tutto
             daily_notes.append(note)
