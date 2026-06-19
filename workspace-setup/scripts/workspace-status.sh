@@ -13,6 +13,14 @@ else
 fi
 
 echo ""
+echo "=== Audit anti-drift CLAUDE.md ==="
+if [ -f "_meta/check-claude-md.py" ]; then
+    python3 _meta/check-claude-md.py || true
+else
+    echo "(nessun _meta/check-claude-md.py — vedi vault-template/_meta/)"
+fi
+
+echo ""
 echo "=== Commit recenti (ultimi 15) ==="
 echo "  vault: ... = utente (Obsidian Git)   |   ai: ... = AI (sessioni precedenti)"
 echo ""
