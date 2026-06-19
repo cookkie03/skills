@@ -14,7 +14,7 @@ description: >
 
 Configura il vault e genera due cose distinte:
 
-1. **CLAUDE.md** — istruzioni operative, scritte una volta e **non più modificate**.È il file che l'AI carica ad ogni sessione: dice come lavorare, dove guardare, come committare.
+1. **CLAUDE.md** — istruzioni operative, scritte una volta e **non più modificate**. È il file che l'AI carica ad ogni sessione: dice come lavorare, dove guardare, come committare.
 2. **File di stato vivi** in `_meta/` — la memoria del vault, che l'AI **tiene sempre aggiornata** mentre lavora.
 
 Questa separazione è il cuore della skill: CLAUDE.md è immutabile e contiene le *regole*; i file in `_meta/` sono lo *stato* e cambiano nel tempo. CLAUDE.md non contiene cataloghi o liste che invecchiano — rimanda ai file vivi.
@@ -32,7 +32,27 @@ Quattro file che l'AI consulta e mantiene. Sono la memoria del vault: git regist
 | `hot-cache.md` | Contesto caldo: aree toccate di recente, thread aperti, focus corrente. Letto **per primo** a inizio sessione per orientarsi in fretta. | a inizio sessione | a fine sessione |
 | `log.md` | Registro cronologico append-only degli eventi significativi (decisioni, milestone, conflitti risolti). Leggibile da umano e AI. | quando serve la storia del *perché* | dopo ogni cambiamento significativo |
 
-Tieni i file leggeri: `hot-cache.md` è una finestra mobile (sovrascrivi le vocivecchie), `log.md` è append-only ma sintetico, `index.md` una riga per voce.
+Tieni i file leggeri: `hot-cache.md` è una finestra mobile (sovrascrivi le voci vecchie), `log.md` è append-only ma sintetico, `index.md` una riga per voce.
+
+Accanto ai quattro file di *stato* vivono due **file companion** in `_meta/`:
+
+| File | Ruolo |
+|---|---|
+| `procedures.md` | Procedure operative dettagliate + formati dei file meta. Semi-statico: l'AI lo legge su richiesta, non a ogni turno. Serve a tenere CLAUDE.md compatto. |
+| `check-claude-md.py` | Auditor deterministico anti-drift di CLAUDE.md (vedi sotto). |
+
+### Perché un auditor deterministico per CLAUDE.md
+
+La separazione regole/stato è il cuore della skill, ma resta una *buona
+intenzione* finché qualcosa non la verifica: nel tempo CLAUDE.md tende ad
+accumulare date, procedure intere e riferimenti a cartelle rinominate — è drift
+reale, osservato sul campo. `check-claude-md.py` lo rende un controllo meccanico.
+Segnala: (1) date/fatti datati → `log.md`; (2) procedure passo-passo →
+`procedures.md`; (3) cataloghi/liste lunghe → `index.md`; (4) path inesistenti =
+rename non propagati. Gira da solo a inizio sessione (`workspace-status.sh`) e nel
+hook auto-commit quando CLAUDE.md cambia, così la regola «CLAUDE.md immutabile»
+smette di dipendere dalla memoria dell'AI e diventa una proprietà osservabile del
+vault.
 
 ---
 
@@ -141,6 +161,10 @@ Copia i file dalla cartella `vault-template/` di questa skill:
 vault-template/
 ├── hooks/
 │   └── auto-commit.sh        → hooks/auto-commit.sh   ← script unico
+├── _meta/
+│   ├── sync.py               → _meta/sync.py
+│   ├── check-claude-md.py    → _meta/check-claude-md.py
+│   └── procedures.md         → _meta/procedures.md
 ├── .claude/
 │   └── settings.json         → .claude/settings.json
 ├── .agents/
@@ -174,6 +198,7 @@ file di config che usa) con la chiave hook appropriata che invoca
 |---|---|
 | `_meta/index.md` ricostruito | `sync.py` scansiona tutti i .md del vault |
 | `_meta/hot-cache.md` "File toccati" aggiornato | `sync.py` legge ultimi commit `ai:` |
+| Audit anti-drift di CLAUDE.md (se modificato nel turno) | `check-claude-md.py`, warn-only |
 | Modifiche committate con `ai:` | `auto-commit.sh` dopo sync |
 | Push sul remote | `auto-commit.sh` |
 
@@ -199,25 +224,29 @@ vault/
 ├── .gemini/
 │   └── settings.json      ← hook → hooks/auto-commit.sh
 ├── _meta/             ← file di stato vivi, mantenuti dall'AI
-│   ├── taxonomy.md    ← mappa cartelle → ruolo/contenuto
-│   ├── index.md       ← catalogo dei contenuti (auto-rebuild da sync.py)
-│   ├── hot-cache.md   ← contesto caldo (file toccati auto, focus manuale)
-│   ├── log.md         ← registro eventi significativi (manuale)
-│   └── sync.py        ← aggiorna index e hot-cache (chiamato dallo Stop hook)
+│   ├── taxonomy.md         ← mappa cartelle → ruolo/contenuto
+│   ├── index.md            ← catalogo dei contenuti (auto-rebuild da sync.py)
+│   ├── hot-cache.md        ← contesto caldo (file toccati auto, focus manuale)
+│   ├── log.md              ← registro eventi significativi (manuale)
+│   ├── procedures.md       ← procedure operative + formati (companion, semi-statico)
+│   ├── sync.py             ← aggiorna index e hot-cache (chiamato dal hook)
+│   └── check-claude-md.py  ← auditor anti-drift di CLAUDE.md (hook + sessione)
 ├── daily-notes/       ← YYYY-MM-DD.md, una per giorno
 ├── <tema-1>/
 ├── <tema-2>/
 └── ...
 ```
 
-I quattro file in `_meta/` sono descritti nella sezione "I file di stato vivi".
-Il CLAUDE.md non duplica il loro contenuto: vi rimanda. Così resta immutabile mentre lo stato del vault evolve nei file vivi.
+I quattro file di *stato* in `_meta/` sono descritti nella sezione "I file di
+stato vivi"; `procedures.md` e `check-claude-md.py` sono i companion. Il CLAUDE.md
+non duplica il loro contenuto: vi rimanda. Così resta immutabile mentre lo stato
+del vault evolve nei file vivi.
 
 ---
 
 ## Fase 5 — Genera il CLAUDE.md e i file di stato
 
-Genera il CLAUDE.md **e** i quattro file `_meta/` insieme: il CLAUDE.md fa riferimento ai file vivi, quindi devono esistere fin dall'inizio (anche se inizialmente quasi vuoti).
+Genera il CLAUDE.md **e** i quattro file di stato `_meta/` insieme: il CLAUDE.md fa riferimento ai file vivi, quindi devono esistere fin dall'inizio (anche se inizialmente quasi vuoti). I companion `procedures.md`, `sync.py` e `check-claude-md.py` si copiano da `vault-template/` (Fase 3b).
 
 Compila il template con i dati reali del vault. Nessun placeholder non compilato: il file è caricato ad ogni sessione AI e deve essere immediatamente operativo.
 
@@ -254,7 +283,7 @@ Contiene solo quello che serve ad ogni messaggio: struttura, convenzioni, comand
 <cartella-1>/    # [cosa contiene]
 <cartella-2>/    # [cosa contiene]
 daily-notes/     # YYYY-MM-DD.md
-_meta/           # taxonomy · index · hot-cache · log · procedures · sync.py
+_meta/           # taxonomy · index · hot-cache · log · procedures · sync.py · check-claude-md.py
 ```
 
 Mappa estesa in `_meta/taxonomy.md`. Procedure operative in `_meta/procedures.md`.
@@ -275,6 +304,7 @@ git pull
 cat _meta/hot-cache.md
 git log --oneline -15
 git status --short
+python3 _meta/check-claude-md.py        # audit anti-drift di CLAUDE.md
 cat daily-notes/$(date +%Y-%m-%d).md
 ```
 
@@ -294,7 +324,25 @@ Sintetizza: dov'eravamo (hot-cache) · cosa è cambiato (log ai: vs vault:) · t
 - Non creare cartelle senza accordo esplicito.
 - File in `git status` = in uso dall'utente — non toccare senza chiedere.
 - Preferisci modificare file esistenti.
+- **<processo ricorrente / inbox>**: trigger in una riga. Procedura in `_meta/procedures.md`.
 - [Regole specifiche di questo vault]
+
+## Manutenzione di questo file
+
+CLAUDE.md contiene **solo regole stabili**: struttura, convenzioni, comandi di
+orientamento, regole operative. Si scrive una volta e non si tocca nel flusso
+normale. Tieni fuori tutto ciò che invecchia, indirizzandolo al file vivo giusto:
+
+| Cosa | Dove va |
+|---|---|
+| Fatti datati, decisioni, rinomine, milestone | `_meta/log.md` |
+| Procedure passo-passo | `_meta/procedures.md` (qui solo una riga di rimando) |
+| Cataloghi di file / mappa cartelle estesa | `_meta/index.md` · `_meta/taxonomy.md` |
+| Focus corrente, thread aperti, file toccati | `_meta/hot-cache.md` |
+
+`_meta/check-claude-md.py` verifica questa regola in automatico. Se una riga che
+stai per aggiungere contiene una data, un nome di file specifico o una procedura
+→ quasi sempre appartiene a un file vivo, non qui.
 
 ## Skill
 
@@ -340,6 +388,11 @@ Compila con le cartelle reali emerse dall'intervista. Aggiorna quando si aggiung
 
 Contiene tutto quello che è stato tolto dal CLAUDE.md per tenerlo compatto.
 L'AI la legge su richiesta — non viene caricata ad ogni sessione.
+
+> La versione **completa e aggiornata** si copia da `vault-template/_meta/procedures.md`:
+> include anche le sezioni "Mantenere CLAUDE.md immutabile", "Rinominare o spostare
+> una cartella" e "File toccati di recente (NON editare a mano)". Lo scheletro qui
+> sotto è la base minima da personalizzare.
 
 ```markdown
 # Procedures
@@ -469,4 +522,17 @@ Lo script `scripts/workspace-status.sh` (incluso in questa skill) esegue i coman
 bash <percorso-skill>/scripts/workspace-status.sh
 ```
 
-Stampa: commit recenti con legenda vault/ai, file toccati, modifiche non committate, daily note di oggi. Funziona su vault con qualsiasi strutturadi cartelle.
+Stampa: hot-cache, audit anti-drift di CLAUDE.md (`check-claude-md.py`), commit
+recenti con legenda vault/ai, file modificati, modifiche non committate, daily
+note di oggi. Funziona su vault con qualsiasi struttura di cartelle.
+
+---
+
+## Nota: pagina overview / home
+
+Questa skill **non** genera una `overview.md`: la home funzionale del vault è
+`_meta/hot-cache.md` (cosa sta succedendo) + `_meta/index.md` (cosa c'è). Se il
+vault eredita una `overview.md` da `wiki-init`, tienila come **pagina di pura
+navigazione che rimanda ai file vivi** — mai come catalogo di struttura duplicato,
+che invecchia e contraddice `taxonomy.md`. `check-claude-md.py` audita solo
+CLAUDE.md, quindi sta all'AI mantenere overview un semplice hub di link.
