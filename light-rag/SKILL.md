@@ -1,35 +1,19 @@
 ---
 name: light-rag
 description: >
-  Manage and query LightRAG knowledge bases (KBs) via the `lightrag-kb` toolchain.
-  Trigger when user mentions: LightRAG, ragcli, query/ingest/create KB, local OCR RAG.
+  Manage and query local LightRAG knowledge bases (KBs) via the `ragcli` CLI.
+  Trigger whenever the user mentions LightRAG, ragcli, a KB by name, or asks to query/search/ingest/create a knowledge base, even if they just say "check the wiki/vault/KB for X" or "what do we know about Y" — there is likely already a KB with the answer. ALWAYS check existing KBs before creating a new one or falling back to grep/find.
 ---
-
 # LightRAG Skill
 
-## 1. Paths & Execution (Direct Access - DO NOT run search or find commands)
-- **Root Directory**: `~/Documents/lightrag-kb` (check here first; do not run search or grep to find it).
-- **CLI Executable**: Run `ragcli` directly if in PATH, or run `~/Documents/lightrag-kb/bin/ragcli`.
-- **Config & Registry**: `~/Documents/lightrag-kb/config/global.env` and `~/Documents/lightrag-kb/registry.yaml`.
+The CLI is self-documenting and evolves — don't rely on memorized flags.
+Always run `ragcli -h` and `ragcli <subcommand> -h` (e.g. `ragcli kb -h`, `ragcli query -h`) to see current usage before constructing a command.
 
-## 2. Command Reference
+## Workflow
 
-| Action | Command |
-|---|---|
-| List KBs & Status | `ragcli list` |
-| Status Summary | `ragcli status` |
-| Create KB | `ragcli create <name> <src_folder> [--port N] [--ocr mineru\|glmocr] [--provider ollama\|openrouter]` |
-| Ingest folder | `ragcli ingest <name> [--force]` |
-| Server Control | `ragcli start\|stop\|restart <name\|all>` |
-| Register MCP | `ragcli mcp-add <name>` |
-| Rebuild `.env` | `ragcli regen <name\|all>` (run after registry or global config edits) |
+1. **Check what already exists before doing anything else**: `ragcli kb ls` (or `ragcli status`). If a KB already covers the topic, query it instead of re-reading source files by hand or creating a duplicate KB — that's the entire point of this tool.
+2. **Query**: check `ragcli query -h` and run it non-interactively. If the target server isn't up, the relevant `server`/`status` subcommand will say so — start it the same way (check `-h` for syntax).
+3. **Create/ingest**: only after step 1 finds nothing suitable. Use `ragcli kb -h` and `ragcli ingest -h` to find the right subcommands and flags.
+4. **Maintenance/troubleshooting**: `ragcli <subcommand> -h` for any other operation (server lifecycle, MCP registration, resetting/moving a KB, clearing a stuck ingest pipeline, etc.) — the subcommand list from `ragcli -h` plus `-h` on each covers all of it.
 
-## 3. Querying & MCP
-- **MCP Server Tool**: If registered, query using the `lightrag-<name>/query` tool.
-- **Direct Query API**: `POST http://127.0.0.1:<port>/query` with `{"query": "question", "mode": "mix"}`.
-- **Query Modes**: `mix` (default, vector+graph), `local` (detailed facts), `global` (overviews), `naive` (vector-only).
-
-## 4. Troubleshooting
-- **Server Down**: If status is down, start it: `ragcli start <name>`.
-- **OpenRouter Embedding Error**: Add `EMBEDDING_USE_BASE64=false` to `kb/<kb_name>/.env` and run `ragcli restart <kb_name>`.
-- **Logs**: View logs under `/tmp/lightrag-<name>.log` or `kb/<name>/lightrag.log`.
+Config lives in `~/Documents/lightrag-kb/config/global.env`; the KB registry (names, ports, sources, providers) is `~/Documents/lightrag-kb/registry.yaml`.
