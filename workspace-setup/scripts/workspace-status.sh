@@ -21,6 +21,14 @@ else
 fi
 
 echo ""
+echo "=== Audit frontmatter delle pagine ==="
+if [ -f "_meta/check-frontmatter.py" ]; then
+    python3 _meta/check-frontmatter.py || true
+else
+    echo "(nessun _meta/check-frontmatter.py — vedi vault-template/_meta/)"
+fi
+
+echo ""
 echo "=== Commit recenti (ultimi 15) ==="
 echo "  vault: ... = utente (Obsidian Git)   |   ai: ... = AI (sessioni precedenti)"
 echo ""

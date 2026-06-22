@@ -43,7 +43,9 @@ Procedura di ingest dettagliata del vault: `_meta/procedures.md`.
 Dalla root del vault:
 
 ```bash
-git pull --rebase --autostash 2>/dev/null || true   # incorpora i backup Obsidian
+# incorpora i backup Obsidian; se il rebase fallisce, abortisci subito così non
+# resti in detached HEAD (evita il ciclo detached ↔ push fallito col sync Obsidian)
+git pull --rebase --autostash 2>/dev/null || git rebase --abort 2>/dev/null || true
 python3 .claude/skills/daily-notes/scripts/detect-pending.py --include-uncommitted
 ```
 
@@ -98,6 +100,13 @@ file target → azione*, e procedi su OK. Raggruppa le domande, non chiederle un
 Rispetta sempre: `_raw/` è di sola lettura (le daily note non si modificano mai), e
 nelle cartelle tematiche vanno riferimenti, non copie del raw.
 
+**Frontmatter delle pagine create/aggiornate**: ogni pagina che crei o tocchi deve
+avere un frontmatter coerente con lo schema in `_meta/taxonomy.md` (blocco
+`# frontmatter-schema`): scegli la famiglia giusta per la cartella (es. item di lista,
+scheda, itinerario, o generica) e compila i campi obbligatori — almeno `title`, `type`,
+`created`, `updated`. Usa `tags` già registrati in `taxonomy.md`. Per le pagine che
+aggiorni, porta avanti `updated` alla data odierna.
+
 ---
 
 ## Step 4 — Archivia e chiudi (deterministico)
@@ -116,6 +125,16 @@ python3 .claude/skills/daily-notes/scripts/record-ingest.py \
 - `--archive`: elenca **solo** i source davvero processati (articoli/note). Lo script
   ignora di proposito le daily note e qualsiasi path fuori da `articles/`/`notes/`.
 - Senza source da archiviare (solo daily note), ometti `--archive`.
+
+Dopo l'ingest, valida il frontmatter delle pagine toccate (warn-only):
+
+```bash
+python3 _meta/check-frontmatter.py   # se presente nel vault
+```
+
+Sistema i problemi segnalati sulle pagine che hai appena creato/modificato (campi
+mancanti, valori fuori enum, tag non in taxonomy). Non inventare date: ricavale dal
+contesto o da `git log`.
 
 Lo script di default **committa l'ingest** (`git add -A` → commit `ai:`) e poi punta
 il ledger a *quel* commit. Questo è essenziale per l'idempotenza: se il contenuto

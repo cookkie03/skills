@@ -39,6 +39,21 @@ cambia. Se segnala qualcosa, sposta il contenuto nel file vivo giusto:
 Esecuzione manuale: `python3 _meta/check-claude-md.py` (aggiungi `--strict` per
 exit 1 sui problemi, utile in un pre-commit).
 
+## Validazione frontmatter (`check-frontmatter.py`)
+
+`_meta/check-frontmatter.py` controlla che le pagine abbiano un frontmatter
+coerente con lo schema dichiarato in `taxonomy.md` (blocco `# frontmatter-schema`).
+Segnala: pagine senza frontmatter, campi obbligatori mancanti per famiglia, valori
+`type`/`status` fuori enum, tag non registrati in `taxonomy.md`. È data-driven: se
+aggiorni le famiglie in `taxonomy.md`, il validatore si adegua da solo.
+
+- Esecuzione: `python3 _meta/check-frontmatter.py` (warn-only) · `--strict` (exit 1) ·
+  `--fix` (registra in `taxonomy.md` i soli tag ricorrenti non ancora elencati — unico
+  auto-fix sicuro; date/type/status mancanti restano da sistemare a mano).
+- Gira nel hook `auto-commit.sh` (warn-only, solo se cambiano .md nel turno) e a inizio
+  sessione via `workspace-status.sh`.
+- Esclude `_raw/`, `_models/`, `_meta/`, `_scratch/` e ogni cartella che inizia per `.`.
+
 ## Rinominare o spostare una cartella
 
 Un rename non propagato lascia riferimenti rotti sparsi. Procedura:

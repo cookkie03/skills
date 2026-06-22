@@ -40,6 +40,7 @@ Accanto ai quattro file di *stato* vivono due **file companion** in `_meta/`:
 |---|---|
 | `procedures.md` | Procedure operative dettagliate + formati dei file meta. Semi-statico: l'AI lo legge su richiesta, non a ogni turno. Serve a tenere CLAUDE.md compatto. |
 | `check-claude-md.py` | Auditor deterministico anti-drift di CLAUDE.md (vedi sotto). |
+| `check-frontmatter.py` | Auditor deterministico del frontmatter delle pagine: campi mancanti, valori fuori enum, tag non in taxonomy. Data-driven (legge lo schema da `taxonomy.md`). Warn-only, gira nel hook e a inizio sessione. |
 
 ### Perché un auditor deterministico per CLAUDE.md
 
@@ -150,8 +151,12 @@ nella root del vault, poi rendilo eseguibile:
 chmod +x hooks/auto-commit.sh
 ```
 
-Lo script (avvia `_meta/sync.py`, pull, commit `ai:`, push) non dipende
-dall'agent che lo invoca — è agnostico.
+Lo script (avvia `_meta/sync.py`, audit warn-only, pull, commit `ai:`, push) non
+dipende dall'agent che lo invoca — è agnostico. Include una **guardia anti-loop**:
+esce subito se è in corso un rebase/merge o se `HEAD` è detached, e abortisce il
+`pull --rebase` se fallisce, così non lascia mai il repo in stato rotto (causa
+tipica del ciclo detached-HEAD ↔ push fallito quando un altro processo — es.
+Obsidian Git — sincronizza in parallelo).
 
 ### Config per agent
 
@@ -164,6 +169,7 @@ vault-template/
 ├── _meta/
 │   ├── sync.py               → _meta/sync.py
 │   ├── check-claude-md.py    → _meta/check-claude-md.py
+│   ├── check-frontmatter.py  → _meta/check-frontmatter.py
 │   └── procedures.md         → _meta/procedures.md
 ├── .claude/
 │   └── settings.json         → .claude/settings.json
@@ -199,6 +205,7 @@ file di config che usa) con la chiave hook appropriata che invoca
 | `_meta/index.md` ricostruito | `sync.py` scansiona tutti i .md del vault |
 | `_meta/hot-cache.md` "File toccati" aggiornato | `sync.py` legge ultimi commit `ai:` |
 | Audit anti-drift di CLAUDE.md (se modificato nel turno) | `check-claude-md.py`, warn-only |
+| Audit frontmatter (se cambiano .md nel turno) | `check-frontmatter.py --fix`, warn-only + auto-registra tag ricorrenti |
 | Modifiche committate con `ai:` | `auto-commit.sh` dopo sync |
 | Push sul remote | `auto-commit.sh` |
 
@@ -230,7 +237,8 @@ vault/
 │   ├── log.md              ← registro eventi significativi (manuale)
 │   ├── procedures.md       ← procedure operative + formati (companion, semi-statico)
 │   ├── sync.py             ← aggiorna index e hot-cache (chiamato dal hook)
-│   └── check-claude-md.py  ← auditor anti-drift di CLAUDE.md (hook + sessione)
+│   ├── check-claude-md.py  ← auditor anti-drift di CLAUDE.md (hook + sessione)
+│   └── check-frontmatter.py ← auditor frontmatter pagine, data-driven (hook + sessione)
 ├── daily-notes/       ← YYYY-MM-DD.md, una per giorno
 ├── <tema-1>/
 ├── <tema-2>/
@@ -238,7 +246,7 @@ vault/
 ```
 
 I quattro file di *stato* in `_meta/` sono descritti nella sezione "I file di
-stato vivi"; `procedures.md` e `check-claude-md.py` sono i companion. Il CLAUDE.md
+stato vivi"; `procedures.md`, `check-claude-md.py` e `check-frontmatter.py` sono i companion. Il CLAUDE.md
 non duplica il loro contenuto: vi rimanda. Così resta immutabile mentre lo stato
 del vault evolve nei file vivi.
 
@@ -246,7 +254,7 @@ del vault evolve nei file vivi.
 
 ## Fase 5 — Genera il CLAUDE.md e i file di stato
 
-Genera il CLAUDE.md **e** i quattro file di stato `_meta/` insieme: il CLAUDE.md fa riferimento ai file vivi, quindi devono esistere fin dall'inizio (anche se inizialmente quasi vuoti). I companion `procedures.md`, `sync.py` e `check-claude-md.py` si copiano da `vault-template/` (Fase 3b).
+Genera il CLAUDE.md **e** i quattro file di stato `_meta/` insieme: il CLAUDE.md fa riferimento ai file vivi, quindi devono esistere fin dall'inizio (anche se inizialmente quasi vuoti). I companion `procedures.md`, `sync.py`, `check-claude-md.py` e `check-frontmatter.py` si copiano da `vault-template/` (Fase 3b).
 
 Compila il template con i dati reali del vault. Nessun placeholder non compilato: il file è caricato ad ogni sessione AI e deve essere immediatamente operativo.
 
@@ -378,6 +386,42 @@ language: it | en
 | <tema-1>/ | ... | |
 | <tema-2>/ | ... | |
 | _meta/ | Taxonomy e metadati del vault | Non creare note di lavoro qui |
+
+## Tag per tema
+
+| Tag | Dominio |
+|---|---|
+| <tag> | <dominio> |
+
+## Convenzione frontmatter
+
+Definisci i campi obbligatori per le pagine. Se il vault ha tipi di pagina
+eterogenei (es. note knowledge vs item di lista vs schede), descrivili come
+"famiglie". `_meta/check-frontmatter.py` è **data-driven**: legge lo schema da un
+blocco machine-readable qui sotto, perciò validare costa zero manutenzione extra.
+
+### Schema machine-readable
+
+```yaml
+# frontmatter-schema
+exclude_dirs: [_raw, _models, _meta, _scratch, node_modules]
+no_fm_expected: [AGENTS.md, CLAUDE.md, GEMINI.md]
+families:
+  - name: generica          # fallback (match_path vuoto)
+    match_path: []
+    required: [title, type, created, updated]
+    type_enum: [concept, list, synthesis, source, overview, meta]
+    status_enum: [draft, reviewed, verified, stale, archived]
+  # aggiungi qui altre famiglie per cartelle con schema proprio, es.:
+  # - name: item di lista
+  #   match_path: ["lists/"]
+  #   required: [title, type, status, created]
+  #   type_enum: [list-item]
+  #   status_enum: [idea, archived]
+```
+
+Se ometti il blocco, il validatore usa un default generico equivalente alla
+famiglia "generica" sopra.
 ```
 
 Compila con le cartelle reali emerse dall'intervista. Aggiorna quando si aggiungono cartelle nuove.
