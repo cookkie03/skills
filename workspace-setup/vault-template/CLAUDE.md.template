@@ -1,0 +1,99 @@
+# [Nome Vault]
+
+[1-2 righe: scopo, contenuto principale, lingua di lavoro.]
+
+## Struttura
+
+```
+<cartella-1>/    # [cosa contiene]
+<cartella-2>/    # [cosa contiene]
+daily-notes/     # YYYY-MM-DD.md
+_raw/            # inbox: risorse grezze da processare
+_meta/           # taxonomy · index · hot-cache · log · procedures · sync.py · check-*.py · session-brief.sh
+```
+
+Mappa estesa in `_meta/taxonomy.md`. Procedure operative in `_meta/procedures.md`.
+
+## Convenzione commit
+
+| Prefisso | Autore |
+|---|---|
+| `vault: …` | Obsidian Git — utente |
+| `ai: …` | AI (questa sessione) |
+
+Usa sempre `ai:` — mai `vault:`. Tutto ciò che sta dopo l'ultimo commit `ai:` è
+lavoro dell'utente.
+
+## Ad ogni messaggio
+
+Un hook di pre-turno (`_meta/session-brief.sh`) ti inietta automaticamente il
+**delta utente dall'ultimo commit `ai:`**: commit `vault:`, file non committati,
+risorse nuove in `_raw/`, e commenti `%% … %%` lasciati nelle pagine. Quando il
+brief non è vuoto:
+
+- Leggi cosa è cambiato prima di agire: l'utente potrebbe aver già fatto, spostato
+  o corretto qualcosa. Non sovrascrivere il suo lavoro.
+- Riconcilia lo stato: se servono, aggiorna `_meta/index.md`/`taxonomy.md`/`log.md`.
+- Processa l'inbox `_raw/` e i commenti `%%` come istruzioni dell'utente verso di te
+  (procedura in `_meta/procedures.md`).
+
+Se il brief è vuoto, non è cambiato nulla dall'ultimo turno: procedi normalmente.
+
+## A inizio sessione
+
+```bash
+git pull
+cat _meta/hot-cache.md
+git log --oneline -15
+git status --short
+python3 _meta/check-claude-md.py        # audit anti-drift di CLAUDE.md
+cat daily-notes/$(date +%Y-%m-%d).md 2>/dev/null
+```
+
+Sintetizza: dov'eravamo (hot-cache) · cosa è cambiato (log ai: vs vault:) · task
+aperti. `_meta/index.md` solo se cerchi un file specifico.
+
+## A fine sessione
+
+- Aggiorna `_meta/hot-cache.md`: Focus corrente + Thread aperti (formato in procedures.md).
+- Se evento significativo: appendi a `_meta/log.md` (formato in procedures.md).
+- Se nuova cartella: aggiorna `_meta/taxonomy.md`.
+- Index, commit e push: automatici via Stop hook.
+
+## Regole operative
+
+- Prima di creare file: leggi `_meta/taxonomy.md`.
+- Non creare cartelle senza accordo esplicito.
+- File in `git status` = in uso dall'utente — non toccare senza chiedere.
+- Preferisci modificare file esistenti.
+- Commenti `%%` e risorse in `_raw/`: trattali come input dell'utente (procedure in `_meta/procedures.md`).
+- [Regole specifiche di questo vault]
+
+## Manutenzione di questo file
+
+CLAUDE.md contiene **solo regole stabili**: struttura, convenzioni, comandi di
+orientamento, regole operative. Si scrive una volta e non si tocca nel flusso
+normale. Tieni fuori tutto ciò che invecchia:
+
+| Cosa | Dove va |
+|---|---|
+| Fatti datati, decisioni, rinomine, milestone | `_meta/log.md` |
+| Procedure passo-passo | `_meta/procedures.md` (qui solo una riga di rimando) |
+| Cataloghi di file / mappa cartelle estesa | `_meta/index.md` · `_meta/taxonomy.md` |
+| Focus corrente, thread aperti, file toccati | `_meta/hot-cache.md` |
+
+`_meta/check-claude-md.py` verifica questa regola in automatico (gira a inizio
+sessione e nel Stop hook quando questo file cambia).
+
+## Skill
+
+| Operazione | Skill |
+|---|---|
+| Preprocessing audio, immagini, Office | `wiki-preprocess` |
+| Crawling URL | `crawl4ai` |
+| Sintassi Obsidian | `obsidian-markdown` |
+| File .base / .canvas | `obsidian-bases` · `json-canvas` |
+| Artefatti visivi | `wiki-artifact` |
+| Health check | `wiki-lint` |
+
+[Rimuovi le righe non rilevanti per questo vault.]

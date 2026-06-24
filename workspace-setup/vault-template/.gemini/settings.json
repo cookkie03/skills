@@ -1,5 +1,10 @@
 {
   "hooks": {
+    "beforeTurn": [
+      {
+        "command": "bash _meta/session-brief.sh"
+      }
+    ],
     "afterTurn": [
       {
         "command": "bash hooks/auto-commit.sh"

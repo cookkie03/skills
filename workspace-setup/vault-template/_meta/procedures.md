@@ -11,6 +11,53 @@ Procedure operative dettagliate. Lette su richiesta — non necessarie ad ogni s
 | `hot-cache.md` | Contesto caldo: focus e thread aperti | AI (semantica) + sync.py (file toccati) |
 | `log.md` | Storia del perché: decisioni, milestone | AI (manuale, append-only) |
 
+## Delta utente a inizio messaggio (`session-brief.sh`)
+
+A ogni messaggio l'hook di pre-turno (`_meta/session-brief.sh`, cablato come
+`UserPromptSubmit` in `.claude/settings.json`) inietta nel contesto il **delta
+dall'ultimo commit `ai:`**: commit `vault:`, file non committati, risorse nuove in
+`_raw/`, commenti `%%` nelle pagine cambiate. È read-only e silenzioso quando non
+c'è delta (subito dopo un commit `ai:` il range è vuoto). Quando NON è vuoto:
+
+- È la fotografia di cosa ha fatto l'utente mentre l'AI non c'era. Leggila prima
+  di agire: potrebbe aver già risolto, spostato o corretto qualcosa.
+- Riconcilia lo stato vivo se necessario: `index.md` si rigenera da solo, ma
+  `taxonomy.md` (nuove cartelle), `log.md` (decisioni dell'utente degne di nota) e
+  i `Thread aperti` di `hot-cache.md` potrebbero andare aggiornati.
+- Processa l'inbox `_raw/` e i commenti `%%` (sotto).
+
+Esecuzione manuale: `bash _meta/session-brief.sh`.
+
+## Commenti `%%` (istruzioni inline dell'utente)
+
+In Obsidian `%% … %%` è un commento invisibile in lettura. L'utente lo usa per
+lasciare istruzioni all'AI dentro la pagina ("%% espandi questa sezione %%",
+"%% questa fonte è da verificare %%"). Trattali come richieste dirette:
+
+- Esegui ciò che chiedono nel contesto della pagina in cui stanno.
+- Poi **risolvili**: rimuovi il commento se l'istruzione è completata, oppure
+  rispondi inline e lascialo solo se serve ancora una decisione dell'utente.
+- Non lasciare `%%` orfani: un commento già evaso che resta confonde i turni
+  successivi (verrebbe rifatto). Se non sei sicuro dell'intento, chiedi invece
+  di indovinare.
+- I commenti `%%` possono essere inline o di blocco (multi-riga: `%%` su una riga,
+  testo, `%%` su un'altra). `session-brief.sh` segnala le righe con `%%`; apri il
+  file per leggere il blocco completo.
+
+## Inbox `_raw/`
+
+`_raw/` è la cartella dove l'utente deposita risorse grezze da integrare (file
+scaricati, appunti, export, audio/immagini/Office). È esclusa da index e
+validazione frontmatter. Ciclo di lavorazione:
+
+- Se il file non è testo leggibile (audio, immagine, .docx/.pptx/.xlsx, PDF):
+  prima `wiki-preprocess` per convertirlo/descriverlo.
+- Poi `wiki-ingest` per integrarne il contenuto nelle pagine giuste del vault
+  (usa `taxonomy.md` per decidere dove).
+- A integrazione avvenuta, **svuota** la risorsa da `_raw/`: spostala in archivio
+  o eliminala, così l'inbox segnala solo ciò che resta da fare. Registra in
+  `log.md` solo se l'ingest ha prodotto una decisione o una pagina significativa.
+
 ## Come leggere il git log
 
 - `vault: ...` → auto-commit Obsidian (utente ha lavorato in quell'intervallo di tempo)

@@ -13,16 +13,51 @@ Idempotente: rieseguibile senza danni.
 
 from __future__ import annotations
 
+import re
 import subprocess
 from datetime import datetime
 from pathlib import Path
 
 ROOT = Path.cwd()
 
-EXCLUDE_DIRS = {
+# Cartelle SEMPRE escluse dall'index: servizio/diario, non "contenuto" del vault.
+# Le cartelle dotfile (.obsidian, .git, .claude, …) sono escluse a parte via
+# startswith(".") in is_excluded(), così non serve elencarle tutte.
+STRUCTURAL_EXCLUDE = {
     "_meta", "daily-notes", "Daily Notes", "Journal", "Diario",
-    ".obsidian", ".git", ".claude",
 }
+
+# Schema in taxonomy.md: stesso blocco letto da check-frontmatter.py. Riusiamo il
+# suo `exclude_dirs` così "dove non indicizzare" è dichiarato in un solo posto.
+SCHEMA_FENCE_RE = re.compile(
+    r"```ya?ml\s*\n#\s*frontmatter-schema\s*\n(.*?)\n```", re.DOTALL
+)
+
+
+def load_exclude_dirs() -> set[str]:
+    """STRUCTURAL_EXCLUDE ∪ exclude_dirs dichiarati in taxonomy.md (se leggibili)."""
+    exclude = set(STRUCTURAL_EXCLUDE)
+    taxonomy = ROOT / "_meta" / "taxonomy.md"
+    if not taxonomy.exists():
+        return exclude
+    try:
+        import yaml  # opzionale: senza PyYAML restano i soli structural
+    except ImportError:
+        return exclude
+    m = SCHEMA_FENCE_RE.search(taxonomy.read_text(encoding="utf-8", errors="ignore"))
+    if not m:
+        return exclude
+    try:
+        schema = yaml.safe_load(m.group(1))
+    except yaml.YAMLError:
+        return exclude
+    if isinstance(schema, dict):
+        for d in schema.get("exclude_dirs", []) or []:
+            exclude.add(str(d))
+    return exclude
+
+
+EXCLUDE_DIRS = load_exclude_dirs()
 
 # Quanti commit "ai:" recenti leggere per "File toccati di recente"
 RECENT_AI_COMMITS = 5

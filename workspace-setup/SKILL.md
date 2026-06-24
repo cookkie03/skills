@@ -34,11 +34,14 @@ Quattro file che l'AI consulta e mantiene. Sono la memoria del vault: git regist
 
 Tieni i file leggeri: `hot-cache.md` è una finestra mobile (sovrascrivi le voci vecchie), `log.md` è append-only ma sintetico, `index.md` una riga per voce.
 
-Accanto ai quattro file di *stato* vivono due **file companion** in `_meta/`:
+Accanto ai quattro file di *stato* vivono i **companion** in `_meta/` (procedure +
+script). L'AI legge `procedures.md` su richiesta; gli script girano via hook:
 
 | File | Ruolo |
 |---|---|
 | `procedures.md` | Procedure operative dettagliate + formati dei file meta. Semi-statico: l'AI lo legge su richiesta, non a ogni turno. Serve a tenere CLAUDE.md compatto. |
+| `sync.py` | Rigenera `index.md` e la sezione "File toccati" di `hot-cache.md`. Gira nello Stop hook. |
+| `session-brief.sh` | Hook di **pre-turno**: a ogni messaggio inietta nel contesto il delta utente dall'ultimo commit `ai:` (vedi "Fase 3c"). Read-only, silenzioso se non c'è delta. |
 | `check-claude-md.py` | Auditor deterministico anti-drift di CLAUDE.md (vedi sotto). |
 | `check-frontmatter.py` | Auditor deterministico del frontmatter delle pagine: campi mancanti, valori fuori enum, tag non in taxonomy. Data-driven (legge lo schema da `taxonomy.md`). Warn-only, gira nel hook e a inizio sessione. |
 
@@ -164,13 +167,19 @@ Copia i file dalla cartella `vault-template/` di questa skill:
 
 ```
 vault-template/
+├── CLAUDE.md.template        → CLAUDE.md            ← compila e rinomina (Fase 5)
 ├── hooks/
-│   └── auto-commit.sh        → hooks/auto-commit.sh   ← script unico
+│   └── auto-commit.sh        → hooks/auto-commit.sh ← Stop hook (script unico)
 ├── _meta/
 │   ├── sync.py               → _meta/sync.py
+│   ├── session-brief.sh      → _meta/session-brief.sh   ← hook pre-turno (Fase 3c)
 │   ├── check-claude-md.py    → _meta/check-claude-md.py
 │   ├── check-frontmatter.py  → _meta/check-frontmatter.py
-│   └── procedures.md         → _meta/procedures.md
+│   ├── procedures.md         → _meta/procedures.md
+│   ├── taxonomy.md           → _meta/taxonomy.md    ← compila con le cartelle reali
+│   ├── index.md              → _meta/index.md       ← starter (lo riempie sync.py)
+│   ├── hot-cache.md          → _meta/hot-cache.md   ← starter
+│   └── log.md                → _meta/log.md         ← starter
 ├── .claude/
 │   └── settings.json         → .claude/settings.json
 ├── .agents/
@@ -216,6 +225,48 @@ file di config che usa) con la chiave hook appropriata che invoca
 
 ---
 
+## Fase 3c — Hook di pre-turno (delta utente)
+
+Lo Stop hook (3b) chiude il turno committando `ai:`. Da solo è metà del ciclo:
+quando l'utente lavora in Obsidian *tra* due turni AI, l'agente al messaggio
+successivo non sa cosa è cambiato. `_meta/session-brief.sh` è la metà simmetrica.
+
+- **Quando**: a ogni messaggio, prima che l'agente risponda (`UserPromptSubmit`
+  per Claude Code; l'evento di pre-turno equivalente per gli altri agent).
+- **Cosa fa**: stampa su stdout — che l'agente riceve in contesto — il
+  **delta dall'ultimo commit `ai:`**: commit `vault:`, file non committati, risorse
+  nuove in `_raw/`, righe con commenti `%%` nelle pagine cambiate. Tutto ciò che
+  sta dopo l'ultimo `ai:` è, per costruzione, lavoro dell'utente.
+- **Garanzie di progetto**: read-only (non tocca mai il repo, sicuro anche durante
+  rebase/merge/detached); **silenzioso** quando non c'è delta (subito dopo un
+  commit `ai:` il range è vuoto → zero rumore e zero token); output **cappato**
+  (solo `--stat` ed estratti, mai diff interi); **non fallisce mai** (esce sempre
+  0, così non blocca il prompt dell'utente).
+
+L'agente usa il brief per *riconciliare* prima di agire: leggere cosa ha fatto
+l'utente, evitare di sovrascriverlo, aggiornare lo stato vivo, processare `_raw/`
+ed eseguire i `%%`. La procedura di risposta è in `_meta/procedures.md`
+("Delta utente a inizio messaggio", "Commenti `%%`", "Inbox `_raw/`").
+
+Cablaggio in `.claude/settings.json`:
+
+```json
+{ "hooks": { "UserPromptSubmit": [ { "hooks": [
+  { "type": "command", "command": "bash _meta/session-brief.sh" } ] } ] } }
+```
+
+| Agent | Config file | Chiave hook pre-turno |
+|---|---|---|
+| Claude Code | `.claude/settings.json` | `hooks.UserPromptSubmit` (verificata) |
+| Agents SDK | `.agents/settings.json` | `hooks.userPromptSubmit` (da confermare con la spec) |
+| Gemini CLI | `.gemini/settings.json` | `hooks.beforeTurn` (da confermare con la spec) |
+
+Lo script è agnostico: cambia solo la chiave dell'evento. Per gli agent diversi da
+Claude Code verifica il nome dell'evento di pre-turno nella documentazione corrente
+e aggiorna il template.
+
+---
+
 ## Fase 4 — Struttura cartelle
 
 ```
@@ -223,22 +274,24 @@ vault/
 ├── CLAUDE.md          ← istruzioni immutabili (generato nel passo successivo)
 ├── .gitignore
 ├── hooks/
-│   └── auto-commit.sh     ← script unico condiviso tra tutti gli agent
+│   └── auto-commit.sh     ← Stop hook condiviso tra tutti gli agent
 ├── .claude/
-│   └── settings.json      ← Stop hook → hooks/auto-commit.sh
+│   └── settings.json      ← UserPromptSubmit → session-brief.sh · Stop → auto-commit.sh
 ├── .agents/
-│   └── settings.json      ← hook → hooks/auto-commit.sh
+│   └── settings.json      ← pre-turno → session-brief.sh · stop → auto-commit.sh
 ├── .gemini/
-│   └── settings.json      ← hook → hooks/auto-commit.sh
+│   └── settings.json      ← pre-turno → session-brief.sh · afterTurn → auto-commit.sh
 ├── _meta/             ← file di stato vivi, mantenuti dall'AI
 │   ├── taxonomy.md         ← mappa cartelle → ruolo/contenuto
 │   ├── index.md            ← catalogo dei contenuti (auto-rebuild da sync.py)
 │   ├── hot-cache.md        ← contesto caldo (file toccati auto, focus manuale)
 │   ├── log.md              ← registro eventi significativi (manuale)
 │   ├── procedures.md       ← procedure operative + formati (companion, semi-statico)
-│   ├── sync.py             ← aggiorna index e hot-cache (chiamato dal hook)
+│   ├── sync.py             ← aggiorna index e hot-cache (Stop hook)
+│   ├── session-brief.sh    ← delta utente dall'ultimo ai: (pre-turno hook)
 │   ├── check-claude-md.py  ← auditor anti-drift di CLAUDE.md (hook + sessione)
 │   └── check-frontmatter.py ← auditor frontmatter pagine, data-driven (hook + sessione)
+├── _raw/              ← inbox: risorse grezze da processare (esclusa da index)
 ├── daily-notes/       ← YYYY-MM-DD.md, una per giorno
 ├── <tema-1>/
 ├── <tema-2>/
@@ -246,15 +299,16 @@ vault/
 ```
 
 I quattro file di *stato* in `_meta/` sono descritti nella sezione "I file di
-stato vivi"; `procedures.md`, `check-claude-md.py` e `check-frontmatter.py` sono i companion. Il CLAUDE.md
-non duplica il loro contenuto: vi rimanda. Così resta immutabile mentre lo stato
-del vault evolve nei file vivi.
+stato vivi"; `procedures.md`, `sync.py`, `session-brief.sh`, `check-claude-md.py`
+e `check-frontmatter.py` sono i companion. Il CLAUDE.md non duplica il loro
+contenuto: vi rimanda. Così resta immutabile mentre lo stato del vault evolve nei
+file vivi.
 
 ---
 
 ## Fase 5 — Genera il CLAUDE.md e i file di stato
 
-Genera il CLAUDE.md **e** i quattro file di stato `_meta/` insieme: il CLAUDE.md fa riferimento ai file vivi, quindi devono esistere fin dall'inizio (anche se inizialmente quasi vuoti). I companion `procedures.md`, `sync.py`, `check-claude-md.py` e `check-frontmatter.py` si copiano da `vault-template/` (Fase 3b).
+Genera il CLAUDE.md **e** i quattro file di stato `_meta/` insieme: il CLAUDE.md fa riferimento ai file vivi, quindi devono esistere fin dall'inizio (anche se inizialmente quasi vuoti). I companion `procedures.md`, `sync.py`, `session-brief.sh`, `check-claude-md.py` e `check-frontmatter.py` si copiano da `vault-template/` (Fase 3b). I template di stato e di CLAUDE.md sono anch'essi file in `vault-template/` (vedi tabella più sotto).
 
 Compila il template con i dati reali del vault. Nessun placeholder non compilato: il file è caricato ad ogni sessione AI e deve essere immediatamente operativo.
 
@@ -275,232 +329,29 @@ Aggiungi i symlink al commit iniziale del vault (git li versiona correttamente c
 
 ---
 
-### Template CLAUDE.md
+### I template sono file in `vault-template/`, non incollati qui
 
-Questo file si scrive **una volta sola** e non si tocca nel flusso normale.
-Contiene solo quello che serve ad ogni messaggio: struttura, convenzioni, comandi di orientamento, regole. Le procedure dettagliate e i formati dei file meta vivono in `_meta/procedures.md` — l'AI le legge su richiesta, non le carica ogni turno.
+Per non duplicare (la regola d'oro della skill), i template **non sono ricopiati
+in questo SKILL.md**: sono file reali sotto `vault-template/`, unica fonte di
+verità. Si copiano nel vault e si compilano. Workflow:
 
-````markdown
-# [Nome Vault]
-
-[1-2 righe: scopo, contenuto principale, lingua di lavoro.]
-
-## Struttura
-
-```
-<cartella-1>/    # [cosa contiene]
-<cartella-2>/    # [cosa contiene]
-daily-notes/     # YYYY-MM-DD.md
-_meta/           # taxonomy · index · hot-cache · log · procedures · sync.py · check-claude-md.py
-```
-
-Mappa estesa in `_meta/taxonomy.md`. Procedure operative in `_meta/procedures.md`.
-
-## Convenzione commit
-
-| Prefisso | Autore |
-|---|---|
-| `vault: {{date}}` | Obsidian Git — utente |
-| `ai: <descrizione>` | AI (questa sessione) |
-
-Usa sempre `ai:` — mai `vault:`.
-
-## A inizio sessione
-
-```bash
-git pull
-cat _meta/hot-cache.md
-git log --oneline -15
-git status --short
-python3 _meta/check-claude-md.py        # audit anti-drift di CLAUDE.md
-cat daily-notes/$(date +%Y-%m-%d).md
-```
-
-Sintetizza: dov'eravamo (hot-cache) · cosa è cambiato (log ai: vs vault:) · task aperti. 
-`_meta/index.md` solo se cerchi un file specifico. Procedure in `_meta/procedures.md`.
-
-## A fine sessione
-
-- Aggiorna `_meta/hot-cache.md`: Focus corrente + Thread aperti (formato in procedures.md).
-- Se evento significativo: appendi a `_meta/log.md` (formato in procedures.md).
-- Se nuova cartella: aggiorna `_meta/taxonomy.md`.
-- Index, commit e push: automatici via Stop hook.
-
-## Regole operative
-
-- Prima di creare file: leggi `_meta/taxonomy.md`.
-- Non creare cartelle senza accordo esplicito.
-- File in `git status` = in uso dall'utente — non toccare senza chiedere.
-- Preferisci modificare file esistenti.
-- **<processo ricorrente / inbox>**: trigger in una riga. Procedura in `_meta/procedures.md`.
-- [Regole specifiche di questo vault]
-
-## Manutenzione di questo file
-
-CLAUDE.md contiene **solo regole stabili**: struttura, convenzioni, comandi di
-orientamento, regole operative. Si scrive una volta e non si tocca nel flusso
-normale. Tieni fuori tutto ciò che invecchia, indirizzandolo al file vivo giusto:
-
-| Cosa | Dove va |
-|---|---|
-| Fatti datati, decisioni, rinomine, milestone | `_meta/log.md` |
-| Procedure passo-passo | `_meta/procedures.md` (qui solo una riga di rimando) |
-| Cataloghi di file / mappa cartelle estesa | `_meta/index.md` · `_meta/taxonomy.md` |
-| Focus corrente, thread aperti, file toccati | `_meta/hot-cache.md` |
-
-`_meta/check-claude-md.py` verifica questa regola in automatico. Se una riga che
-stai per aggiungere contiene una data, un nome di file specifico o una procedura
-→ quasi sempre appartiene a un file vivo, non qui.
-
-## Skill
-
-| Operazione | Skill |
-|---|---|
-| Preprocessing audio, immagini, Office | `wiki-preprocess` |
-| Crawling URL | `crawl4ai` |
-| Sintassi Obsidian | `obsidian-markdown` |
-| File .base / .canvas | `obsidian-bases` · `json-canvas` |
-| Artefatti visivi | `wiki-artifact` |
-| Health check | `wiki-lint` |
-
-[Rimuovi le righe non rilevanti per questo vault.]
-````
-
----
-
-## Template `_meta/taxonomy.md`
-
-Genera questo file insieme al CLAUDE.md. È la fonte di verità estesa per la struttura del vault — il CLAUDE.md la richiama, l'AI la legge prima di creare file in cartelle non ovvie.
-
-```markdown
----
-vault_name: ""
-language: it | en
----
-
-# Taxonomy
-
-| Cartella | Contenuto | Note |
+| File | Origine | Cosa compilare dopo la copia |
 |---|---|---|
-| daily-notes/ | Note giornaliere (YYYY-MM-DD.md) | |
-| <tema-1>/ | ... | |
-| <tema-2>/ | ... | |
-| _meta/ | Taxonomy e metadati del vault | Non creare note di lavoro qui |
+| `CLAUDE.md` | `vault-template/CLAUDE.md.template` → rinomina in `CLAUDE.md` | nome vault, struttura, regole specifiche; togli le righe Skill non rilevanti |
+| `_meta/taxonomy.md` | `vault-template/_meta/taxonomy.md` | cartelle reali dall'intervista + blocco `frontmatter-schema` |
+| `_meta/index.md` | `vault-template/_meta/index.md` | nulla — lo riempie `sync.py` |
+| `_meta/hot-cache.md` | `vault-template/_meta/hot-cache.md` | nulla — starter |
+| `_meta/log.md` | `vault-template/_meta/log.md` | la data della voce `init` |
+| `_meta/procedures.md` | `vault-template/_meta/procedures.md` | nulla — copia integrale; personalizza se serve |
 
-## Tag per tema
+Gli script (`sync.py`, `session-brief.sh`, `check-*.py`) e gli hook si copiano
+come sono (Fase 3b). Dopo la copia, **compila `CLAUDE.md` con i dati reali del
+vault**: nessun placeholder `[...]` o `<...>` deve restare, perché il file è
+caricato ad ogni sessione AI e dev'essere operativo da subito.
 
-| Tag | Dominio |
-|---|---|
-| <tag> | <dominio> |
-
-## Convenzione frontmatter
-
-Definisci i campi obbligatori per le pagine. Se il vault ha tipi di pagina
-eterogenei (es. note knowledge vs item di lista vs schede), descrivili come
-"famiglie". `_meta/check-frontmatter.py` è **data-driven**: legge lo schema da un
-blocco machine-readable qui sotto, perciò validare costa zero manutenzione extra.
-
-### Schema machine-readable
-
-```yaml
-# frontmatter-schema
-exclude_dirs: [_raw, _models, _meta, _scratch, node_modules]
-no_fm_expected: [AGENTS.md, CLAUDE.md, GEMINI.md]
-families:
-  - name: generica          # fallback (match_path vuoto)
-    match_path: []
-    required: [title, type, created, updated]
-    type_enum: [concept, list, synthesis, source, overview, meta]
-    status_enum: [draft, reviewed, verified, stale, archived]
-  # aggiungi qui altre famiglie per cartelle con schema proprio, es.:
-  # - name: item di lista
-  #   match_path: ["lists/"]
-  #   required: [title, type, status, created]
-  #   type_enum: [list-item]
-  #   status_enum: [idea, archived]
-```
-
-Se ometti il blocco, il validatore usa un default generico equivalente alla
-famiglia "generica" sopra.
-```
-
-Compila con le cartelle reali emerse dall'intervista. Aggiorna quando si aggiungono cartelle nuove.
-
----
-
-## Template `_meta/procedures.md`
-
-Contiene tutto quello che è stato tolto dal CLAUDE.md per tenerlo compatto.
-L'AI la legge su richiesta — non viene caricata ad ogni sessione.
-
-Non duplicare qui il contenuto: si copia **integralmente** da
-`vault-template/_meta/procedures.md` (unica fonte di verità). Quel file include i
-formati di `hot-cache.md`/`log.md`, le note su git log/conflitti e le sezioni
-"Mantenere CLAUDE.md immutabile", "Rinominare o spostare una cartella" e "File
-toccati di recente (NON editare a mano)". Personalizza dopo la copia se serve.
-
----
-
-## Template `_meta/index.md`
-
-Catalogo dei contenuti. A setup è quasi vuoto; cresce man mano che il vault si popola. Una riga per voce, raggruppata per cartella.
-
-```markdown
-# Index
-
-Catalogo dei contenuti del vault. Aggiornato dall'AI a ogni file rilevante creato o modificato. Una riga per voce.
-
-## <tema-1>/
-- [[<tema-1>/nota-esempio]] — di cosa tratta in una riga
-
-## <tema-2>/
--
-```
-
----
-
-## Template `_meta/hot-cache.md`
-
-Contesto caldo: finestra mobile su dove si sta lavorando. Sovrascrivibile, sempre corto.
-
-```markdown
-# Hot Cache
-
-Contesto di lavoro recente. Finestra mobile: le voci vecchie si sovrascrivono. Letto a inizio sessione per riprendere il filo.
-
-**Aggiornato**: YYYY-MM-DD
-
-## Focus corrente
-- [su cosa stiamo lavorando]
-
-## Thread aperti
-- [ ] [cosa è in sospeso]
-
-## File toccati di recente
-- [[...]]
-```
-
----
-
-## Template `_meta/log.md`
-
-Registro append-only degli eventi significativi. Non si riscrive: si appende.
-
-```markdown
-# Log
-
-Registro cronologico degli eventi significativi del vault (decisioni, milestone, conflitti risolti). Append-only, sintetico.
-
-## [YYYY-MM-DD] init
-- Vault creato con workspace-setup.
-```
-
-Voci successive seguono lo stesso formato:
-
-```markdown
-## [YYYY-MM-DD] <tipo> | <titolo breve>
-- [cosa è successo e perché, 1-2 righe]
-```
+`CLAUDE.md.template` già rispetta le proprie regole (niente date, niente liste
+numerate ≥3, niente cataloghi): dopo averlo compilato, `check-claude-md.py` deve
+passare pulito.
 
 ---
 
