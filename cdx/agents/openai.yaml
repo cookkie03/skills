@@ -1,0 +1,4 @@
+interface:
+  display_name: "cdx"
+  short_description: "Delegate work to Codex CLI headlessly"
+  default_prompt: "Use $cdx to delegate a scoped repository task to Codex CLI and report verified results."
