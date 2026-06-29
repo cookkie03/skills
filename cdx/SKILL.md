@@ -1,79 +1,67 @@
 ---
 name: cdx
-description: "Delegate operational work to the OpenAI Codex CLI (`codex`) as a headless subagent while you orchestrate and verify. Use when the user mentions cdx, codex cli, or headless Codex, or when you need a bounded parallel/secondary Codex pass for scoped code edits, repository analysis, refactors, code review, build/test triage, batch work, structured JSON output, or a second opinion. Prefer `codex exec` for non-interactive task execution and `codex review` for review-only work."
+description: "Delegate operational work to the OpenAI Codex CLI (`codex`) as a headless subagent while you orchestrate and verify. Use when the user mentions /cdx, cdx, codex cli, headless Codex, or asks you to let Codex implement/test while you supervise. Also use for bounded secondary Codex passes: scoped code edits, repository analysis, refactors, code review, build/test triage, batch work, structured JSON output, or second opinions. Prefer `codex exec` for non-interactive task execution and `codex review` for review-only work."
 ---
 
-# cdx - Codex CLI as a delegated subagent
+# cdx - Codex CLI as a supervised subagent
 
-`codex` is an agentic CLI. In `exec` mode it can run non-interactively, read and edit files, run shell commands, and return a final answer. Treat it like a subagent you supervise: brief it with a complete task, constrain its workspace and permissions, then verify its claims and diffs before relying on them.
+Use `codex` for bounded operational work, not for final judgment. You brief it, scope it, run it, then verify its output, logs, and diffs before reporting to the user.
 
-Use `cdx` to offload bounded operational work you would otherwise hand to another agent: large-context repository reads, scoped edits, refactors, build/test triage, structured extraction, review passes, or independent second opinions.
-
-## Core Loop
+## Fast Start
 
 ```bash
-codex exec -C /path/to/repo "<self-contained task>"
-codex exec -C /path/to/repo --add-dir /extra/path "<task that needs both roots>"
-codex exec -C /path/to/repo --sandbox workspace-write "<task that may edit files>"
-codex exec -C /path/to/repo --json -o /tmp/cdx-last-message.txt "<task>"
+codex --version
+codex exec -h
+git -C /path/to/repo status --short
+
+codex exec -C /path/to/repo --sandbox workspace-write -o /tmp/cdx-final.txt "<self-contained task>"
 codex review --uncommitted "Focus on bugs, regressions, and missing tests."
 ```
 
-Write prompts as standalone briefs. Include the goal, relevant paths, constraints, expected output, and verification requirements. `codex exec` can read instructions from stdin; when a prompt and piped stdin are both supplied, stdin is appended as a `<stdin>` block.
+Build commands from the installed help output. Top-level `codex` flags and `codex exec` flags differ; do not pass a flag to `codex exec` unless `codex exec -h` lists it. In particular, do not add `--ask-for-approval` to `codex exec`.
 
-If a flag is uncertain, run `codex -h`, `codex exec -h`, or `codex review -h` before guessing. The installed CLI is the source of truth for exact flags.
+## Brief
 
-## Delegation Rules
-
-- Scope every run with `-C /path/to/repo`; add writable roots with `--add-dir` only when the task genuinely needs them.
-- Choose `codex exec` for implementation, investigation, test triage, or structured answers.
-- Choose `codex review` for review-only work. Use `--uncommitted`, `--base <branch>`, or `--commit <sha>` to make the reviewed diff explicit.
-- Use `--sandbox read-only` for analysis-only passes and `--sandbox workspace-write` for bounded edits. Avoid `danger-full-access` unless the user explicitly accepts that risk.
-- Use `--ask-for-approval on-request` or `on-failure` when a run may need commands outside the sandbox. Use `never` only inside a trusted external sandbox.
-- Use `--search` only when live web search is necessary for the delegated task.
-- Use `-m <model>` or `-p <profile>` only when there is a clear reason to override the user's Codex defaults.
-- Add `--skip-git-repo-check` only for non-repository folders.
-- Add `--ephemeral` for throwaway analysis that should not persist a session.
-
-## Prompt Template
+Give Codex a standalone task: goal, paths, constraints, allowed scope, tests to run, and the exact report you need. Mention unrelated user changes explicitly and tell Codex not to commit, push, delete, or touch out-of-scope paths.
 
 ```text
 You are a headless Codex subagent. Work in /path/to/repo.
-
-Task: <specific goal>
-
-Constraints:
-- Touch only <paths>.
-- Preserve existing behavior unless the task says otherwise.
-- Do not commit, push, or run destructive commands.
-- If blocked by auth, missing dependencies, or permissions, stop and report the exact blocker.
-
-Verification:
-- Run <specific tests/checks> if feasible.
-- Report files changed, commands run, and remaining risks.
+Task: <goal>
+Scope: touch only <paths>; preserve existing behavior unless requested.
+Verification: run <checks> if feasible.
+Report: files changed, commands run, test results, blockers, residual risks.
 ```
 
-Keep the main agent responsible for task selection, final integration, and final user communication. Do not blindly pass a delegated result through.
+## Robust Run
 
-## Output Capture
-
-For automation or clean handoff, prefer explicit output files:
+For substantial work, keep brief and logs separate:
 
 ```bash
-codex exec -C /path/to/repo -o /tmp/cdx-result.txt "<task>"
+codex exec \
+  -C /path/to/repo \
+  --sandbox workspace-write \
+  -o /tmp/cdx-task/final.txt \
+  - < /tmp/cdx-task/brief.md \
+  > /tmp/cdx-task/stdout.log \
+  2> /tmp/cdx-task/stderr.log
 ```
 
-Use `--json` when event streams are useful for tooling or auditing. Use `--output-schema <schema.json>` when the final answer must be machine-validated JSON. After the run, read the final message or JSON, then inspect any touched files yourself.
+After launch, inspect early stdout/stderr before assuming Codex started. After completion, success means: acceptable exit code, non-empty final message, no CLI usage error in logs, and `git status`/diff matches the requested scope.
 
-## Parallel Fan-Out
+## Operating Rules
 
-Run multiple `codex exec` calls only for independent chunks, with separate scopes and output files. Ask each run to avoid committing and to report exact edits. Reconcile results manually; if two runs touch the same file, inspect carefully before applying or keeping both changes.
+- Use `codex exec` for implementation, repo analysis, test triage, structured answers, and second opinions.
+- Use `codex review` for review-only work; make the diff explicit with `--uncommitted`, `--base <branch>`, or `--commit <sha>`.
+- Use `-C` for the primary workspace and `--add-dir` only when extra writable roots are genuinely needed.
+- Use `--sandbox read-only` for analysis and `--sandbox workspace-write` for bounded edits. Ask before `danger-full-access` or bypass flags.
+- Use `--json` for event streams and `--output-schema <file>` for machine-validated final JSON.
+- Use `--search`, `-m`, `-p`, `--ephemeral`, or `--skip-git-repo-check` only when listed by help and justified by the task.
+- Prefer foreground execution until the command is known to start cleanly. Background runs must capture stdout, stderr, and final output separately.
+- Run parallel Codex jobs only for independent chunks; reconcile overlapping edits manually.
 
-## Auth And Failure Handling
+## Failure Checks
 
-If Codex reports missing authentication, stop and tell the user to run `codex login` or open Codex interactively to complete login.
-
-If the CLI fails because a flag changed, rerun the relevant help command and adapt to the installed version. If sandboxing blocks a necessary command, either rerun with an appropriate approval policy or ask the user before escalating risky access.
+If the final file is empty or Codex exits immediately, inspect stderr/logs first; bad flags often prevent startup. If auth fails, stop and ask the user to run `codex login` or complete an interactive Codex login. If a hook or MCP warning appears, separate it from the actual run by checking exit code, stderr, final output, and repo diff.
 
 ## Discovery
 
@@ -86,5 +74,3 @@ codex features
 codex mcp -h
 codex plugin -h
 ```
-
-Useful current CLI surfaces include `exec`, `review`, `resume`, `fork`, `mcp`, `plugin`, `doctor`, `sandbox`, `cloud`, `completion`, and `update`. Confirm with local help because Codex CLI evolves quickly.

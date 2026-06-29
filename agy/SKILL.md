@@ -1,7 +1,6 @@
 ---
 name: agy
-description: "Delegate operational work to the Antigravity (`agy`) agentic CLI as a headless subagent while you orchestrate and review. Use whenever you'd otherwise spawn a subagent or grind through hands-on work yourself: scoped code edits, refactors, file/repo analysis over large context, codebase Q&A, running and triaging builds/tests, batch or parallel tasks, second opinions, or any time the user mentions agy, antigravity, or gemini as a CLI tool. agy runs real tools (reads, edits, shell) inside a scoped workspace and returns the result, so you stay the orchestrator and verify its output."
-homepage: https://antigravity.google/
+description: "Delegate operational work to the Antigravity (`agy`) agentic CLI as a headless subagent while you orchestrate and verify. Use whenever the user mentions agy, antigravity, or gemini as a CLI tool, or when you would otherwise spawn a subagent for scoped code edits, refactors, repository analysis, codebase Q&A, build/test triage, batch or parallel tasks, or second opinions. agy runs real tools inside a scoped workspace and returns a result; you remain responsible for review."
 metadata:
   {
     "openclaw":
@@ -21,56 +20,69 @@ metadata:
       },
   }
 ---
-# agy — Antigravity CLI as a delegated subagent
 
-`agy` is an **agentic** CLI: in print mode it plans, runs tools (read/edit files, shell), and returns a result. Treat it like a subagent you supervise. You stay the orchestrator — frame the task, scope its workspace, then **review what it returns**. Don't blindly trust the output; verify edits and claims before building on them.
+# agy - Antigravity CLI as a supervised subagent
 
-Use it to offload work you'd otherwise do by hand or hand to a subagent: it absorbs the token-heavy operational grind (large-context reads, multi-file edits, test triage) and hands back a result.
+Use `agy` for bounded operational work, not for final judgment. You brief it, scope it, run it, then verify its output, logs, and diffs before reporting to the user.
 
-## Core loop
-
-```bash
-agy -p "<self-contained task>"             # one-shot, prints result, exits
-agy -p "<task>" --add-dir /path/to/repo   # scope its workspace to a dir
-agy -p "<task>" --model "<model-name>"    # pick model (see: agy models)
-cat file.md | agy -p "<task>"             # stdin is appended to the prompt
-```
-
-Print mode is non-interactive — write **complete, standalone prompts**, the way you'd brief a subagent: goal, relevant paths, constraints, and the exact output you want back. agy can't ask follow-ups.
-
-> **Flag changed or not working?** Run `agy -h` before guessing — it's the live source of truth for all flags and their exact names.
-
-> **Login required?** If agy responds asking for authentication, stop immediately and tell the user: "agy richiede login — esegui `agy` una volta in modo interattivo nel terminale per completare il login, poi dimmi quando sei pronto."
-
-## Delegating effectively
-
-- **Scope the workspace** with `--add-dir` (repeatable) so agy only sees relevant dirs — sharper results, fewer tokens. Without it the workspace is the current dir.
-- **Autonomous runs**: add the skip-permissions flag (`agy -h` for the exact name) when you want agy to edit/run without prompting. Only for trusted, scoped tasks — never aim it at secrets or destructive ops you can't reverse.
-- **Long tasks**: bump `--print-timeout` (e.g. `15m`) for big refactors or full test runs; default is `5m`.
-- **Parallel fan-out**: launch several `agy -p` calls in the background (`&`) for independent chunks, then collect and review.
-- **Multi-turn**: short flags for continue/interactive exist — run `agy -h` to confirm current names. Prefer fresh one-shots unless context must carry over.
-
-## Picking a model
-
-Before choosing, fetch the live list:
+## Fast Start
 
 ```bash
+agy -h
 agy models
+git -C /path/to/repo status --short
+
+agy -p "<self-contained task>" --add-dir /path/to/repo
+cat /tmp/agy-task/brief.md | agy -p "Execute this brief." --add-dir /path/to/repo
 ```
 
-General heuristic: lighter/faster models for routine operational work (edits, lookups, summaries); heavier reasoning models for architecture decisions, tricky debugging, or when you want a cross-model second opinion. Match cost to complexity.
+Build commands from the installed help output. `agy` flags change; confirm the exact names for autonomous execution, continuation, timeout, plugins, and model selection before using them.
 
-## What to delegate vs. keep
+## Brief
 
-Delegate: bounded, well-specified work — "refactor X in `src/`", "find where Y is wired up", "run the suite and report failures", "summarize these 2k lines". Keep yourself: deciding *what* to do, stitching results together, and final review.
+Give agy a standalone task: goal, paths, constraints, allowed scope, tests to run, and the exact report you need. Mention unrelated user changes explicitly and tell agy not to commit, push, delete, or touch out-of-scope paths.
+
+```text
+You are a headless Antigravity subagent. Work in /path/to/repo.
+Task: <goal>
+Scope: touch only <paths>; preserve existing behavior unless requested.
+Verification: run <checks> if feasible.
+Report: files changed, commands run, test results, blockers, residual risks.
+```
+
+## Robust Run
+
+For substantial work, keep brief and logs separate:
+
+```bash
+agy -p "Execute the brief from stdin." \
+  --add-dir /path/to/repo \
+  < /tmp/agy-task/brief.md \
+  > /tmp/agy-task/stdout.log \
+  2> /tmp/agy-task/stderr.log
+```
+
+After launch, inspect early stdout/stderr before assuming agy started. After completion, success means: acceptable exit code, non-empty output, no CLI usage/auth error in logs, and `git status`/diff matches the requested scope.
+
+## Operating Rules
+
+- Use print mode (`-p`) for non-interactive delegation; agy cannot ask follow-ups, so the prompt must be complete.
+- Use `--add-dir` to scope the workspace. Repeat it only when extra roots are genuinely needed.
+- For autonomous edit/test runs, confirm the current skip-permissions flag with `agy -h`; use it only for trusted, scoped tasks.
+- For long work, confirm and use the current timeout flag, commonly `--print-timeout`.
+- Use `agy models` before overriding the model. Prefer defaults unless complexity or cost clearly argues otherwise.
+- Prefer foreground execution until the command is known to start cleanly. Background runs must capture stdout and stderr separately.
+- Run parallel agy jobs only for independent chunks; reconcile overlapping edits manually.
+
+## Failure Checks
+
+If output is empty or agy exits immediately, inspect stderr/logs first; bad flags often prevent startup. If auth fails, stop and tell the user: "agy richiede login: esegui `agy` una volta in modo interattivo nel terminale, poi dimmi quando sei pronto." If a plugin or environment warning appears, separate it from the actual run by checking exit code, stderr, output, and repo diff.
 
 ## Discovery
 
 ```bash
-agy -h          # full flag reference (source of truth)
-agy models      # available models with exact names
-agy plugin -h   # plugin subcommands
-agy update      # update the CLI
+agy -h
+agy models
+agy plugin -h
+agy update
 ```
-
-Auth/first run: if a call stalls, run `agy` once interactively to complete login.
