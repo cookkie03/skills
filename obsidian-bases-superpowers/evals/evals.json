@@ -1,0 +1,23 @@
+{
+  "skill_name": "obsidian-bases-superpowers",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use $obsidian-bases-superpowers to build a project command center in Obsidian. My project notes use #project, status, area, due, and owner properties. Create one active dashboard and one completed view, with formulas that make stale or overdue projects obvious.",
+      "expected_output": "Proposes a data contract and produces valid .base YAML with filters, formulas, properties, and at least two views, followed by only the concise maintenance notes needed to adjust the base.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Use $obsidian-bases-superpowers. Build a contextual sidebar base for a people note in Obsidian: when I'm on [[Ada Lovelace]], show notes that link to the active person, recent updates, and a compact list layout.",
+      "expected_output": "Produces a context-aware Base using `this`, selects a compact list or table view, validates the link/file shape, and documents the required sidebar placement.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Use $obsidian-bases-superpowers to design a cleanup radar for my vault. I want to find markdown notes missing status, notes with no tags, very large files, and anything modified more than 30 days ago. Make it feel like an instrument panel, not a generic table.",
+      "expected_output": "Creates a cleanup-focused Base with separate diagnostic formulas, an issue count or equivalent signal, a filtered view of problematic notes, and concise maintenance notes for each signal.",
+      "files": []
+    }
+  ]
+}

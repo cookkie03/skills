@@ -1,0 +1,4 @@
+interface:
+  display_name: "Obsidian Bases Superpowers"
+  short_description: "Design powerful Obsidian .base workflows"
+  default_prompt: "Use $obsidian-bases-superpowers to design a powerful Obsidian Base for my notes."
