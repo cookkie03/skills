@@ -124,7 +124,7 @@ This entire block is hidden in reading view.
 ==Highlighted text==                   Highlight syntax
 ```
 
-## Math (LaTeX)
+## Math (LaTeX) & Currency Escaping
 
 ```markdown
 Inline: $e^{i\pi} + 1 = 0$
@@ -134,6 +134,13 @@ $$
 \frac{a}{b} = c
 $$
 ```
+
+> [!warning] Critical Trap: Dollar Sign ($) & Currency Collisions
+> In Obsidian, single `$` starts inline math and `$$` starts display math. Raw currency dollar signs (e.g. `$1000`, `$20,000`, `$0`) will be interpreted as opening LaTeX delimiters, corrupting subsequent formulas and paragraphs across the note.
+>
+> **Rules for Currency & Literal Dollar Signs:**
+> 1. **In Markdown Prose**: Always escape literal dollar signs with a backslash (`\$1,000`, `\$0`, `\$20,000`) or write explicit ISO currency (`1,000 USD`, `1,000 dollars`). Never write raw `$1000` or malformed combinations like `$\$1000$` or `$$1000$`.
+> 2. **Inside LaTeX Math Blocks**: Never put raw `$` inside `$ ... $` or `$$ ... $$`. If a dollar sign is needed inside math mode, wrap it inside `\text{\$1,000}` or `\text{USD}`.
 
 ## Diagrams (Mermaid)
 
@@ -157,41 +164,6 @@ Text with a footnote[^1].
 
 Inline footnote.^[This is inline.]
 ```
-
-## Complete Example
-
-````markdown
----
-title: Project Alpha
-date: 2024-01-15
-tags:
-  - project
-  - active
-status: in-progress
----
-
-# Project Alpha
-
-This project aims to [[improve workflow]] using modern techniques.
-
-> [!important] Key Deadline
-> The first milestone is due on ==January 30th==.
-
-## Tasks
-
-- [x] Initial planning
-- [ ] Development phase
-  - [ ] Backend implementation
-  - [ ] Frontend design
-
-## Notes
-
-The algorithm uses $O(n \log n)$ sorting. See [[Algorithm Notes#Sorting]] for details.
-
-![[Architecture Diagram.png|600]]
-
-Reviewed in [[Meeting Notes 2024-01-10#Decisions]].
-````
 
 ## References
 

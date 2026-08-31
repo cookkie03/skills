@@ -47,7 +47,10 @@ Use this skill to convert raw course materials (lecture slides, audio transcript
 - **Prose Style & Visual Formatting**:
   - Write high-density, filler-free prose with **bold keywords** and smooth conceptual transitions.
   - Enhance readability using structured **comparison tables** for tradeoffs/properties, and **bulleted/numbered lists** for step-by-step algorithms, assumptions, and parameter lists.
-  - Standardize syntax: LaTeX math (`$`, `$$\n...\n$$`), Obsidian callouts (`> [!warning]`, `> [!tip]`), and filtered diagram embeds (`![[slide-XX.png]]`). Match source language.
+  - **Obsidian Standards & LaTeX Math (see `obsidian-markdown` skill)**:
+    - Use LaTeX math (`$...$` inline, `$$\n...\n$$` block display).
+    - **Currency & Dollar Sign Escaping**: Always escape literal currency dollar signs in markdown prose with a backslash (`\$1,000`, `\$20,000`, `\$0`) or write explicit ISO currency (`1,000 USD`). Never write unescaped `$1000` or malformed blocks (`$\$1000$`, `$$1000$`) which break Obsidian's MathJax renderer.
+    - Use Obsidian callouts (`> [!note]`, `> [!warning]`, `> [!tip]`) and filtered diagram embeds (`![[slide-XX.png]]`). Match source language.
 
 ### 4. Deliver Report
 - Insert the synthesized `## Week N` section at the appropriate chronological insertion point in `<Course Name>.md`.
