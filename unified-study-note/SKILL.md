@@ -38,23 +38,16 @@ Use this skill to convert raw course materials (lecture slides, audio transcript
   - Integrate quiz questions, choices, and official justifications directly into the corresponding concept sections to enrich explanations, rather than keeping a separate standalone quiz section.
 
 ### 3. Synthesize & Deduplicate
-- **Backbone Structure**: Follow the logical flow of the lecture slides as the primary structure.
-- **Obsidian Source Referencing (Mandatory)**: Always include explicit Obsidian references and wikilinks to all ingested source materials of any kind (e.g., slide PDFs `![[...]]` or `[[...]]`, personal student notes `[[...]]`, audio/video transcripts `[[...]]`, Jupyter/R notebooks `[[...]]`, Notion workbooks `[[...]]`, quizzes, lab files, and any other inputs) at the start of each weekly section and under relevant concept headers.
-- **Information Depth**: Capture 100% of substantive concepts, formulas, derivation steps, parameter definitions, edge cases, theorems, proofs, and practical arguments.
-- **Writing Style & Visual Structuring**:
-  - Synthesize content into high-density, cohesive prose using **bold keywords** for all core terms, variables, and conditions.
-  - Eliminate conversational transcript filler while fully unpacking theoretical intuition, mathematical derivations, and edge cases.
-  - Maximize visual clarity and reading speed by employing structured formatting: use **comparison tables** for multi-dimensional tradeoffs or properties, and **bulleted or numbered lists** for sequential steps, assumptions, and parameter breakdowns.
-- **Unified Concept Sections**:
-  - For each topic, merge slide bullets + transcript explanations + student note clarifications + code snippets + quiz insights into a single definitive, non-redundant section.
-  - Merge definitions, formulas, bound code snippets, exam traps (`> [!warning]`), and student clarifications (`> [!tip]`) into a single narrative block.
-- **Single Source of Truth**: State every fact, formula, and rule in **exactly one place**. Course logistics appear only in the top-level overview.
-- **Formatting Standards**:
-  - Use Obsidian callouts (`> [!note]`, `> [!warning]`, `> [!tip]`) for exam traps, clarifications, and critical warnings.
-  - Use LaTeX math (`$...$` inline, `$$\n...\n$$` block) for mathematical formulas.
-  - Embed slide images using standard Markdown or Wikilinks (`![[slide-XX.png]]` or `![](images/slide-XX.png)`).
-  - Include a structured **Course Logistics & Exam Overview** section if administrative/exam info is present in the week's materials.
-  - **Language**: Match the primary language of the input sources (e.g., English sources -> English note).
+- **Slide-Grounded Structure & Source Attribution**:
+  - Follow the lecture slide sequence as the primary outline, including a top-level **Course Logistics & Exam Overview** when administrative info is present.
+  - Cite all ingested inputs at the top of each section using Obsidian wikilinks (`[[slides.pdf]]`, `[[transcript.md]]`, `[[student-notes.md]]`, `[[notebook.ipynb]]`, Notion workbooks, quizzes).
+- **Exhaustive Unified Content (Zero Information Loss)**:
+  - Fuse all source layers (slides, transcript explanations, student `%% %%` questions, bound code snippets, quiz insights) into unified concept sections with zero source siloing.
+  - Enforce a Single Source of Truth with 100% substantive coverage: formulas, derivation steps, parameter definitions, proofs, and edge cases are stated in exactly one place.
+- **Prose Style & Visual Formatting**:
+  - Write high-density, filler-free prose with **bold keywords** and smooth conceptual transitions.
+  - Enhance readability using structured **comparison tables** for tradeoffs/properties, and **bulleted/numbered lists** for step-by-step algorithms, assumptions, and parameter lists.
+  - Standardize syntax: LaTeX math (`$`, `$$\n...\n$$`), Obsidian callouts (`> [!warning]`, `> [!tip]`), and filtered diagram embeds (`![[slide-XX.png]]`). Match source language.
 
 ### 4. Deliver Report
 - Insert the synthesized `## Week N` section at the appropriate chronological insertion point in `<Course Name>.md`.
