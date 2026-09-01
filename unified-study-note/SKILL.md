@@ -32,9 +32,8 @@ Use this skill to convert raw course materials (lecture slides, audio transcript
   - Answer every `%% %%` question inline using evidence from the transcript, slides, or course context.
 - **Audio Transcripts**:
   - Carefully interpret spoken transcript text, correcting misrecognized audio words into precise academic/domain terminology.
-- **Code Notebooks & Notion Workbooks**:
+- **Code Notebooks & Practical Workbooks**:
   - Extract actual code blocks directly into syntax-highlighted code fences (e.g., ````python````, ````r````, ````sql````) rather than providing high-level text descriptions.
-  - **Notion Workbooks & Pages (Mandatory Toggle Expansion)**: When extracting or using Notion pages/workbooks as source inputs, ALWAYS execute progressive top-to-bottom scroll passes (~800px step size) and recursively expand all collapsible toggles (`[aria-expanded="false"]`, `.notion-toggle-block`, triangle SVGs) across multiple passes until 0 closed toggles remain to defeat Notion's virtualized DOM lazy-loading and ensure no sections (e.g. Dictionaries, Lists, Methods, Exercises) are truncated.
 - **Quizzes & Solutions**:
   - Integrate quiz questions, choices, and official justifications directly into the corresponding concept sections to enrich explanations, rather than keeping a separate standalone quiz section.
 
@@ -51,6 +50,7 @@ Use this skill to convert raw course materials (lecture slides, audio transcript
   - Use LaTeX math (`$...$` inline, `$$\n...\n$$` block) for mathematical formulas.
   - **Currency & Dollar Sign Escaping**: Always escape literal currency dollar signs in markdown prose with a backslash (`\$1,000`, `\$50`) or use ISO currency (`1,000 USD`) so Obsidian's MathJax renderer does not break.
   - Embed slide images using standard Markdown or Wikilinks (`![[slide-XX.png]]` or `![](images/slide-XX.png)`).
+  - Refer to the `obsidian-markdown` skill for Obsidian-specific syntax, frontmatter, and formatting standards.
   - Include a structured **Course Logistics & Exam Overview** section if administrative/exam info is present in the week's materials.
   - **Language**: Match the primary language of the input sources (e.g., English sources -> English note).
 
