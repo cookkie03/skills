@@ -41,7 +41,7 @@ Use this skill to convert raw course materials (lecture slides, audio transcript
 ### 3. Synthesize & Deduplicate
 - **Backbone Structure**: Follow the logical flow of the lecture slides as the primary structure.
 - **Obsidian Source Referencing (Mandatory)**: Always include explicit Obsidian references and wikilinks to all ingested source materials of any kind (e.g., slide PDFs `![[...]]` or `[[...]]`, personal student notes `[[...]]`, audio/video transcripts `[[...]]`, code notebooks/scripts `[[...]]`, Notion workbooks `[[...]]`, quizzes, lab files, and any other inputs) at the start of each weekly section and under relevant concept headers.
-- **Information Depth**: Capture 100% of substantive concepts, formulas, derivation steps, parameter definitions, edge cases, theorems, proofs, and practical arguments.
+- **Information Depth**: Capture 100% of substantive concepts, formulas, derivation steps, parameter definitions, edge cases, theorems, proofs, code snippets, and practical arguments.
 - **Unified Concept Sections**:
   - For each topic, merge slide bullets + transcript explanations + student note clarifications + code snippets + quiz insights into a single definitive, non-redundant section.
   - Merge definitions, formulas, bound code snippets, exam traps (`> [!warning]`), and student clarifications (`> [!tip]`) into a single narrative block.
