@@ -1,105 +1,82 @@
 ---
-name: "notion-to-obsidian"
-description: "Extract public or workspace Notion pages cleanly into Obsidian Markdown notes. Iteratively expands all toggle blocks with full-page progressive scrolling to bypass virtualized DOM lazy-loading, isolates code blocks from explanation text, preserves AST formatting (bold, italics, inline code, headings, lists, callouts, tables, math formulas, double line breaks), crawls nested sub-pages, downloads remote images locally to prevent URL expiration, escapes currency dollar signs, strips Notion UI noise, and syncs directly to the Obsidian vault in safe execution batches."
+name: notion-to-obsidian
+description: Extract public or workspace Notion pages (notion.site, notion.so, course workbooks, practical guides) into complete Obsidian Markdown notes with local image assets, expanded toggles, and LaTeX math preservation.
 ---
 
-# Notion to Obsidian Extraction Skill
+# Notion to Obsidian Extraction
 
-Use this skill whenever you need to convert public or workspace Notion pages into complete, faithfully formatted, rich Markdown notes for Obsidian with zero data loss.
+Convert public or workspace Notion pages and course workbooks into complete, faithfully formatted Obsidian Markdown notes with offline assets and zero data loss.
 
-## Core Extraction Pipeline
+## Execution Pipeline
 
-When extracting Notion pages:
+### Phase 1: Discovery & URL Queue
+1. Navigate to the target Notion URL in Aside (`openTab(url)` or `page.goto(url)`).
+2. For course hubs or database indexes (e.g. `Data Mining (Practical)` or `Programming for Data Science`), extract child page URLs from anchor elements (`a[href*="notion.site"]`, `a[href*="notion.so"]`).
+3. Maintain parent-child hierarchy to organize output notes into matching vault subfolders (`/Users/luca/Documents/Second-Brain/learning/tilburg-university/<Course>/Workbooks/`).
+4. **Batch Processing**: For large workbooks (300–1,200+ toggles), process 3–5 pages per REPL turn to avoid execution timeouts.
 
-### 1. Page & Index Discovery
-- Navigate to the target Notion URL in Playwright `page` REPL.
-- If the page is a course hub or database (e.g. `Data Mining (Practical)` or `Programming for Data Science Course Page`), extract all sub-page URLs from child link anchors (`a[href*="notion.site"]` or `a[href*="notion.so"]`).
-- Maintain a queue of discovered sub-page URLs and their parent-child hierarchy to organize notes into the correct subfolders in Obsidian.
+### Phase 2: Progressive Scroll & Recursive Toggle Expansion
+Notion virtualizes DOM blocks and unmounts nodes outside the active viewport. Expanding parent toggles dynamically mounts child toggles that may also be collapsed.
 
-### 2. Safe Execution Batching
-- Large workbooks (e.g. `Py2`, `Py4`, `Py6` with 300–1,200+ toggles, embedded code, and deep nesting) take significant time and memory to process.
-- **Batch extractions into sets of 3–5 pages per REPL turn** to prevent the 120-second tool execution timeout.
+- **Progressive Scroll**: Scroll the page from top to bottom in increments of **600px** with a **120ms pause** per step to allow `IntersectionObserver` handlers to mount elements.
+- **Multi-Pass Toggle Expansion**: On each scroll step, find and click all collapsed toggle elements:
+  - `[aria-expanded="false"]`
+  - `.notion-toggle-block:not(.notion-toggle-open)`
+  - Triangle SVG containers within toggle headers.
+- **Convergence Criterion**: Repeat full top-to-bottom scroll passes until a complete pass yields **0 newly opened toggles** and document height stabilizes.
 
-### 3. Progressive Full-Scroll & Recursive Toggle Expansion (CRITICAL)
-- **Virtualized DOM / Lazy Loading**: Notion virtualizes its DOM blocks and unmounts/lazy-loads content outside the visible viewport. Expanding a top-level toggle renders child elements that may contain additional closed toggles.
-- **Mandatory Progressive Scroll & Multi-Pass Pattern**:
-  - Run multiple top-to-bottom scroll passes across the page.
-  - Step size: **500–800px** per scroll step, with a settling pause (**100–200ms**) after each step to allow Notion's IntersectionObservers to mount DOM nodes.
-  - At every step, query and click all closed toggles:
-    - `[aria-expanded="false"]`
-    - `.notion-toggle-block:not(.notion-toggle-open)`
-    - Div containers with triangle SVG icons (`svg` with triangle shape) and short label text.
-  - Repeat the full top-to-bottom scroll cycle until a complete pass yields **0 newly opened toggles** and the total page height stabilizes.
+### Phase 3: DOM AST Parsing & Asset Extraction
 
-### 4. DOM AST Node Parsing & Formatting Separation
+#### 1. Table of Contents
+- Parse `.notion-table_of_contents-block` into an indented Obsidian wikilink list (`- [[#Heading]]`, `  - [[#Sub-heading]]`) matching the element's indent margin styling.
+- Remove redundant plain-text "Table of Contents" label elements preceding the block.
 
-#### A. Table of Contents Block
-- Convert Notion's `.notion-table_of_contents-block` into an indented, nested Obsidian wikilink list (`- [[#Heading]]`, `  - [[#Sub-heading]]`) based on the element's `margin-inline-start` / `margin-left` indentation styling.
-- Remove duplicate preceding plain "Table of Contents" label elements.
+#### 2. Code Blocks & Language Detection
+- Extract code text from `.line-numbers` or `pre code` containers into fenced code blocks (` ```python `, ` ```r `, ` ```sql `, ` ```bash `, ` ```json `).
+- Separate prose explanations and captions outside the code fence as standard paragraphs.
+- Detect language dynamically from `.notion-code-block-language` or class attributes.
 
-#### B. Code Blocks vs Explanation Separation
-- Extract pure code lines from `.line-numbers` or `pre code` containers directly into fenced Markdown code blocks (```python, ```r, ```sql, ```bash, ```json).
-- Detect language dynamically from Notion's language selector (`.notion-code-block-language`, `[aria-label*="language"]`, or class names).
-- Ensure explanation text, commentary, or descriptions accompanying the block are placed cleanly outside the code fence as standard prose paragraphs.
-- Preserve exact whitespace and indentation within code blocks.
-
-#### C. Math & Equations (KaTeX / LaTeX & Dollar Sign Escaping)
-- **Display / Block Equations**: Convert Notion equation blocks (`.notion-equation-block`, `.katex-display`, or `annotation[encoding="application/x-tex"]`) into multiline Obsidian LaTeX blocks:
+#### 3. Math & KaTeX Equations
+- **Block Equations**: Convert `.notion-equation-block`, `.katex-display`, or `annotation[encoding="application/x-tex"]` into multiline LaTeX blocks:
   ```markdown
   $$
   formula
   $$
   ```
-- **Inline Equations**: Convert inline KaTeX elements (`.katex`, inline `.notion-equation`) into inline LaTeX (`$formula$`).
-- **Currency & Dollar Sign Escaping ($ Issue)**:
-  - Raw currency figures or numbers containing dollar signs (e.g. `$1,000`, `$50`, `$100k`) MUST be escaped as `\$1,000` or written as `1,000 USD` in prose to prevent Obsidian's MathJax renderer from treating currency symbols as broken LaTeX math delimiters.
+- **Inline Equations**: Convert inline `.katex` elements to `$formula$`.
+- **Currency Escaping**: Standalone currency figures (e.g. `$1,000`, `$50`) must be escaped as `\$1,000` to prevent Obsidian's MathJax renderer from misinterpreting currency signs as LaTeX delimiters.
 
-#### D. Tables
-- Convert Notion table blocks (`.notion-table-block`, `table`, `tr`, `td`) into standard Markdown pipe tables with header dividers (`| Col 1 | Col 2 |\n|---|---|\n| Val 1 | Val 2 |`).
-- Cleanly replace internal newlines inside table cells with spaces or `<br>` tags to prevent table row breakage.
+#### 4. Tables & Structural Blocks
+- **Tables**: Convert `.notion-table-block` into standard Markdown pipe tables with header dividers (`| Col 1 | Col 2 |\n|---|---|\n| Val 1 | Val 2 |`). Replace internal newlines in cells with spaces.
+- **Callouts**: Map `.notion-callout-block` to Obsidian callouts (`> [!note]`, `> [!tip]`, `> [!warning]`, `> [!info]`), preserving emoji icons.
+- **Typography & Lists**: Preserve Headings (H1–H3), nested bullet/numbered lists, bold (`**text**`), italics (`*text*`), and inline code (`` `code` ``).
 
-#### E. Callouts & Blockquotes
-- Convert Notion callout blocks (`.notion-callout-block`) into Obsidian callouts (`> [!note]`, `> [!tip]`, `> [!warning]`, `> [!info]`).
-- Preserve the callout icon/emoji if present (e.g. `> [!tip] 💡 Tip`).
+#### 5. Local Image Downloads (Asset Expiration Prevention)
+- Notion embeds images on temporary AWS S3 signed URLs that expire within hours.
+- Download all image assets locally into the vault asset directory (`/Users/luca/Documents/Second-Brain/learning/tilburg-university/<Course>/Workbooks/images/`).
+- Name images with unique slugs (e.g. `<workbook-slug>-fig-01.png`) and replace remote URLs in Markdown with local embeds (`![[image.png]]` or `![alt](images/image.png)`).
 
-#### F. Lists & Headings
-- Headings: Preserve H1 (`#`), H2 (`##`), H3 (`###`).
-- Lists: Bullet lists (`- `) and numbered lists (`1. `), preserving nested indentation levels.
-- Text Styles: Bold (`**text**`), Italics (`*text*`), Strikethrough (`~~text~~`), Inline Code (`` `code` ``).
-- Paragraphs: Ensure consistent double line breaks (`\n\n`) between structural blocks.
-
-#### G. Local Image Download & URL Expiration Prevention (CRITICAL)
-- **AWS S3 URL Expiration**: Notion hosts embedded images on temporary AWS S3 signed URLs that expire after a few hours, causing broken images in Obsidian if hotlinked.
-- **Local Download Requirement**:
-  - Download all remote image assets directly into the local vault asset directory (`/Users/luca/Documents/Second-Brain/learning/tilburg-university/<Course>/Workbooks/images/` or `images/`).
-  - Name downloaded images with a unique, descriptive slug (e.g. `<workbook-slug>-fig-01.png`).
-  - Replace remote Notion image URLs in the Markdown output with local Obsidian image embeds: `![[<image-name>.png]]` or `![alt](images/<image-name>.png)`.
-
-### 5. Strip Notion UI Noise
-- Strip Notion topbars, sidebars, navigation bars, breadcrumbs, search bars, "Get Notion free" buttons, template clone banners, and cookie notices prior to Markdown serialization.
-
-### 6. Sync to Obsidian Vault & Non-Destructive Preservation
-- Write converted Markdown files and downloaded images to temporary storage (`tmp/`) in REPL, then copy them directly into the target Obsidian vault directory (`/Users/luca/Documents/Second-Brain/learning/tilburg-university/<Course>/Workbooks/`).
-- **Non-Destructive User Edits**: If a note already exists locally with user annotations, personal notes, or custom callouts, preserve the user's modifications intact and merge new structural content cleanly.
-
-### 7. Obsidian Markdown Standards (Skill Reference: obsidian-markdown)
-- All generated notes must adhere strictly to the guidelines in the `obsidian-markdown` skill (`/Users/luca/.aside/u/0/skills/user/obsidian-markdown/SKILL.md`).
-- Include standard YAML frontmatter properties (`title`, `source`, `tags`, `date_extracted`).
+### Phase 4: Vault Placement & Non-Destructive Update
+- Write converted Markdown files and images to the target vault directory.
+- Include standard YAML frontmatter (`title`, `source`, `tags`, `date_extracted`).
+- **Non-Destructive Merge**: If a note already exists with user annotations or custom callouts, preserve user additions intact while updating structural content.
 
 ---
 
-## Production Extraction Script Template
+## REPL Extraction Template
+
+Execute this automation in `aside repl`:
 
 ```js
-// 1. Progressive scroll and recursive multi-pass toggle expansion
-async function expandAllNotionTogglesWithScroll(p) {
+// 1. Expand all Notion toggles with progressive scroll
+async function expandAllNotionToggles(p) {
   return await p.evaluate(async () => {
     let totalOpened = 0;
     for (let pass = 0; pass < 6; pass++) {
       let passOpened = 0;
       const step = 600;
       const docHeight = () => Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
-      
+
       for (let scrollY = 0; scrollY <= docHeight(); scrollY += step) {
         window.scrollTo(0, scrollY);
         await new Promise(r => setTimeout(r, 120));
@@ -127,13 +104,13 @@ async function expandAllNotionTogglesWithScroll(p) {
   });
 }
 
-// 2. Full DOM AST Parser with Image Asset Extraction & Math Escaping
-async function convertNotionASTComplete(p, pageTitle, pageUrl) {
+// 2. Parse DOM AST to Obsidian Markdown
+async function convertNotionToMarkdown(p, pageTitle, pageUrl) {
   return await p.evaluate(({ title, url }) => {
     const pageEl = document.querySelector('.notion-page-content') || document.querySelector('main') || document.body;
     const clone = pageEl.cloneNode(true);
 
-    // Remove UI noise
+    // Strip Notion UI noise
     const noise = clone.querySelectorAll('a[href*="cookie-notice"], button, .notion-topbar, .notion-sidebar, nav, [aria-label*="Breadcrumb"]');
     noise.forEach(n => {
       if (n.innerText && (n.innerText.includes('Get Notion free') || n.innerText.includes('Skip to content') || n.innerText.includes('Cookie'))) {
@@ -141,7 +118,7 @@ async function convertNotionASTComplete(p, pageTitle, pageUrl) {
       }
     });
 
-    // Process Table of Contents Block
+    // Table of Contents
     const tocBlocks = Array.from(clone.querySelectorAll('.notion-table_of_contents-block'));
     tocBlocks.forEach(tocBlock => {
       let prev = tocBlock.previousElementSibling;
@@ -164,7 +141,7 @@ async function convertNotionASTComplete(p, pageTitle, pageUrl) {
       tocBlock.outerHTML = tocMd + '\n\n';
     });
 
-    // Process code blocks
+    // Code Blocks
     const codeBlocks = Array.from(clone.querySelectorAll('.notion-selectable.notion-code-block, .notion-code-block'));
     codeBlocks.forEach(codeBlock => {
       const lineNumbers = codeBlock.querySelector('.line-numbers');
@@ -185,16 +162,15 @@ async function convertNotionASTComplete(p, pageTitle, pageUrl) {
 
       let replacementHtml = '';
       if (codeText) {
-        replacementHtml += `\n\n```${lang}\n${codeText}\n```\n\n`;
+        replacementHtml += `\n\n\`\`\`${lang}\n${codeText}\n\`\`\`\n\n`;
       }
       if (expText && expText !== codeText) {
         replacementHtml += `\n\n${expText}\n\n`;
       }
-
       codeBlock.outerHTML = replacementHtml;
     });
 
-    // Process Tables
+    // Tables
     const tables = Array.from(clone.querySelectorAll('table, .notion-table-block'));
     tables.forEach(tbl => {
       const rows = Array.from(tbl.querySelectorAll('tr'));
@@ -214,16 +190,15 @@ async function convertNotionASTComplete(p, pageTitle, pageUrl) {
     function parseNode(node) {
       if (!node) return '';
       if (node.nodeType === Node.TEXT_NODE) {
-        // Escape standalone currency dollar signs ($1,000 -> \$1,000)
         return node.textContent.replace(/\$([0-9]+(?:\.[0-9]+)?)/g, '\\$$$1');
       }
       if (node.nodeType === Node.ELEMENT_NODE) {
         const tag = node.tagName.toLowerCase();
         const className = node.getAttribute('class') || '';
 
-        if (tag === 'script' || tag === 'style' || tag === 'button' || tag === 'nav') return '';
+        if (['script', 'style', 'button', 'nav'].includes(tag)) return '';
 
-        // Math / KaTeX equations
+        // Math / KaTeX
         if (className.includes('katex') || className.includes('notion-equation')) {
           const texAnnotation = node.querySelector('annotation[encoding="application/x-tex"]');
           const mathTex = texAnnotation ? texAnnotation.textContent.trim() : node.innerText.trim();
@@ -233,22 +208,19 @@ async function convertNotionASTComplete(p, pageTitle, pageUrl) {
         }
 
         // Inline code
-        const hasCodeBackground = Boolean(
-          (node.style?.backgroundColor && node.style?.backgroundColor !== 'transparent' && node.style?.backgroundColor !== 'rgba(0, 0, 0, 0)') ||
+        const isMono = Boolean(
           (node.style?.fontFamily && node.style?.fontFamily.toLowerCase().includes('mono')) ||
           className.includes('notion-inline-code')
         );
-        if (tag === 'code' || className.includes('notion-inline-code') || (tag === 'span' && hasCodeBackground && node.innerText.trim().length > 0 && !node.querySelector('*'))) {
-          return ` `${node.innerText.trim()}` `;
+        if (tag === 'code' || isMono) {
+          return ` \`${node.innerText.trim()}\` `;
         }
 
-        // Bold text
+        // Bold / Italics
         if (tag === 'strong' || tag === 'b' || node.style?.fontWeight === 'bold' || node.style?.fontWeight >= 600) {
           const inner = Array.from(node.childNodes).map(parseNode).join('').trim();
           return inner ? ` **${inner}** ` : '';
         }
-
-        // Italic text
         if (tag === 'em' || tag === 'i' || node.style?.fontStyle === 'italic') {
           const inner = Array.from(node.childNodes).map(parseNode).join('').trim();
           return inner ? ` *${inner}* ` : '';
@@ -256,7 +228,6 @@ async function convertNotionASTComplete(p, pageTitle, pageUrl) {
 
         // Images
         if (tag === 'img') {
-          const alt = node.getAttribute('alt') || 'Image';
           const src = node.getAttribute('src');
           return src ? `\n\n![Image](${src})\n\n` : '';
         }
@@ -287,16 +258,14 @@ async function convertNotionASTComplete(p, pageTitle, pageUrl) {
           return inner ? `\n- ${inner}` : '';
         }
 
-        // Paragraphs & Line Breaks
+        // Paragraphs
         if (tag === 'p' || tag === 'div') {
           const inner = Array.from(node.childNodes).map(parseNode).join('');
-          if (!inner.trim()) return '';
-          return `\n\n${inner.trim()}`;
+          return inner.trim() ? `\n\n${inner.trim()}` : '';
         }
 
         return Array.from(node.childNodes).map(parseNode).join('');
       }
-
       return '';
     }
 
