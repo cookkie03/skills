@@ -11,7 +11,7 @@ Converts raw course materials into a single, deduplicated, concept-centric maste
 
 - **Single master note**: All content merges into `<Course Name>.md` at `/Users/luca/Documents/Second-Brain/learning/tilburg-university/<Course Name>/`. Keep all course knowledge unified in this single file.
 - **Topical deduplication**: Organize by concept (`### <Topic>`). When a topic reappears across sessions or sources, merge it directly into the existing concept section with inline spot citations.
-- **Exhaustive concept preservation**: Capture every formula, derivation, parameter definition, proof, edge case, code block, and quiz insight in full. State everything once, fully articulated, in its rightful conceptual home.
+- **Exhaustive inclusion**: Every formula ($$...$$), derivation, parameter definition, proof, edge case, verbatim code snippet, callout, and visual asset from the raw sources must be explicitly included in the final note. State everything once, in full, with zero omissions or high-level summaries.
 - **Textual self-sufficiency**: Ensure the Markdown prose is completely self-contained. Articulate all definitions, theoretical arguments, parameter interpretations, and graphical insights directly in the surrounding text, using visual embeds and code blocks as supportive references.
 - **Consistency within a note**: Maintain uniform formatting conventions (callout styles, table structures, code annotations) throughout a given master note.
 
@@ -43,7 +43,7 @@ Read all extracted texts, transcripts, notes, and code files in full. Build a st
 - **Visuals**: Embedded images (`![[slide-XX.png]]`) paired with complete prose explaining what the visualization demonstrates.
 
 ### 3. Build concept sections
-Synthesize the inventoried items into unified, high-density concept blocks:
+Fuse all inventoried items into unified, high-density concept blocks, ensuring every formula, parameter table, verbatim code block, callout, and visual asset from the inventory is explicitly written into the final note:
 
 ```markdown
 ### <Concept Name>
