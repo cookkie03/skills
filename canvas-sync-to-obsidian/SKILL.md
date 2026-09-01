@@ -1,8 +1,10 @@
 ---
-name: "canvas-sync-to-obsidian"
-description: "Synchronize all Canvas courses and Tilburg University Google Drive ([EMAIL_REDACTED], /u/1/) to Obsidian Second-Brain, ensuring exhaustive 1-to-1 verification of every module, file, assignment, page, media asset, and Notion workbook."
+name: canvas-sync-to-obsidian
+description: Synchronize all Canvas courses and Tilburg University Google Drive
+  ([EMAIL_REDACTED], /u/1/) to Obsidian Second-Brain, ensuring exhaustive 1-to-1
+  verification of every module, file, assignment, page, media asset, and Notion
+  workbook.
 ---
-
 # Canvas Course & Google Drive Sync to Obsidian
 
 Use this skill to perform a comprehensive, 1-to-1 audit and synchronization of all Tilburg University Canvas courses, course Notion workbooks, and the user's Tilburg University Google Drive (`[EMAIL_REDACTED]`, `/u/1/`) into the Obsidian Second-Brain vault at `/Users/luca/Documents/Second-Brain/learning/tilburg-university/`.
@@ -11,9 +13,10 @@ Use this skill to perform a comprehensive, 1-to-1 audit and synchronization of a
 
 ### 1. Exhaustive 1-to-1 Extraction Across All Canvas Courses (Full-Depth Audit)
 - **All Active Courses**: Recursively scan **every active course** visible on Canvas via the Canvas API / web interface.
-- **Complete Module & Item Traversal**:
+- **Complete Module & Item Traversal (CLICK & INSPECT EVERYTHING)**:
   - Query `/modules?include[]=items`, `/files`, `/pages`, `/discussion_topics`, and `/assignments` across all courses and sections.
-  - Traverse all modules, sub-modules, content pages, file attachments, and external links in their exact published sequence.
+  - Traverse all modules, sub-modules, content pages, file attachments, and **every external link/tool** (`ExternalUrl`, `ExternalTool`, "Video Clips", Panopto, YouTube) in their exact published sequence.
+  - **NEVER skip external links, video clips, or embedded tools**: Click and open every module item without exception. If an item is an external URL pointing to Panopto (`tilburguniversity.cloud.panopto.eu`), YouTube, or another platform, follow the link, analyze its contents, and extract its media assets.
   - Do NOT restrict checks to new or recently modified items. Verify that historical materials from earlier weeks, past blocks, or completed modules are fully preserved and accounted for in the vault.
 - **1-to-1 Obsidian Vault Matching Audit**:
   - Compare every item on Canvas against the target Obsidian vault directory (`/Users/luca/Documents/Second-Brain/learning/tilburg-university/<Course Directory>/`).
@@ -45,7 +48,7 @@ Use this skill to perform a comprehensive, 1-to-1 audit and synchronization of a
 ### 4. Incremental Synchronization & Updating Modified Files
 - **File Update & Parity Policy**:
   - For every file (`.pdf`, `.ipynb`, `.py`, `.r`, `.csv`, `.xlsx`, `.zip`, `.docx`, etc.) hosted on Canvas or Google Drive:
-    - **New Files**: Download immediately and place in the designated folder (`<Course Directory>/Modules/` or `Workbooks/`).
+    - **New Files**: Download immediately and place in the designated folder (`<Course Directory>/Modules/`, `Workbooks/`, ...).
     - **Modified Files**: Check the Canvas `updated_at` timestamp, file size, or hash/content diff against the local file. If an updated version is detected on Canvas, overwrite/update the local copy to keep lecture slides, lab materials, and syllabi strictly up to date.
     - **Preserve User Additions**: Never delete local notes or files created by the user during synchronization passes.
 
@@ -65,18 +68,24 @@ Use this skill to perform a comprehensive, 1-to-1 audit and synchronization of a
   - Map them into their appropriate semantic home in the Obsidian Second-Brain vault (e.g. `<Course Directory>/Workbooks/`, `<Course Directory>/Modules/`, or project/thesis directories).
   - Convert Google Colab / Jupyter notebooks (`.ipynb`), `.py`, `.r`, datasets (`.csv`, `.xlsx`, `.sqlite`), and documents into clean local notes or native assets.
 
-### 7. Media Processing Policy (Panopto & YouTube) - OmniRoute STT via Aside .env
-- Whenever a Panopto video (`tilburguniversity.cloud.panopto.eu`) or YouTube video (`youtube.com`, `youtu.be`) is encountered in any module, page, or lecture post:
-  - **Do NOT save video files**.
-  - **Extract Audio Only**:
-    - *Panopto*: Fetch authenticated direct audio stream via `DeliveryInfo.aspx` (`deliveryId=<ID>&isMaster=true`) or use `yt-dlp` (`/Users/luca/.aside/runtime/bin/python3 -m yt_dlp -x --audio-format mp3`).
+### 7. Media Processing Policy (Panopto & YouTube) - Audio Extraction, Merging & OmniRoute STT
+- Whenever a Panopto video (`tilburguniversity.cloud.panopto.eu`) or YouTube video (`youtube.com`, `youtu.be`) link is encountered in any module, item, page, or lecture post:
+  - **Do NOT save video files** (extract audio only).
+  - **Panopto Playlist & Multi-Clip Handling**:
+    - If a Panopto link is a playlist (`pid=...`) or contains multiple video clips, resolve and download the audio for **all individual video clips inside that specific playlist/link**.
+    - **Merge rule (CRITICAL)**: Merge all audio clips from that single Panopto link/playlist into one single consolidated `.mp3` file (e.g. `02design_missing_merged_audio.mp3` or `02slr_merged_audio.mp3`).
+    - **Isolation rule**: NEVER merge clips across different Canvas links, different modules, or different weeks. Each Canvas item/link produces its own standalone merged audio and transcript.
+  - **Extract Audio**:
+    - *Panopto*: Fetch authenticated stream via `DeliveryInfo.aspx` (`deliveryId=<ID>&isMaster=true`) or plain HLS variant URLs, download `fragmented.mp4` / audio stream via `ffmpeg` / `curl`, and convert to MP3.
     - *YouTube*: Extract audio via `yt-dlp` (`/Users/luca/.aside/runtime/bin/python3 -m yt_dlp -x --audio-format mp3 <URL>`).
   - **STT Transcription Policy (STRICT - NO LOCAL WHISPER)**:
     - **NEVER use Whisper local** (`whisper.cpp`, `OpenWhispr.app`, local `.bin` models).
-    - **ALWAYS use OmniRoute STT**: Read `OMNIROUTE_API_KEY` and `OMNIROUTE_BASE_URL` from `/Users/luca/.aside/u/0/.env` (or fallback to `models.json` under `providers.omniroute.apiKey`). Access the model `auto/best-stt` via the OpenAI-compatible audio transcription endpoint (`POST ${OMNIROUTE_BASE_URL}/audio/transcriptions`).
-  - **Save Transcripts**:
-    - Save transcribed text alongside the corresponding module materials in Obsidian for downstream synthesis by `unified-study-note`.
-  - Delete temporary audio files after transcription completes.
+    - **ALWAYS use OmniRoute STT**: Read `OMNIROUTE_API_KEY` and `OMNIROUTE_BASE_URL` from `/Users/luca/.aside/u/0/.env` (or fallback to `models.json`). Access the OpenAI-compatible audio transcription endpoint (`POST ${OMNIROUTE_BASE_URL}/audio/transcriptions`) using `groq/whisper-large-v3-turbo` (or `auto/best-stt`).
+    - Split long merged audio files into ~10-minute segments (600s) with `ffmpeg -f segment` before transcribing to respect API payload limits, then concatenate the resulting transcript text.
+  - **Keep Local Copies in Materials Folder (CRITICAL)**:
+    - **Keep a permanent copy of the merged audio `.mp3`** directly inside the module/materials folder in Obsidian (e.g. `/Users/luca/Documents/Second-Brain/learning/tilburg-university/<Course Directory>/Modules/Week N/<prefix>_merged_audio.mp3`).
+    - **Keep the full Markdown transcript `.md`** in the same folder (e.g. `<prefix>_transcript.md`) structured with a table of contents, segment timestamps, and complete verbatim text.
+    - Clean up temporary chunk files after merging and transcription.
 
 ### 8. Exclusion Policy (Announcements & Quizzes - STRICT EXCLUSIONS)
 - **ALWAYS SKIP / IGNORE ALL ANNOUNCEMENTS**: Whenever Canvas announcements (`/announcements`, announcement feeds, or announcement posts) are encountered, ALWAYS skip and ignore them completely. Do NOT download, export, parse, or mirror announcements into the vault.
