@@ -1,63 +1,60 @@
 ---
 name: "unified-study-note"
-description: "Merge raw course materials (slides, audio recordings/transcripts, personal notes, code notebooks, quizzes) into a single, comprehensive, deduplicated Obsidian master note with zero information loss."
+description: "Create comprehensive, unified study reports by combining lecture slide PDFs, audio transcripts, personal notes, coding notebooks, and quiz solutions into a single structured Markdown note."
 ---
 
-# Unified Study Note Merger
+# Unified Study Note Generator
 
-Use this skill to perform an exhaustive, non-destructive merge of multi-modal course materials into a single authoritative master note (`<Course Name>.md`) in Obsidian.
-
----
-
-## Core Principles
-
-- **Single Master Note**: All material merges into EXACTLY ONE authoritative master markdown file per course: `/Users/luca/Documents/Second-Brain/learning/tilburg-university/<Course Name>/<Course Name>.md`. Never create fragmented note files.
-- **Exhaustive Merge (Zero Information Loss)**: This is a full information merge, NOT a high-level summary. Retain every formula, derivation step, parameter definition, algorithm step, bound code argument, and edge case. Rewrite prose for clarity and high density.
-- **Topical Deduplication**: Every topic has exactly one definitive home. Read the existing master note first to cross-reference established concepts (`[[#Topic Name]]`) rather than repeating definitions. Keep mathematical notation and code blocks consistent.
-- **Spot Citations**: Cite source files inline (`[[slide.pdf]]`, `[[transcript.md]]`, `[[notes.md]]`) where relevant, without requiring mandatory attribution headers.
-
----
+Use this skill to convert raw course materials (lecture slides, audio transcripts, student notes, practical notebooks, and quizzes) into a single, comprehensive, deduplicated study report in Markdown.
 
 ## Workflow
 
-### 1. Source Intake & Pre-Processing
-- **Locate Master Note**: Read the existing `<Course Name>.md` to identify established sections, notations, and cross-reference targets. If it does not exist, initialize it with frontmatter and a Table of Contents.
-- **Audit Available Input Sources**:
-  - **Slide Documents** (slide PDFs, presentations, attachments)
-  - **Audio / Video Recordings or Transcripts** (audio/video recording files, text transcripts, subtitles, or inline text)
-  - **Student Scratchpad / Personal Notes** (markdown notes or prompt text, with optional `%% %%` questions)
-  - **Practical Code Notebooks & Workbooks** (code notebooks, scripts, query files, or Notion workbooks formatted for Obsidian)
-  - **Quizzes / Exercises / Mock Questions**
+### 1. Gather Inputs & Output Destination
+- **Confirm Sources**: Verify available inputs for the session/week (slide PDFs, audio transcripts, student notes, code notebooks, quizzes). Ask the user for any missing input sources if not already provided. Inputs can be:
+  - Slide PDFs (local path or attachment)
+  - Personal notes (`.md` or text in prompt)
+  - Audio/video transcripts (`.txt`, `.md`, `.srt`, or inline text in prompt)
+  - Practical code notebooks / scripts (e.g., `.ipynb`, `.py`, `.R`)
+  - Quizzes / solutions
+- **Output Target (Single Master Note Rule)**:
+  - All study syntheses MUST merge directly into the course's single authoritative master note: `<Course Name>.md`.
+  - Never create standalone fragmented files (e.g., `Week N - Notes.md`, `Week N - <Course>.md`).
+  - Maintain the top-level chronological outline by academic week: `## Week N: <Topic Title> (Date / Lecture N)`.
+  - **Incremental Master Note Merge**: If `<Course Name>.md` already contains previous weeks, read the existing note first to avoid duplicate definitions; merge the new week cleanly without overwriting or deleting earlier content.
 
-- **Audio Inputs**: If raw audio/video recordings are provided, transcribe using OmniRoute STT (`auto/best-stt` via `/v1/audio/transcriptions` with credentials from `/.aside/u/0/.env`). Save the output to a transcript file for inline referencing. Review spoken phonetic errors, domain-specific abbreviations, and mathematical terms during transcript analysis.
+### 2. Extract Source Content
+- **Slides (PDF)**:
+  - Extract all slide text, structure, and bullet points.
+  - Render PNG images of slides using `pdftoppm -png -r 150` into an `images/` directory adjacent to the target file.
+  - Filter images: Embed images ONLY for slides containing diagrams, plots, formulas, tables, architecture schemas, or visual figures. Skip plain text and title slides.
+- **Personal Notes**:
+  - Read all student notes and identify inline comments or questions wrapped in `%% %%` tags (e.g., `%%what is a contingency table?%%`).
+  - Answer every `%% %%` question inline using evidence from the transcript, slides, or course context.
+- **Audio Transcripts**:
+  - Carefully interpret spoken transcript text, correcting misrecognized audio words into precise academic/domain terminology.
+- **Code Notebooks & Notion Workbooks**:
+  - Extract actual code blocks directly into syntax-highlighted code fences (e.g., ````python````, ````r````, ````sql````) rather than providing high-level text descriptions.
+  - **Notion Workbooks & Pages (Mandatory Toggle Expansion)**: When extracting or using Notion pages/workbooks as source inputs, ALWAYS execute progressive top-to-bottom scroll passes (~800px step size) and recursively expand all collapsible toggles (`[aria-expanded="false"]`, `.notion-toggle-block`, triangle SVGs) across multiple passes until 0 closed toggles remain to defeat Notion's virtualized DOM lazy-loading and ensure no sections (e.g. Dictionaries, Lists, Methods, Exercises) are truncated.
+- **Quizzes & Solutions**:
+  - Integrate quiz questions, choices, and official justifications directly into the corresponding concept sections to enrich explanations, rather than keeping a separate standalone quiz section.
 
-- **Slide Documents**: Render images with `pdftoppm -png -r 150 <slides.pdf> images/slide`. Embed only essential figures, diagrams, plots, and visual schemas (`![[slide-XX.png]]`).
+### 3. Synthesize & Deduplicate
+- **Backbone Structure**: Follow the logical flow of the lecture slides as the primary structure.
+- **Obsidian Source Referencing (Mandatory)**: Always include explicit Obsidian references and wikilinks to all ingested source materials of any kind (e.g., slide PDFs `![[...]]` or `[[...]]`, personal student notes `[[...]]`, audio/video transcripts `[[...]]`, code notebooks/scripts `[[...]]`, Notion workbooks `[[...]]`, quizzes, lab files, and any other inputs) at the start of each weekly section and under relevant concept headers.
+- **Information Depth**: Capture 100% of substantive concepts, formulas, derivation steps, parameter definitions, edge cases, theorems, proofs, and practical arguments.
+- **Unified Concept Sections**:
+  - For each topic, merge slide bullets + transcript explanations + student note clarifications + code snippets + quiz insights into a single definitive, non-redundant section.
+  - Merge definitions, formulas, bound code snippets, exam traps (`> [!warning]`), and student clarifications (`> [!tip]`) into a single narrative block.
+- **Single Source of Truth**: State every fact, formula, and rule in **exactly one place**. Course logistics appear only in the top-level overview.
+- **Formatting Standards**:
+  - Use Obsidian callouts (`> [!note]`, `> [!warning]`, `> [!tip]`) for exam traps, clarifications, and critical warnings.
+  - Use LaTeX math (`$...$` inline, `$$\n...\n$$` block) for mathematical formulas.
+  - **Currency & Dollar Sign Escaping**: Always escape literal currency dollar signs in markdown prose with a backslash (`\$1,000`, `\$50`) or use ISO currency (`1,000 USD`) so Obsidian's MathJax renderer does not break.
+  - Embed slide images using standard Markdown or Wikilinks (`![[slide-XX.png]]` or `![](images/slide-XX.png)`).
+  - Include a structured **Course Logistics & Exam Overview** section if administrative/exam info is present in the week's materials.
+  - **Language**: Match the primary language of the input sources (e.g., English sources -> English note).
 
-### 2. Multi-Layer Information Fusion
-For each topic, fuse all available source streams into a single unified narrative block with zero source siloing:
-- **Slides & Visuals**: Anchor core definitions, formulas, and structural hierarchy to the slide sequence. Place filtered diagram embeds (`![[slide-XX.png]]`) directly adjacent to their conceptual explanations.
-- **Spoken Audio & Transcripts**: Expand compact slide bullets with verbal intuition, real-world examples, proofs, and edge cases from the lecture, eliminating conversational filler while preserving complete academic depth.
-- **Personal Notes & Inline Questions (`%% %%`)**: Integrate student observations and resolve all inline `%%question%%` comments directly in context using:
-  ```markdown
-  > [!tip] Student Clarification: <Question / Concept>
-  > <Detailed, evidence-backed answer derived from the lecture and transcript>
-  ```
-- **Code Notebooks, Scripts & Workbooks**: Bind theory to practical implementation by embedding runnable code blocks in their respective language fences with parameter breakdowns directly underneath their theoretical concepts.
-- **Quizzes, Exercises & Past Exams**: Embed quiz questions, trap justifications, and multiple-choice explanations directly into the relevant concept section:
-  ```markdown
-  > [!warning] Exam Trap & Quiz Insight
-  > **Question**: <Quiz Question>
-  > **Key Takeaway**: <Explanation of why distractors fail and why the correct choice holds>
-  ```
-- **Course Logistics & Announcements**: If the materials contain syllabus updates, exam guidelines, or administrative rules, isolate them into a concise overview section rather than scattering them across concept sections.
-
-### 3. Formatting & Obsidian Standards
-- **Math Formatting**: Inline math `$f(x)$`, display math on dedicated lines `$$\n...\n$$`.
-- **Currency Escaping**: Escape literal dollar signs in prose (`\$1,000`, `\$50`) or use ISO codes (`1,000 USD`) to prevent MathJax parsing breaks.
-- **Structured Elements**: Use Markdown comparison tables for trade-offs and callouts (`> [!note]`, `> [!warning]`, `> [!tip]`) for critical takeaways.
-- **Obsidian Reference**: Consult the `obsidian-markdown` skill for further syntax guidelines.
-
-### 4. Merge & Verification
-- Insert the new topical section non-destructively into `<Course Name>.md`.
-- Refresh the Table of Contents at the top with Obsidian internal links (`- [[#Heading]]`).
-- Verify that formulas, image embeds, and wikilinks render cleanly.
+### 4. Deliver Report
+- Insert the synthesized `## Week N` section at the appropriate chronological insertion point in `<Course Name>.md`.
+- Regenerate the master note's Table of Contents with valid Obsidian wikilinks (`- [[#Heading]]`).
+- Verify that formatting (LaTeX `$$`, code fences, wikilinks, callouts) renders cleanly with no broken references before reporting completion.
