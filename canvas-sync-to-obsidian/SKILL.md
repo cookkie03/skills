@@ -14,7 +14,7 @@ Audit and synchronize Tilburg University Canvas courses, Google Drive files, and
 To keep the vault focused on permanent knowledge and structured coursework, apply explicit scope filtering:
 
 ### Synchronized Content (Permanent Course Knowledge)
-- **Canvas Modules & Pages**: Full module hierarchies, content pages (`/pages/:url`), embedded notes, and syllabi converted to Obsidian Markdown.
+- **Canvas Modules & Course Sections**: Full module hierarchies, content pages (`/pages/:url`), embedded notes, syllabi, assignment rubrics, and discussion resources converted to Obsidian Markdown.
 - **Course Files & Slides**: Slides, lecture handouts, lab code (`.ipynb`, `.py`, `.r`), datasets (`.csv`, `.xlsx`, `.sqlite`), and documents (`.pdf`, `.docx`).
 - **External Media & Links**: Panopto video recordings (`tilburguniversity.cloud.panopto.eu`), YouTube videos, and Notion workbooks.
 - **Tilburg Google Drive (`/u/1/`)**: Academic and research files from the university Google account (`[EMAIL_REDACTED]`, account index `1`).
@@ -28,11 +28,26 @@ To keep the vault focused on permanent knowledge and structured coursework, appl
 
 ## 2. Canvas Course Extraction Pipeline
 
-### Step 1: Traversal & Parity Audit
-1. Query Canvas courses via API or browser navigation (`/modules?include[]=items`, `/files`, `/pages`, `/assignments`).
-2. Traverse all modules, content pages, file attachments, and external links (`ExternalUrl`, `ExternalTool`, Panopto, YouTube) in published sequence.
-3. Compare Canvas items against the local vault (`/Users/luca/Documents/Second-Brain/learning/tilburg-university/<Course>/`).
-4. Download new files and update modified files when remote timestamps or file hashes change.
+### Step 1: Exhaustive 7-Section Traversal & Parity Audit
+Recursively scan every active course visible on Canvas (`/api/v1/courses?enrollment_state=active` and dashboard). Within each course, systematically inspect all 7 core sections:
+
+1. **Modules (`/modules?include[]=items`)**:
+   - Traverse all modules, sub-modules, content items, headers, embedded pages, file attachments, and external links (`ExternalUrl`, `ExternalTool`, "Video Clips", Panopto, YouTube) in exact published sequence.
+   - Click and inspect every item. If an item points to Panopto or YouTube, resolve and extract its media assets.
+2. **Syllabus (`/assignments/syllabus`)**:
+   - Extract course overview, exam logistics, grading breakdown, schedule, and assessment rules into a structured `<Course>/Syllabus.md`.
+3. **Files & Folders (`/files`, `/folders`)**:
+   - Crawl all folders and root directories for unlinked slides, datasets, code templates, and PDFs.
+4. **Pages (`/pages`)**:
+   - Query all published pages to capture standalone guides, wikis, or tutorials not nested in modules.
+5. **Assignments (`/assignments`)**:
+   - Extract project prompts, lab instructions, and grading rubrics (excluding interactive quiz types).
+6. **Discussions (`/discussion_topics`)**:
+   - Extract pinned Q&A threads, TA instructions, and resource-sharing posts.
+7. **Panopto Video Tab (`Panopto Video` navigation item)**:
+   - Check dedicated course Panopto folders for standalone recordings or playlist feeds not linked inside weekly modules.
+
+Compare every item against `/Users/luca/Documents/Second-Brain/learning/tilburg-university/<Course>/`. Download new files and update modified files based on remote timestamps and content hashes.
 
 ### Step 2: Canvas HTML to Obsidian Markdown
 For each content page (`/pages/:url`), convert HTML into Obsidian Markdown:
@@ -54,13 +69,34 @@ For each content page (`/pages/:url`), convert HTML into Obsidian Markdown:
 
 To conserve local storage and system resources, extract audio only (no video files) and perform speech-to-text via cloud API.
 
-### Audio Extraction Rules
-- **Panopto (`tilburguniversity.cloud.panopto.eu`)**: Fetch delivery stream via `DeliveryInfo.aspx` (`deliveryId=<ID>&isMaster=true`) or HLS playlist URL, download audio stream with `curl` / `ffmpeg`, and convert to MP3.
-- **YouTube**: Extract audio using yt-dlp:
-  ```bash
-  /Users/luca/.aside/runtime/bin/python3 -m yt_dlp -x --audio-format mp3 -o "%(title)s.%(ext)s" "<URL>"
-  ```
-- **Consolidation Per Canvas Link**: If a single Panopto link contains multiple clips or a playlist, merge all clips from that link into one consolidated MP3 (e.g. `<prefix>_merged_audio.mp3`). Keep clips from different Canvas links/modules separate.
+### Audio Extraction Pipeline
+
+#### Panopto Audio Stream Extraction (`tilburguniversity.cloud.panopto.eu`)
+1. Obtain the delivery ID or playlist ID from the Panopto URL (`deliveryId=<ID>` or `id=<ID>`).
+2. Query Panopto's DeliveryInfo endpoint to retrieve the master stream / HLS playlist:
+   ```js
+   // Inside aside repl or page context:
+   const deliveryId = "DELIVERY_UUID";
+   const infoUrl = `https://tilburguniversity.cloud.panopto.eu/Panopto/Pages/Viewer/DeliveryInfo.aspx?deliveryId=${deliveryId}&isMaster=true`;
+   const res = await fetch(infoUrl);
+   const data = await res.json();
+   // Extract audio/video stream URL:
+   const streamUrl = data.Delivery?.StreamUrl || data.Delivery?.Streams?.[0]?.StreamUrl;
+   ```
+3. Download and convert the audio stream to MP3 using FFmpeg:
+   ```bash
+   ffmpeg -i "<STREAM_URL>" -vn -acodec libmp3lame -q:a 2 "<OUTPUT_AUDIO>.mp3"
+   ```
+
+#### YouTube Audio Extraction
+Extract audio via yt-dlp:
+```bash
+/Users/luca/.aside/runtime/bin/python3 -m yt_dlp -x --audio-format mp3 -o "%(title)s.%(ext)s" "<URL>"
+```
+
+#### Consolidation Per Canvas Link
+- If a single Panopto link contains multiple clips or a playlist (`pid=...`), download all clip audio streams and merge them into one consolidated MP3 (e.g. `<prefix>_merged_audio.mp3`).
+- Keep clips from different Canvas links/modules separate.
 
 ### OmniRoute Cloud STT (No Local Models)
 Local transcription models consume significant memory and compute. All speech-to-text processing uses OmniRoute cloud STT:
@@ -70,7 +106,14 @@ Local transcription models consume significant memory and compute. All speech-to
    ```bash
    ffmpeg -i merged_audio.mp3 -f segment -segment_time 600 -c copy chunk_%03d.mp3
    ```
-3. Transcribe each chunk via `POST ${OMNIROUTE_BASE_URL}/audio/transcriptions` with model `groq/whisper-large-v3-turbo` (or `auto/best-stt`).
+3. Transcribe each chunk via `POST ${OMNIROUTE_BASE_URL}/audio/transcriptions` with model `groq/whisper-large-v3-turbo` (or `auto/best-stt`):
+   ```bash
+   curl -s -X POST "${OMNIROUTE_BASE_URL}/audio/transcriptions" \
+     -H "Authorization: Bearer ${OMNIROUTE_API_KEY}" \
+     -H "Content-Type: multipart/form-data" \
+     -F file="@chunk_000.mp3" \
+     -F model="groq/whisper-large-v3-turbo"
+   ```
 4. Save the merged MP3 and the full Markdown transcript directly in the module directory:
    - Audio: `<Course>/Modules/Week N/<prefix>_merged_audio.mp3`
    - Transcript: `<Course>/Modules/Week N/<prefix>_transcript.md`
