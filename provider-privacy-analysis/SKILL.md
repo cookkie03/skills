@@ -5,110 +5,65 @@ description: "Perform deep privacy, data governance, and model training policy a
 
 # AI Provider Privacy & Data Governance Analysis
 
-Perform deep, rigorous privacy and data governance audits of AI model providers, API platforms, and LLM gateways. The analysis focuses strictly on data sovereignty, payload privacy, model training risks, retention policies, and cross-border legal compliance.
+Perform fast, schematic, and high-density privacy audits of AI model providers, developer platforms, and LLM gateways. Avoid conversational prose and narrative filler; focus strictly on technical data handling, request-level privacy options, actionable opt-out steps, and before/after privacy posture states.
 
 ---
 
-## 🔍 Core Audit Methodology
+## Core Investigation Checklist
 
-When auditing an AI provider or gateway, retrieve and cross-reference official legal and technical sources:
-1. **Terms of Service / Terms of Use** (especially sections on Intellectual Property, User Content, Model Training, and License Grants).
-2. **Privacy Policy** (data collection, retention periods, third-party sharing, sub-processors).
-3. **Developer / API Terms & Service Agreements** (commercial confidentiality, payload handling vs consumer UI).
-4. **Trust Center, Security, & Compliance Docs** (SOC 2 Type II, ISO 27001, HIPAA, GDPR Data Processing Agreements (DPA)).
-5. **Platform Settings & Developer Dashboards** (live opt-out toggles, telemetry controls, privacy modes).
+When auditing a provider, extract and verify these 5 core data points:
 
----
-
-## 📋 6 Authoritative Privacy Dimensions
-
-Every deep provider privacy analysis must evaluate and report on these 6 dimensions:
-
-### 1. Model Training & Fine-Tuning on Payloads
-- **Default Policy**: Does the provider train, fine-tune, distill, evaluate, or align foundation/ML models on user inputs, prompts, completions, code, or attachments? (Default ON vs Default OFF).
-- **Opt-Out Mechanism**: Is there an explicit opt-out mechanism? Where is it located (dashboard toggle, HTTP header, account settings, support request)? Does it apply prospectively or retroactively?
-- **Licensing & Derivative Rights**: Do the Terms grant the provider a broad, perpetual, royalty-free license to create derivative datasets or share interaction data with third parties and research collaborators?
-
-### 2. Data Retention & Zero Data Retention (ZDR)
-- **Payload Retention Window**: How long are raw prompts, completions, embeddings, and files retained on disk? (Ephemeral/in-memory only, 30 days abuse monitoring, 6 months, or indefinitely).
-- **Zero Data Retention (ZDR)**: Is strict ZDR available by default, configurable per request/key, or locked behind enterprise contracts?
-- **Operational Metadata & Telemetry**: What metadata is permanently logged (token counts, timestamps, IP addresses, client headers, billing records, model IDs)?
-
-### 3. Tier & Surface Differences (Free vs Paid vs API vs Web UI)
-- **Consumer Web Playground vs Developer API**: Does the free playground/chat UI train on data while the API provides strict confidentiality?
-- **Free Tier vs Paid Tier**: Are free tier users subjected to payload logging and model training as payment-in-kind, while paid/consumption tiers are exempted?
-- **Enterprise & VPC Deployments**: Are dedicated instances, VPC deployments, or on-premise container distributions available where the provider has zero data access?
-
-### 4. Infrastructure, Routing & Third-Party Sub-processors
-- **Architecture Role**: Is the provider a first-party foundation model developer/host or an intermediary proxy/routing gateway?
-- **Upstream & Downstream Processing**: If requests are routed through third-party hosting partners (e.g. Together AI, Fireworks, AWS Bedrock, CoreWeave, Azure, Lambda Labs), do those third parties enforce independent data retention and training terms?
-- **Data Leakage in Routing**: Does the gateway log payloads before forwarding, or pass them transparently?
-
-### 5. Legal Jurisdiction, Sovereignty & Regulatory Compliance
-- **Corporate Entity & Governing Law**: Where is the legal entity incorporated (e.g., US Delaware/California, EU member state, Canada, Singapore, China)?
-- **Data Center & Inference Locations**: Where are physical inference compute clusters and storage located? Can EU users enforce data residency?
-- **Regulatory Frameworks & Certifications**: GDPR compliance, EU Standard Contractual Clauses (SCCs), SOC 2 Type II, ISO 27001, HIPAA.
-- **Government Access Risk**: Legal vulnerability to foreign government compelled-disclosure orders (e.g., US CLOUD Act / FISA 702, China Cybersecurity Law & PIPL).
-
-### 6. Actionable Privacy Configuration Checklist
-- Provide precise, step-by-step instructions to maximize privacy:
-  - Specific dashboard URLs and toggle locations.
-  - Required API request headers or parameters (e.g., `privacy_mode`, `no-log`).
-  - Recommended combos, endpoints, or tier selections.
+1. **Request Payload Training**: Default stance on using prompts, completions, attachments, and code for model training, fine-tuning, or alignment.
+2. **Opt-Out Paths**: Exact UI toggles, API headers, account forms, or configuration parameters to disable training and logging.
+3. **Retention & ZDR**: Ephemeral memory vs persistent logging, retention duration (e.g., 30 days vs indefinite), and Zero Data Retention availability.
+4. **Surface & Tier Separation**: Policy differences across Free Web Playground, Paid API, Self-Hosted/Local Weights, and Enterprise VPC.
+5. **Infrastructure & Jurisdiction**: Cloud hosting entities, data centers (US vs EU vs PRC), sub-processors, and governing law.
 
 ---
 
-## 📊 Standardized Report Structure
+## Standard Output Format
 
-Always format the final provider privacy analysis following this structured template:
+Always format the report strictly using this concise, schematic template:
 
 ```markdown
-# Privacy & Data Governance Analysis: <Provider Name>
+# Provider Privacy Audit: <Provider Name>
 
-## 📌 Executive Summary & Privacy Matrix
+## 1. Quick Privacy Matrix
 
-| Privacy Dimension | Status / Policy | Risk Level |
+| Dimension | Default Cloud State | Hardened / Post Opt-Out State |
 | :--- | :--- | :--- |
-| **Model Training on Payloads** | Default: [OFF / ON / Configurable] | [Safe / Caution / High Risk] |
-| **Data Retention Duration** | [Ephemeral / 30 Days / Indefinite] | [Safe / Moderate / Risky] |
-| **Zero Data Retention (ZDR)** | [Available / Enterprise Only / None] | [Safe / Moderate / Risky] |
-| **Free vs Paid Differences** | [Identical / Free Trains, Paid Doesn't] | [Safe / Warning] |
-| **Infrastructure & Routing** | [First-Party Host / Third-Party Gateway] | [Direct / Multi-Hop] |
-| **Legal Jurisdiction** | [Country / State / GDPR Status] | [Low / Medium / High Risk] |
+| **Model Training on Payloads** | [ON / OFF / Allowed] | [Disabled / Not Applicable / Blocked] |
+| **Payload Data Retention** | [Indefinite / 30 Days / None] | [0 Days / Ephemeral / Blocked] |
+| **Zero Data Retention (ZDR)** | [None / Enterprise Only] | [Achieved via Local / Custom DPA] |
+| **Telemetry & Metadata** | [Logged / Shared] | [Minimized / Isolated] |
+| **Data Residency & Jurisdiction** | [Country / Cloud Host] | [Local Hardware / Sovereign] |
 
-**Overall Privacy Verdict**: [🟢 Privacy-First / 🟡 Moderate Caution / 🔴 High Exposure / ⛔ Critical Risk]
-
----
-
-## 1. Model Training & Data Licensing
-- **Training Rights**: [Detailed breakdown from Terms of Service]
-- **Opt-Out Mechanism**: [Exact instructions and scope]
-- **Derivative Datasets**: [Third-party sharing / research rights]
-
-## 2. Retention Periods & Zero Data Retention (ZDR)
-- **Raw Payloads (Prompts/Completions)**: [Storage timeline and abuse monitoring policies]
-- **Metadata & Telemetry**: [What is logged and retained]
-- **ZDR Availability**: [How to enable zero retention]
-
-## 3. Tier & Platform Comparison
-- **Free Tier vs Paid API**: [Key contractual differences]
-- **Web UI vs Developer API**: [Playground vs programmatic inference]
-- **Enterprise / Private VPC**: [Private deployment options]
-
-## 4. Architecture, Sub-processors & Infrastructure
-- **Model Hosting**: [Owned clusters vs third-party cloud infrastructure]
-- **Gateway / Proxy Routing**: [Downstream provider data policies]
-
-## 5. Legal Jurisdiction, Sovereignty & Compliance
-- **Corporate Entity & Headquarters**: [Entity name, location, applicable law]
-- **Data Residency & Cross-Border Transfers**: [Server regions, GDPR compliance, SCCs]
-- **Certifications**: [SOC 2, ISO 27001, HIPAA]
-- **Foreign Surveillance & Legal Exposure**: [US CLOUD Act, Chinese CSL/PIPL, etc.]
+**Privacy Verdict**: [Safe / Moderate Caution / High Exposure / Critical]
 
 ---
 
-## 🛠️ Actionable Privacy Hardening Checklist
-1. **[Action Item 1]**: [Exact toggle, URL, or API header to apply]
-2. **[Action Item 2]**: [Tier/endpoint recommendation]
-3. **[Action Item 3]**: [Gateway / proxy hardening recommendation]
+## 2. Request Privacy Options
+
+- **Cloud Web / Playground**: [Exact options available on web UI]
+- **Developer API**: [API parameters, headers, or terms governing API calls]
+- **Local / Edge Deployment**: [Availability of open weights, GGUF/MLX/ONNX formats for local execution]
+
+---
+
+## 3. Step-by-Step Full Opt-Out & Hardening Action Plan
+
+1. **[Step 1: UI / Account Action]**: [Exact toggle, URL, or settings page to disable data sharing]
+2. **[Step 2: API / Gateway Action]**: [Headers, request parameters, or OmniRoute filter to use]
+3. **[Step 3: Web / Cookie Action]**: [Cookie rejection, GPC signal, analytics opt-out]
+4. **[Step 4: Sovereign Alternative]**: [Local deployment method to eliminate cloud exposure completely]
+
+---
+
+## 4. Before vs. After Opt-Out Comparison
+
+| Metric | Default Setup | After Applying Hardening & Opt-Outs |
+| :--- | :--- | :--- |
+| **Prompt/Code Privacy** | [Exposed / Trained on] | [100% Private / Not logged] |
+| **Model Training Risk** | [Active] | [Eliminated] |
+| **Cloud Surveillance / CLOUD Act** | [Subject to foreign law] | [Zero exposure (Local/Airgapped)] |
 ```
