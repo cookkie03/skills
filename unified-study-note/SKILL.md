@@ -32,6 +32,7 @@ Use this skill to convert raw course materials (lecture slides, audio transcript
   - Answer every `%% %%` question inline using evidence from the transcript, slides, or course context.
 - **Audio Transcripts**:
   - Carefully interpret spoken transcript text, correcting misrecognized audio words into precise academic/domain terminology.
+  - If raw audio/video is provided, transcribe using OmniRoute STT (`auto/best-stt` via `/v1/audio/transcriptions` with credentials from `.env`).
 - **Code Notebooks & Practical Workbooks**:
   - Extract actual code blocks directly into syntax-highlighted code fences (e.g., ````python````, ````r````, ````sql````) rather than providing high-level text descriptions.
 - **Quizzes & Solutions**:
