@@ -11,12 +11,26 @@ Use this skill to perform a comprehensive, 1-to-1 audit and synchronization of a
 
 ## Mandatory Requirements & Architecture
 
-### 1. Exhaustive 1-to-1 Extraction Across All Canvas Courses (Full-Depth Audit)
-- **All Active Courses**: Recursively scan **every active course** visible on Canvas via the Canvas API / web interface.
-- **Complete Module & Item Traversal (CLICK & INSPECT EVERYTHING)**:
-  - Query `/modules?include[]=items`, `/files`, `/pages`, `/discussion_topics`, and `/assignments` across all courses and sections.
-  - Traverse all modules, sub-modules, content pages, file attachments, and **every external link/tool** (`ExternalUrl`, `ExternalTool`, "Video Clips", Panopto, YouTube) in their exact published sequence.
-  - **NEVER skip external links, video clips, or embedded tools**: Click and open every module item without exception. If an item is an external URL pointing to Panopto (`tilburguniversity.cloud.panopto.eu`), YouTube, or another platform, follow the link, analyze its contents, and extract its media assets.
+### 1. Exhaustive 1-to-1 Extraction Across All Canvas Courses & Sections (Full-Depth Audit)
+- **Every Active Course**: Recursively scan **every single active course** visible to the user on Canvas (via `/api/v1/courses?enrollment_state=active` and the Canvas Dashboard/Courses menu). No course may be skipped.
+- **Every Section Inside Every Course (MANDATORY SECTION-BY-SECTION AUDIT)**:
+  Inside **every** course, systematically inspect and audit **all navigation sections and tabs**:
+  1. **Modules** (`/modules?include[]=items`):
+     - Traverse all modules, sub-modules, content items, headers, embedded pages, file attachments, and **every external link/tool** (`ExternalUrl`, `ExternalTool`, "Video Clips", Panopto, YouTube) in their exact published sequence.
+     - **Click and open every item without exception**: If an item is an external URL pointing to Panopto (`tilburguniversity.cloud.panopto.eu`), YouTube, or another external service, follow the link, inspect the contents (e.g. all playlist clips), and extract all media assets.
+  2. **Syllabus** (`/assignments/syllabus` / syllabus page):
+     - Extract course overview, exam logistics, grading breakdown, required literature, schedule, and assessment rules.
+  3. **Files** (`/files` & `/folders`):
+     - Recursively crawl all file folders and root directories. Check for slides, lab handbooks, datasets (`.csv`, `.xlsx`, `.sqlite`), code templates (`.py`, `.ipynb`, `.r`), and `.pdf` documents that may not be linked inside modules.
+  4. **Pages** (`/pages`):
+     - Query all published pages to catch standalone guides, tutorials, or reference wikis not nested inside the modules list.
+  5. **Assignments** (`/assignments`):
+     - Extract project prompts, lab assignment instructions, submission guidelines, and grading rubrics (excluding native quizzes).
+  6. **Discussions** (`/discussion_topics`):
+     - Inspect pinned Q&A threads, TA instructions, and resource-sharing posts.
+  7. **Panopto Video / External Tools** (Navigation menu tabs):
+     - Check dedicated course video folders (`Panopto Video` tab) and external tool integrations for unlinked recordings or playlists.
+- **Historical & Complete Depth**:
   - Do NOT restrict checks to new or recently modified items. Verify that historical materials from earlier weeks, past blocks, or completed modules are fully preserved and accounted for in the vault.
 - **1-to-1 Obsidian Vault Matching Audit**:
   - Compare every item on Canvas against the target Obsidian vault directory (`/Users/luca/Documents/Second-Brain/learning/tilburg-university/<Course Directory>/`).
