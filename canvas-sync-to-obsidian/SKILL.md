@@ -122,10 +122,12 @@ Local transcription models consume significant memory and compute. All speech-to
 
 ## 4. Google Drive Mirroring (/u/1/)
 
-1. Access Tilburg University Google account (`/u/1/` / `[EMAIL_REDACTED]`).
-2. Search folders matching course abbreviations (`IDT`, `Programming`, `PfDS`, `DM`, `DMBG`, `NLP`, `S&M`, `SM`, `GROW`, `Tesi`).
-3. Download Colab/Jupyter notebooks (`.ipynb`), scripts (`.py`, `.r`), and datasets (`.csv`, `.xlsx`, `.sqlite`) into the corresponding vault course folder.
-4. Update local copies when remote file modification timestamps change.
+1. **Access & Scan**: Access `/u/1/` (`[EMAIL_REDACTED]`) and inspect folders matching course abbreviations (`IDT`, `Programming`, `PfDS`, `DM`, `DMBG`, `NLP`, `S&M`, `SM`, `GROW`, `Tesi`).
+2. **Nature of Drive Files**: Drive files originate from classroom PC work (lab/practicals) or Canvas downloads. Never create dedicated `Google Drive/` or source-named subdirectories.
+3. **Deduplication Check**: Compare incoming files against existing vault files across `<Course>/`:
+   - **Identical file** (matching hash/content): Skip download or keep existing location in `Modules/` / `Materials/` without creating duplicates.
+   - **New or Modified file** (edited lab, practical solution, new notebook): Ingest as active coursework.
+4. **Contextual Ingestion**: Intelligently place new/modified files directly into the existing Obsidian folder tree matching the topic, week, or practical (e.g. `<Course>/Modules/Week N/`, `<Course>/Practicals/`, or `<Course>/Assignments/`).
 
 ---
 
