@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 verify_note.py - Quality and reconciliation audit gate for Unified Master Study Notes.
-Checks TOC link integrity in the main study guide, balanced fences/details, math delimiters, and zero-loss source audit trail.
+Checks TOC link integrity, balanced fences, matching HTML details tags, and syntax standards.
 """
 
 import sys
@@ -21,18 +21,12 @@ def verify_master_note(note_path: str) -> bool:
     print(f"Auditing Master Note: {note_path} ({len(text):,} characters, {len(text.splitlines()):,} lines)\n")
     all_passed = True
 
-    # Separate Main Guide from Audit Trail
-    parts = text.split("## Complete source record")
-    main_body = parts[0]
-    audit_trail = parts[1] if len(parts) > 1 else ""
-
-    # 1. Check Main Table of Contents Wikilinks
-    # Extract TOC section
-    toc_match = re.search(r"## 📑 Table of Contents.*?(?=\n---|\n## )", main_body, re.DOTALL)
+    # 1. Check Table of Contents Wikilinks
+    toc_match = re.search(r"## 📑 Table of Contents.*?(?=\n---|\n## )", text, re.DOTALL)
     if toc_match:
         toc_text = toc_match.group(0)
         toc_links = re.findall(r"\[\[#(.*?)(?:\|.*?)?\]\]", toc_text)
-        print(f"1. Checking {len(toc_links)} Master Table of Contents links...")
+        print(f"1. Checking {len(toc_links)} Table of Contents links...")
         broken_links = []
         for anchor in toc_links:
             clean_anchor = re.escape(anchor.strip())
@@ -48,7 +42,7 @@ def verify_master_note(note_path: str) -> bool:
                 print(f"      - [[#{bl}]]")
             all_passed = False
         else:
-            print("   ✅ All Master TOC links resolve perfectly to headings.")
+            print("   ✅ All TOC links resolve perfectly to headings.")
     else:
         print("1. ⚠️ No dedicated Table of Contents block detected at top.")
 
@@ -61,30 +55,26 @@ def verify_master_note(note_path: str) -> bool:
     else:
         print(f"   ✅ Code fences are symmetric ({code_fences // 2} blocks).")
 
-    # 3. Check Details Tags
+    # 3. Check Details Tags (if any exist)
     open_details = len(re.findall(r"<details>", text))
     close_details = len(re.findall(r"</details>", text))
-    print(f"\n3. Checking HTML details tags ({open_details} open, {close_details} close)...")
-    if open_details != close_details:
-        print(f"   ❌ Unmatched details tags: {open_details} <details> vs {close_details} </details>!")
-        all_passed = False
-    else:
-        print(f"   ✅ All {open_details} <details> blocks are matched and closed.")
-
-    # 4. Check Complete Source Record Truncation
-    print("\n4. Checking Source Audit Trail integrity...")
-    if not audit_trail:
-        print("   ❌ Missing '## Complete source record' section!")
-        all_passed = False
-    else:
-        sources_found = re.findall(r"### Source: `([^`]+)`", audit_trail)
-        print(f"   Found {len(sources_found)} documented source entries.")
-        truncated_matches = re.findall(r"(?i)\.\.\.\s*\[truncated\]", audit_trail)
-        if truncated_matches:
-            print(f"   ⚠️ Warning: Found {len(truncated_matches)} truncated source markers in the audit trail.")
+    if open_details > 0 or close_details > 0:
+        print(f"\n3. Checking HTML details tags ({open_details} open, {close_details} close)...")
+        if open_details != close_details:
+            print(f"   ❌ Unmatched details tags: {open_details} <details> vs {close_details} </details>!")
             all_passed = False
         else:
-            print("   ✅ Zero truncated source markers detected (100% full content preserved).")
+            print(f"   ✅ All {open_details} <details> blocks are matched and closed.")
+    else:
+        print("\n3. HTML details tags check: None present.")
+
+    # 4. Check LaTeX and Math Delimiters Symmetry
+    double_dollars = len(re.findall(r"\$\$", text))
+    if double_dollars % 2 != 0:
+        print(f"\n4. ❌ Asymmetric display math delimiters ($$ count: {double_dollars})!")
+        all_passed = False
+    else:
+        print(f"\n4. ✅ Display math delimiters symmetric ({double_dollars // 2} display equations).")
 
     print("\n" + "=" * 40)
     if all_passed:

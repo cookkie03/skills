@@ -106,5 +106,5 @@ Before completing the synthesis, perform an explicit coverage verification:
 - [ ] **100% Workbook Accounting**: Every exercise, code task, and solution from all workbooks is fully articulated.
 - [ ] **100% Formula Completeness**: Every equation has an accompanying parameter breakdown table.
 - [ ] **Exam Pitfalls & Traps**: Every classroom warning or diagnostic note has a dedicated callout.
-- [ ] **Audit Trail Integrity**: Every source file is present in the `## Complete source record` with zero truncation.
+- [ ] **Reconciliation Audit**: 100% of extracted definitions, formulas, code logic, visual takeaways, and exam caveats are fully articulated in the text prose with zero omissions.
 - [ ] **Navigation & TOC**: Table of contents wikilinks (`- [[#Topic]]`) resolve cleanly to document headers.
