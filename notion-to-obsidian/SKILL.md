@@ -45,11 +45,12 @@ Notion virtualizes DOM blocks and unmounts nodes outside the active viewport. Ex
   ```
 - **Inline Equations**: Convert inline `.katex` elements to `$formula$`.
 - **Currency Escaping**: Standalone currency figures (e.g. `$1,000`, `$50`) must be escaped as `\$1,000` to prevent Obsidian's MathJax renderer from misinterpreting currency signs as LaTeX delimiters.
+- **Equals Spacing**: Inside code blocks (and when emitting literal `=` / `==`), always pad with spaces: write ` = ` and ` == `, never bare `=` / `==`.
 
 #### 4. Tables & Structural Blocks
 - **Tables**: Convert `.notion-table-block` into standard Markdown pipe tables with header dividers (`| Col 1 | Col 2 |\n|---|---|\n| Val 1 | Val 2 |`). Replace internal newlines in cells with spaces.
 - **Callouts**: Map `.notion-callout-block` to Obsidian callouts (`> [!note]`, `> [!tip]`, `> [!warning]`, `> [!info]`), preserving emoji icons.
-- **Typography & Lists**: Preserve Headings (H1–H3), nested bullet/numbered lists, bold (`**text**`), italics (`*text*`), and inline code (`` `code` ``).
+- **Typography & Lists**: Preserve Headings (H1–H3), nested bullet/numbered lists, bold (`**text**`), italics (`*text*`), and inline code (`` `code` ``). **Do not use bold inside headers** — it glitches Obsidian formatting.
 
 #### 5. Local Image Downloads (Asset Expiration Prevention)
 - Notion embeds images on temporary AWS S3 signed URLs that expire within hours.

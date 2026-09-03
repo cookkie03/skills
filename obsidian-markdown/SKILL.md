@@ -138,9 +138,11 @@ $$
 > [!warning] Critical Trap: Dollar Sign ($) & Currency Collisions
 > In Obsidian, single `$` starts inline math and `$$` starts display math. Raw currency dollar signs (e.g. `$1000`, `$20,000`, `$0`) will be interpreted as opening LaTeX delimiters, corrupting subsequent formulas and paragraphs across the note.
 >
-> **Rules for Currency & Literal Dollar Signs:**
+> **Rules for Tricky Blocks:**
 > 1. **In Markdown Prose**: Always escape literal dollar signs with a backslash (`\$1,000`, `\$0`, `\$20,000`) or write explicit ISO currency (`1,000 USD`, `1,000 dollars`). Never write raw `$1000` or malformed combinations like `$\$1000$` or `$$1000$`.
 > 2. **Inside LaTeX Math Blocks**: Never put raw `$` inside `$ ... $` or `$$ ... $$`. If a dollar sign is needed inside math mode, wrap it inside `\text{\$1,000}` or `\text{USD}`.
+> 3. **Inside Code Blocks**: Never put represent `=` or `==`. If a equal is needed inside code mode, wrap it inside ` = ` or ` == `, with spaces.
+> 4. **With Headers, do not use Bold** carachters: it will glitch the formats.
 
 ## Diagrams (Mermaid)
 
