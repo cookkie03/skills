@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 transcribe_audio.py - Robust speech-to-text transcription via OmniRoute STT.
-Handles long audio files automatically via chunking (10-min slices) with Groq primary and Debian Faster-Whisper fallback.
+Uses OmniRoute STT model 'best-stt' (auto-routing Groq Whisper Large V3 Turbo with fallback to Debian Faster-Whisper).
+Handles long audio files automatically via chunking (10-min slices).
 """
 
 import os
@@ -12,8 +13,6 @@ import shutil
 import tempfile
 import argparse
 import subprocess
-import urllib.request
-import urllib.error
 
 
 def resolve_omniroute_credentials():
@@ -70,7 +69,7 @@ def get_audio_duration_seconds(file_path: str) -> float:
         return 0.0
 
 
-def transcribe_single_file(audio_path: str, base_url: str, api_key: str, model: str) -> str:
+def transcribe_single_file(audio_path: str, base_url: str, api_key: str, model: str = "best-stt") -> str:
     """Uploads a single audio file chunk to OmniRoute STT endpoint using curl subprocess for multipart robustness."""
     url = f"{base_url}/audio/transcriptions"
     cmd = [
@@ -95,18 +94,19 @@ def transcribe_single_file(audio_path: str, base_url: str, api_key: str, model: 
         raise RuntimeError(f"Invalid JSON from {url}: {res.stdout[:200]}")
 
 
-def transcribe_chunk_with_fallback(chunk_path: str, base_url: str, api_key: str) -> str:
-    primary_model = "groq/whisper-large-v3-turbo"
-    fallback_model = "whisper-local/deepdml/faster-whisper-large-v3-turbo-ct2"
-
+def transcribe_chunk(chunk_path: str, base_url: str, api_key: str, model: str = "best-stt") -> str:
+    """Transcribes a chunk using the specified OmniRoute STT model (defaults to best-stt)."""
     try:
-        return transcribe_single_file(chunk_path, base_url, api_key, primary_model)
+        return transcribe_single_file(chunk_path, base_url, api_key, model=model)
     except Exception as e:
-        print(f"    [Warning] Primary model '{primary_model}' failed ({e}). Falling back to '{fallback_model}'...")
-        return transcribe_single_file(chunk_path, base_url, api_key, fallback_model)
+        # If best-stt alias failed, try auto/best-stt
+        if model == "best-stt":
+            print(f"    [Retry] Retrying with 'auto/best-stt'...")
+            return transcribe_single_file(chunk_path, base_url, api_key, model="auto/best-stt")
+        raise e
 
 
-def process_audio_file(audio_path: str, chunk_duration_min: int = 10, output_path: str = None) -> str:
+def process_audio_file(audio_path: str, chunk_duration_min: int = 10, output_path: str = None, model: str = "best-stt") -> str:
     base_url, api_key = resolve_omniroute_credentials()
     file_name = os.path.basename(audio_path)
     base_name, _ = os.path.splitext(audio_path)
@@ -115,11 +115,11 @@ def process_audio_file(audio_path: str, chunk_duration_min: int = 10, output_pat
         output_path = f"{base_name}_transcript.md"
 
     duration = get_audio_duration_seconds(audio_path)
-    print(f"\nProcessing '{file_name}' (Duration: {duration / 60:.1f} min)...")
+    print(f"\nProcessing '{file_name}' (Duration: {duration / 60:.1f} min, Model: '{model}')...")
 
-    # If shorter than 10 minutes, transcribe directly
+    # If shorter than chunk threshold, transcribe directly
     if 0 < duration <= (chunk_duration_min * 60):
-        text = transcribe_chunk_with_fallback(audio_path, base_url, api_key)
+        text = transcribe_chunk(audio_path, base_url, api_key, model=model)
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(text.strip() + "\n")
         print(f"Transcribed successfully -> '{output_path}'")
@@ -140,12 +140,12 @@ def process_audio_file(audio_path: str, chunk_duration_min: int = 10, output_pat
         subprocess.run(split_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
 
         chunks = sorted(glob.glob(os.path.join(temp_dir, "chunk_*.mp3")))
-        print(f"  Created {len(chunks)} chunks. Transcribing sequentially...")
+        print(f"  Created {len(chunks)} chunks. Transcribing via OmniRoute STT ({model})...")
 
         full_texts = []
         for i, chunk in enumerate(chunks):
             print(f"  - Chunk {i + 1}/{len(chunks)}...")
-            chunk_text = transcribe_chunk_with_fallback(chunk, base_url, api_key)
+            chunk_text = transcribe_chunk(chunk, base_url, api_key, model=model)
             full_texts.append(chunk_text.strip())
 
         combined_transcript = " ".join(full_texts).strip() + "\n"
@@ -160,8 +160,9 @@ def process_audio_file(audio_path: str, chunk_duration_min: int = 10, output_pat
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Transcribe audio recordings using OmniRoute STT with chunking and fallback.")
+    parser = argparse.ArgumentParser(description="Transcribe audio recordings using OmniRoute STT model 'best-stt' with chunking.")
     parser.add_argument("target", help="Audio file or folder containing recordings (.m4a, .mp3, .wav, .aac, .webm, .ogg).")
+    parser.add_argument("--model", default="best-stt", help="OmniRoute STT model name (default: best-stt).")
     parser.add_argument("--chunk-min", type=int, default=10, help="Chunk length in minutes for long audio (default: 10).")
     parser.add_argument("-o", "--output", default=None, help="Explicit output path for single file.")
     args = parser.parse_args()
@@ -169,14 +170,14 @@ def main():
     audio_exts = (".m4a", ".mp3", ".wav", ".aac", ".webm", ".ogg")
 
     if os.path.isfile(args.target):
-        process_audio_file(args.target, chunk_duration_min=args.chunk_min, output_path=args.output)
+        process_audio_file(args.target, chunk_duration_min=args.chunk_min, output_path=args.output, model=args.model)
     elif os.path.isdir(args.target):
         found = False
         for root, _, files in os.walk(args.target):
             for f in sorted(files):
                 if f.lower().endswith(audio_exts) and not f.startswith("."):
                     audio_p = os.path.join(root, f)
-                    process_audio_file(audio_p, chunk_duration_min=args.chunk_min)
+                    process_audio_file(audio_p, chunk_duration_min=args.chunk_min, model=args.model)
                     found = True
         if not found:
             print(f"No audio files found in {args.target}")
