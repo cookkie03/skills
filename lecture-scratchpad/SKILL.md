@@ -33,27 +33,23 @@ Use this skill to prepare dedicated, slide-by-slide scratchpad notes for upcomin
 - Ensure proper read permissions are set on rendered images (`chmod -R a+r images/`).
 
 ### 3. Generate Blank Scratchpad Markdown
-Create the scratchpad note with standard Obsidian YAML frontmatter, a table of contents / logical section groupings, and the clean, 3-part blank subheader template for every slide:
+Create the scratchpad note with standard Obsidian YAML frontmatter, a table of contents / logical section groupings, and the standardized 2-part blank subheader template for every slide:
 
 ```markdown
 #### Slide <NN>: <Slide Title>
 ![[<relative-vault-path-to-slide-image.png>]]
 
-### Key Slide Content
-- 
-
 ### Spoken Lecture Takeaways & Audio Insights
 - 
 
 ### Questions & Clarifications
-- %% %%
+- 
 ```
 
 ### 4. Structural Standards
 - **Slide Headings**: Pre-fill concise slide title or section topic for each slide (`#### Slide NN: <Title>`).
-- **Key Slide Content**: Leave a single empty bullet prompt (`- `) for the student to jot down formulas, definitions, or code points during lecture.
 - **Spoken Lecture Takeaways & Audio Insights**: Leave a single empty bullet prompt (`- `) for live verbal remarks, exam hints, and professor intuitions.
-- **Questions & Clarifications**: Pre-populate an empty Obsidian comment block (`- %% %%`) for quick capture of personal doubts or discussion points.
+- **Questions & Clarifications**: Leave a single empty bullet prompt (`- `) for live student questions, personal doubts, or discussion points.
 
 ### 5. Integration with Master Note Lifecycle
 - Once the lecture concludes and the student completes their real-time notes, use the `unified-study-note` skill to synthesize and merge these scratchpad notes into the authoritative single master note (`<Course Name>.md`).
