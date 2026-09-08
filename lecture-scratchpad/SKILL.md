@@ -1,6 +1,6 @@
 ---
 name: "lecture-scratchpad"
-description: "Generate clean slide-by-slide personal scratchpad notes with sequential slide images and blank structured subheaders for real-time student note-taking in Obsidian."
+description: "Generate clean slide-by-slide personal scratchpad notes with sequential slide images and blank structured subheaders for real-time student note-taking in Obsidian using a zero-token script."
 ---
 
 # Lecture Slide Scratchpad Generator
@@ -11,29 +11,33 @@ Use this skill to prepare dedicated, slide-by-slide scratchpad notes for upcomin
 
 ## Operating Principles
 
+- **Zero-Token Automation**: Always execute the bundled script `scripts/generate_scratchpad.py` instead of generating or writing note content through LLM generation.
 - **No Pre-Written Content**: Scratchpad notes are designed as real-time in-class worksheets. Never pre-populate slide summaries, transcripts, or synthetic notes.
 - **Clean Structure Only**: Only include slide headers, sequential slide image embeds, and empty bullet prompts under standardized subheaders.
 
 ---
 
-## Workflow
+## Quick Execution (Zero-Token Script)
 
-### 1. Ingest Slide Deck & Define Destination
-- Target course directory: `/Users/luca/Documents/Second-Brain/learning/tilburg-university/<Course Name>/`
-- Output scratchpad note name: `Week N - Personal Notes.md` or `<Lecture/Topic> - Personal Notes.md`
-- Locate slide PDF (`slides.pdf` or `LectureN-<Topic>.pdf`).
+Run the bundled deterministic script:
 
-### 2. Render Slide PNGs
-- Render all slides at 150 DPI into the module's `images/` directory (inside `Materials/Modules/<Module Name>/images/` or course `images/`):
-  ```bash
-  mkdir -p images
-  pdftoppm -png -r 150 "<slides.pdf>" images/slide
-  ```
-- Slide images are named sequentially: `slide-01.png`, `slide-02.png`, etc.
-- Ensure proper read permissions are set on rendered images (`chmod -R a+r images/`).
+```bash
+python3 /Users/luca/.aside/u/0/skills/user/lecture-scratchpad/scripts/generate_scratchpad.py \
+  --pdf "/path/to/slides.pdf" \
+  --output "/Users/luca/Documents/Second-Brain/learning/tilburg-university/<Course Name>/Week N - Personal Notes.md"
+```
 
-### 3. Generate Blank Scratchpad Markdown
-Create the scratchpad note with standard Obsidian YAML frontmatter, a table of contents / logical section groupings, and the standardized 2-part blank subheader template for every slide:
+The script automatically:
+1. Renders all slides at 150 DPI into the module's `images/` folder (`slide-01.png`, `slide-02.png`, etc.).
+2. Sets proper read permissions on rendered images.
+3. Extracts concise slide titles from PDF text.
+4. Generates standard Obsidian YAML frontmatter and per-slide templates.
+
+---
+
+## Markdown Template Specification
+
+For every slide in the generated note:
 
 ```markdown
 #### Slide <NN>: <Slide Title>
@@ -46,10 +50,12 @@ Create the scratchpad note with standard Obsidian YAML frontmatter, a table of c
 - 
 ```
 
-### 4. Structural Standards
+### Structural Standards
 - **Slide Headings**: Pre-fill concise slide title or section topic for each slide (`#### Slide NN: <Title>`).
-- **Spoken Lecture Takeaways & Audio Insights**: Leave a single empty bullet prompt (`- `) for live verbal remarks, exam hints, and professor intuitions.
-- **Questions & Clarifications**: Leave a single empty bullet prompt (`- `) for live student questions, personal doubts, or discussion points.
+- **Spoken Lecture Takeaways & Audio Insights**: Single empty bullet prompt (`- `) for live verbal remarks, exam hints, and professor intuitions.
+- **Questions & Clarifications**: Single empty bullet prompt (`- `) for live student questions, personal doubts, or discussion points.
 
-### 5. Integration with Master Note Lifecycle
+---
+
+## Integration with Master Note Lifecycle
 - Once the lecture concludes and the student completes their real-time notes, use the `unified-study-note` skill to synthesize and merge these scratchpad notes into the authoritative single master note (`<Course Name>.md`).
