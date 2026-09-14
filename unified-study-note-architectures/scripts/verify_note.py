@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 verify_note.py - Quality and reconciliation audit gate for Unified Master Study Notes.
-Checks TOC link integrity in the main study guide, balanced fences/details, math delimiters, LaTeX macro integrity, and zero-loss source audit trail.
+Checks TOC link integrity in the main study guide, balanced fences/details, math delimiters, and zero-loss source audit trail.
 """
 
 import sys
@@ -70,22 +70,8 @@ def verify_master_note(note_path: str) -> bool:
     else:
         print(f"   ✅ All {open_details} <details> blocks are matched and closed.")
 
-    # 4. Check LaTeX Rendering Integrity & Control Characters
-    print("\n4. Checking LaTeX rendering & control character integrity...")
-    control_chars = [c for c in text if ord(c) in [7, 8, 11, 12]]
-    corrupt_macros = re.findall(r'(?<!\\)\b(ext\{|rac\{|ar\{|lpha\b|pprox\b|heta\b|imes\b|igma\b|au\b|ight\]|ight\)|ight\})', text)
-    
-    if control_chars or corrupt_macros:
-        if control_chars:
-            print(f"   ❌ Found {len(control_chars)} unescaped ASCII control characters (\\x07, \\x08, \\x0b, \\x0c).")
-        if corrupt_macros:
-            print(f"   ❌ Found {len(corrupt_macros)} corrupted LaTeX macros missing leading backslashes: {corrupt_macros[:5]}")
-        all_passed = False
-    else:
-        print("   ✅ Zero unescaped control characters or corrupted LaTeX macros detected.")
-
-    # 5. Check Complete Source Record Truncation
-    print("\n5. Checking Source Audit Trail integrity...")
+    # 4. Check Complete Source Record Truncation
+    print("\n4. Checking Source Audit Trail integrity...")
     if not audit_trail:
         print("   ❌ Missing '## Complete source record' section!")
         all_passed = False

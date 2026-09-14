@@ -1,6 +1,6 @@
 ---
 name: "canvas-sync-to-obsidian"
-description: "Synchronize Tilburg University Canvas courses, university Google Drive files (/u/1/), lecture slides, Panopto/YouTube media transcripts, Notion workbooks, and external course sources into the Obsidian Second-Brain vault."
+description: "Synchronize Tilburg University Canvas courses (materials, announcements, read-only quizzes), university Google Drive files (/u/1/), lecture slides, Panopto/YouTube media audio streams, Notion workbooks, and external course sources into the Obsidian Second-Brain vault."
 ---
 
 # Canvas Course & Universal Source Sync to Obsidian
@@ -28,7 +28,7 @@ Audit and synchronize Tilburg University Canvas courses, university Google Drive
 - **Student Personal Notes & Private Work**:
   - Never modify, overwrite, delete, or relocate the user's personal notes, master course notes (`<Course>/<Course>.md`), lecture scratchpads (`Week N - Personal Notes.md`), personal scripts, or private folders (`Lectures/`, `Workbooks/`, `Practice/`, `_Docs/`).
 - **Excluded Remote Content**:
-  - Ephemeral notices, active quiz-taking forms, and personal Google Drive accounts (`/u/0/`) are excluded unless explicitly requested.
+  - Personal Google Drive accounts (`/u/0/`) are excluded (`[EMAIL_REDACTED]`).
 
 ---
 
@@ -42,7 +42,7 @@ Before downloading or processing any asset, perform a differential parity check 
    | State | Check | Action |
    |---|---|---|
    | **Identical** | Hash/size/timestamp matches local file | **Skip (No-op)**: Do not re-download, re-transcribe, or re-parse. |
-   | **Modified** | Remote timestamp newer or content altered | **In-Place Update**: Overwrite and update the matching file at its existing path. |
+   | **Modified** | Remote timestamp newer or content altered | **In-Place Update**: Overwrite and update the matching file at its exact existing path. |
    | **New / Missing** | File does not exist locally | **Route to Resolved User Path**: Place into the user-confirmed or established directory. |
 
 ---
@@ -51,26 +51,34 @@ Before downloading or processing any asset, perform a differential parity check 
 
 ### A. Native Files & Slides
 - Download course files (PDFs, notebooks, scripts, datasets) directly into the resolved user path for that week/topic.
-- When slide or lecture PDFs are downloaded, generate a companion `*_text_extract.md` to support study and note synthesis.
 - Decompress lab/dataset archives (`.zip`) in-place where applicable.
+- **No `*_text_extract.md` generation**: Do not generate text extract markdown files during download. Pre-extraction is handled in temporary staging (`.staging_unified/`) by `unified-study-note` during study note compilation.
 
 ### B. Canvas Content Pages
 - Convert Canvas pages (`/pages/:url`) to clean Obsidian Markdown (preserving headings, pipe tables, KaTeX math `$$...$$`, inline code, and escaping standalone currency `\$`).
 - Download embedded page images locally and reference them via wikilinks (`![[image.png]]`).
 
-### C. Panopto & Audio Cloud Transcription
-- Extract audio streams (HLS/master stream) from Panopto / YouTube links without downloading bulky video files.
-- Transcribe audio chunks via OmniRoute cloud STT using model `auto/best-stt` (or `groq/whisper-large-v3-turbo`).
-- Save the consolidated audio and transcript directly inside the designated user folder for that lecture/topic:
-  - Audio: `<prefix>_merged_audio.mp3`
-  - Transcript: `<prefix>_transcript.md`
+### C. Canvas Announcements (`/announcements`)
+- Ingest and synchronize course announcements into the course hierarchy (e.g. `<Course>/Materials/Announcements/` or the designated module location).
+- Convert announcement content into clean Obsidian Markdown with timestamps, author metadata, and links.
 
-### D. Notion Workspaces Delegation (`notion-to-obsidian`)
+### D. Canvas Quizzes & Surveys (`/quizzes`) — Strict Read-Only & Zero-Attempt Rule
+- Synchronize quiz solutions, descriptions, instructions, publicly visible practice questions, files named quiz, and already-submitted review feedback in **strict read-only mode**.
+- **NEVER Start or Take a Quiz**: Never click "Take the Quiz", "Start Quiz", "Begin Quiz", "Resume", or submit any answers. The synchronization must NEVER consume a student quiz attempt or trigger a timed session.
+- **Skip Rule**: Consider all files, but if inspecting interactive Canvas quiz pages requires clicking "Start/Take Quiz" or initiating an active attempt, **SKIP the interactive quiz page immediately** and record it in the sync summary as skipped to protect student attempts.
+
+### E. Media Extraction (Audio Streams Only)
+- Extract audio streams (HLS/master stream) from Panopto / YouTube links without downloading bulky video files.
+- Save the consolidated audio file directly inside the designated user folder for that lecture/topic:
+  - Audio: `<prefix>_merged_audio.mp3`
+- **No `_transcript.md` Artifact Generation**: Do not generate separate transcript markdown files in the vault. Transcription is performed on-demand in temporary staging (`.staging_unified/`) by `unified-study-note` and recorded directly into the master note's source audit record.
+
+### F. Notion Workspaces Delegation (`notion-to-obsidian`)
 - When a module item points to Notion (`notion.site`, `notion.so`), invoke the `notion-to-obsidian` skill to recursively extract pages, toggles, LaTeX math, code blocks, and local image assets.
 
-### E. University Google Drive Mirroring (`/u/1/`)
+### G. University Google Drive Mirroring (`/u/1/`)
 - Access Tilburg University Google Drive (`/u/1/` / `[EMAIL_REDACTED]`).
-- Search for course-related files, deduplicate by content hash against existing course files, and place new items into the user's designated course structure.
+- Check if files from Google Drive are identical to existing files (keep/skip) or new/modified (intelligently place in existing Obsidian folder tree without creating generic Google Drive subfolders).
 
 ---
 
@@ -86,6 +94,6 @@ At the completion of synchronization, provide an audit report:
   - Total Items Scanned: [N]
   - Unchanged (Skipped): [N]
   - Updated In-Place: [N]
-  - Newly Downloaded: [N] (Files: [N], Canvas Pages: [N], Audio Transcripts: [N])
+  - Newly Downloaded: [N] (Files: [N], Canvas Pages: [N], Announcements: [N], Read-Only Quizzes: [N], Media Streams: [N])
+  - Quizzes Skipped (Required Active Attempt): [N]
 ```
-

@@ -1,5 +1,5 @@
 ---
-name: unified-study-note
+name: unified-study-note-architectures
 description: Synthesize slides, audio transcripts, lab code, and quizzes into an Obsidian master study note. Use when compiling, merging, or updating university course master notes.
 ---
 
@@ -13,16 +13,12 @@ Every source across the entire course directory tree is ingested as an authorita
 
 ## Core Rules
 
-1. **Exhaustive Lossless MERGE (Never a Summary)**: The output is **strictly a comprehensive MERGE of all raw source materials, never a high-level summary or abstraction**. Every single concept, bullet point, definition, formula derivation, parameter table row, verbatim code block, line-by-line commentary, practical case study, quiz question with arithmetic justification, and personal note reflection must be fully merged and preserved without condensation or loss.
-2. **Single Master Note**: All course knowledge unifies into `<Course Name>.md` at `/Second-Brain/learning/tilburg-university/<Course Name>/`.
-3. **Recursive Course Coverage**: Every single file across all folders and subfolders (`Modules/`, `Practical/`, `Canvas/`, `Materials/`, `Extended Tutorials/`, `Syllabus/`, etc.) must be evaluated and ingested.
-4. **Topical Deduplication & Co-Location**: Group knowledge strictly by concept (`### <Topic>`). When a topic reappears across lectures or labs, fuse details directly into the existing section with inline citations (`[[<source-file>]]`). Avoid disconnected slide-by-slide summaries.
-5. **100% Slide & Source Exhaustiveness**: Every bullet point, definition, formula ($$...$$), derivation, parameter interpretation, verbatim code snippet, edge case, diagram takeaway, and lecture quiz must be explicitly articulated in full prose. High-level condensations or silent omissions are strictly forbidden.
-6. **Textual Self-Sufficiency**: The prose must be 100% self-contained. Explain all definitions, causal mechanisms, mathematical parameter interpretations, and graphical insights directly in the surrounding text, using visual embeds and code blocks as supportive anchors.
-7. **Uniform Taxonomy & Intuitive Math Explanations**:
-   - **Plain-Language Formula Deconstruction ("Spiegazioni Umane")**: Deconstruct every mathematical formula into simple, plain-language mechanics explaining what each symbol represents intuitively, paired with a formal LaTeX parameter breakdown table.
-   - **Exam Calculation Highlighting**: Explicitly tag formulas that must be **memorized and calculated by hand** during the exam using `> [!important] 🎯 Formula d'Esame: Da Sapere a Memoria & Calcolare`. Distinguish these from high-level algorithmic formulas evaluated by software.
-   - Pair verbatim code fences with line-by-line commentary, and maintain dedicated callouts for exam traps and practical quiz questions.
+1. **Single Master Note**: All course knowledge unifies into `<Course Name>.md` at `/Second-Brain/learning/tilburg-university/<Course Name>/`.
+2. **Recursive Course Coverage**: Every single file across all folders and subfolders (`Modules/`, `Practical/`, `Canvas/`, `Materials/`, `Extended Tutorials/`, `Syllabus/`, etc.) must be evaluated and ingested.
+3. **Topical Deduplication & Co-Location**: Group knowledge strictly by concept (`### <Topic>`). When a topic reappears across lectures or labs, fuse details directly into the existing section with inline citations (`[[<source-file>]]`). Avoid disconnected slide-by-slide summaries.
+4. **100% Slide & Source Exhaustiveness**: Every bullet point, definition, formula ($$...$$), derivation, parameter interpretation, verbatim code snippet, edge case, diagram takeaway, and lecture quiz must be explicitly articulated in full prose. High-level condensations or silent omissions are unacceptable.
+5. **Textual Self-Sufficiency**: The prose must be 100% self-contained. Explain all definitions, causal mechanisms, mathematical parameter interpretations, and graphical insights directly in the surrounding text, using visual embeds and code blocks as supportive anchors.
+6. **Uniform Taxonomy**: Pair LaTeX formulas with parameter breakdown tables, verbatim code fences with line-by-line commentary, and dedicated callouts for exam traps and practical quiz questions.
 
 ---
 
@@ -81,7 +77,7 @@ Native text and code sources do **not** need temporary staging files. Read them 
 
 ### 1. Pre-Read Master Note
 - Open `<Course Name>.md` and inspect existing sections and Table of Contents (TOC).
-- Inspect the top of the Master Study Note for note-specific comment directives (`%% MASTER NOTE DIRECTIVE ... %%`). If missing, initialize it. If the user requests specific recurring behaviors, embed them into the directive block for future runs.
+- Inspect the top of the Master Study Note for note-specific comment directives (`%% MASTER NOTE DIRECTIVE ... %%`). Follow declared course-specific granularity and formatting rules. If missing, initialize it. If the user asks most of the time for a specific behaviour, map it inside the block for future runs.
 
 ### 2. Raw Inventory & Topic Roadmap
 Inspect extracted files from Track A (`.staging_unified/extracts/`) and native files from Track B. Map each incoming item to a **Target Topic** (`### <Topic>`) and categorize as **`NEW`** or **`DELTA`**:
@@ -92,21 +88,24 @@ Inspect extracted files from Track A (`.staging_unified/extracts/`) and native f
 - **Quizzes**: Slide questions and step-by-step solutions (`> [!tip] Slide Quiz & Practical Application`).
 - **Visuals**: Identify every slide with diagrams, plots, architecture schemas, tables, drawings, or decision workflows to carry forward into the concept blocks.
 
-### 3. Sub-Agent Delegation & Exhaustive Synthesis
-The Master Orchestrator oversees the **Big Picture** (topic roadmap, TOC, and audit gate) and delegates drafting topic-by-topic to dedicated sub-agents to guarantee **zero information loss and maximum exhaustiveness**:
+### 3. Adaptive Execution Strategy (Inline vs Macro-Batch)
+The Master Orchestrator oversees the **Big Picture** (topic roadmap, TOC, and audit gate) and selects the execution strategy:
 
-- **Mandatory Sub-Agent Isolation**:
-  - Whenever updating or creating master note modules, dispatch parallel sub-agents (`delegate_task`) per module/topic cluster.
-  - Each sub-agent is given an isolated task prompt instructing it to **maximize information retention** from its assigned raw sources (slides, Notion workbooks, code notebooks, practice scripts, quizzes, recordings). High-level summaries, condensations, or silent omissions are strictly forbidden.
-  - Sub-agent Prompt Blueprint:
+- **A. INLINE Mode (Light Update $\le 3$ topics or $< 15\text{k}$ words)**:
+  - Master Orchestrator drafts concept blocks and applies delta patches directly inline (0 sub-agent overhead).
+
+- **B. MACRO-BATCH Mode (Heavy Update $> 3$ topics or multi-module synthesis)**:
+  - Orchestrator establishes the roadmap and groups topics into **2–3 logical macro-clusters**.
+  - Dispatches parallel sub-agents using an explicit, isolated context prompt:
     ```text
-    Goal: Draft an exhaustive, high-density concept section for [Topic/Module Name].
+    Goal: Draft concept blocks for cluster: [Topic Names].
     Context:
-    - Primary Sources: <list of specific slide extracts, notion guides, notebooks, quiz files>
-    - Output Path: .staging_unified/drafts/<topic_slug>.md
-    - Mandate: 100% information exhaustiveness. Translate EVERY bullet point, formula derivation, parameter table, verbatim code snippet with line-by-line commentary, [!important] 🎯 Formula d'Esame callout, [!warning] Exam Trap, and [!tip] Slide Quiz with full arithmetic. Do NOT summarize or condense.
+    - Track A Extracts: .staging_unified/extracts/<assigned_files>
+    - Track B Native Paths: <assigned_code_or_notebook_paths>
+    - Output path: .staging_unified/drafts/<topic_slug>.md
+    - Standard: Follow LaTeX parameter tables, verbatim code with line-by-line commentary, [!warning] Exam Trap, and [!tip] Slide Quiz callouts.
     ```
-  - The Orchestrator collects all completed drafts from `.staging_unified/drafts/`, integrates them into `<Course Name>.md`, and executes `verify_note.py`.
+  - Orchestrator collects completed drafts from `.staging_unified/drafts/` and integrates them into `<Course Name>.md`.
 
 ---
 
@@ -182,10 +181,7 @@ At the bottom of `<Course Name>.md`, append all newly processed sources (both Tr
 ---
 
 ### 6. Formatting Standards
-- **LaTeX Math & String Escaping**:
-  - Inline math with `$...$`, multi-line blocks with `$$\n...\n$$`.
-  - **Raw String & Script Escapes**: When assembling or generating Markdown notes programmatically (in Python, JS, or Bash), **always use raw strings (`r"""..."""`) or write directly to separate `.md` files**. Never let Python/Bash string evaluation decode LaTeX backslashes into ASCII control characters (`\t` $\to$ tab, `\f` $\to$ form feed `\x0c`, `\b` $\to$ backspace `\x08`, `\a` $\to$ bell `\x07`, `\r` $\to$ carriage return `\x0d`, `\v` $\to$ vertical tab `\x0b`).
-  - **No Corrupted LaTeX Macros**: Ensure macros like `\text`, `\frac`, `\bar`, `\alpha`, `\approx`, `\theta`, `\times`, `\sigma`, `\tau`, `\nabla`, `\right]`, `\left[` preserve their leading backslash.
+- **LaTeX Math**: Inline math with `$...$`, multi-line blocks with `$$\n...\n$$`.
 - **Currency**: Escape dollar signs as `\$1,000` or write `1,000 USD` to prevent MathJax parsing collisions.
 - **Highlights**: Use ` == ` and ` = ` always with spaces around `==` for reliable Obsidian rendering.
 - **Language**: Match the primary language of the course materials (English/Italian).
@@ -200,9 +196,9 @@ python3 scripts/verify_note.py "<note_path>"
 ```
 The audit gate verifies:
 - [ ] **100% Source Accounting**: All definitions, formulas, code logic, and quiz questions from all new sources across all subfolders are fully articulated.
-- [ ] **Formula Completeness & LaTeX Integrity**: Every equation has an accompanying parameter breakdown table, with zero unescaped ASCII control characters or corrupted LaTeX macros.
+- [ ] **Formula Completeness**: Every equation has an accompanying parameter breakdown table.
 - [ ] **Navigation & TOC**: Table of contents wikilinks (`- [[#Topic]]`) resolve cleanly to document headers.
 - [ ] **Fence & Tag Symmetry**: Code fences and `<details>` blocks are properly balanced and closed.
 - [ ] **Audit Trail Integrity**: All newly processed sources (Track A and Track B) are recorded in `## Complete source record` with zero truncation markers.
 
-
+**Staging Cleanup**: Once the audit passes cleanly, delete `.staging_unified/` (discarding unreferenced slide images and temporary extracts, keeping the vault clean).
