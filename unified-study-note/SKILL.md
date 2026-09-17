@@ -30,7 +30,7 @@ Ingest course materials recursively across two tracks: pre-extract binary media 
 ### 0. Deterministic Source Diffing (Closed-Loop Ingestion Gate)
 Scan the entire course folder and all nested subdirectories recursively:
 ```bash
-python3 scripts/diff_sources.py "<course_dir>" "<note_path>"
+python3 scripts/diff_sources.py "<course_dir>" "<note_path>" [--force-include <regex>] [--json]
 ```
 - **Recursive Scan**: Visits all subfolders (`Modules/`, `Practical/`, `Canvas/`, etc.) and detects every supported format (slides, audio, code, docs, workbooks).
 - **Manifest Diffing**: Compares filenames and SHA-256 hashes against the manifest (`## Complete source record` or `## Synchronized Course Assets & Inventory`) at the bottom of `<Course Name>.md`.
@@ -44,7 +44,7 @@ python3 scripts/diff_sources.py "<course_dir>" "<note_path>"
 1. **Slide Decks (Deterministic Text Extraction & Image Rendering)**:
    Extract full slide text and render high-resolution 150 DPI slide images:
    ```bash
-   python3 scripts/extract_slides.py "<pdf_path>" -o ".staging_unified/extracts/<deck_name>_extract.md"  --images-dir ".staging_unified/images"
+   python3 scripts/extract_slides.py <file.pdf> [-o output.md] [--images-dir <path>]
    ```
    - Renders all slide PNGs to `.staging_unified/images/slide-XX.png` via macOS native Swift/PDFKit (with pdftoppm fallback).
    - Generates `.staging_unified/extracts/<deck_name>_extract.md` containing slide-by-slide text paired with corresponding image links (`![[slide-XX.png]]`).
@@ -52,7 +52,7 @@ python3 scripts/diff_sources.py "<course_dir>" "<note_path>"
 2. **Audio & Video Transcripts (OmniRoute STT)**:
    Transcribe audio recordings via OmniRoute STT (`auto/best-stt`):
    ```bash
-   python3 scripts/transcribe_audio.py "<audio_path>" -o ".staging_unified/extracts/<audio_name>_transcript.md"
+   python3 scripts/transcribe_audio.py "<audio_path.m4a>" -o ".staging_unified/extracts/<audio_name>_transcript.md" [--model auto/best-stt]
    ```
    - Handles long audio files automatically via 10-minute chunking.
    - Captures verbal professor explanations, exam hints, student Q&A, and technical nuances.
@@ -76,32 +76,29 @@ Native text and code sources do **not** need temporary staging files. Read them 
 
 ## Synthesis Workflow
 
-### 1. Pre-Read Master Note
+### 1. Pre-Read & Target Extraction
 - Open `<Course Name>.md` and inspect existing sections and Table of Contents (TOC).
 - Inspect top comment directives (`%% MASTER NOTE DIRECTIVE ... %%`). Follow declared course-specific rules.
+- Identify existing topics and declare the new hierarchy of topics to cover. The Orchestrator collects all existing topics into a target Topic Vocabulary.
 
-### 2. Zero-Token Staging Copy & Tagging Sub-Agent
-- **Zero-Token Staging Copy**: Copy all raw materials (Track A extracts and Track B native/material files) into `.staging_unified/sources/` using OS/Python copy tools (`shutil.copy2`). **NEVER tag or write into original source files.**
-- **Topic Roadmap**: Master Orchestrator establishes the target topic list (`#topic-slug`).
-- **Tagging Sub-Agent**: Dispatched to scan staged files in `.staging_unified/sources/` and insert standard boundary tags around sentences, paragraphs, code fences, and formulas:
-  ```markdown
-  %% BLOCK-START | id:<unique_id> | ref:<source_relative_path> | tags: #topic-1, #topic-2 %%
-  <Raw text / formula / code snippet>
-  %% BLOCK-END %%
-  ```
-  - Supports **multi-tagging** (a single block can belong to multiple topic tags).
-  - **Exhaustive coverage**: Tag unconditionally every single extracted detail; leave zero raw data outside a tagged block.
+### 2. Map Phase: Line-Level Classification (`llm_classifier.py`)
+USAGE: `python3 scripts/llm_classifier.py <sources_dir> <output.json> --topics "A, B, C" --endpoint <url> --model auto/best-free`
+- Run the classifier script on the raw files/folders. 
+- The script preprocesses raw context by injecting line numbers (`1| ...\n2| ...`).
+- It iterates using `auto/best-free` (or `auto/best-cheap`) via OmniRoute.
+- Forces JSON responses mapping `start_line`, `end_line`, `topic` (matched from vocabulary), and `source_granularity` (slide/minute marker).
+- Results are appended to a Master Dictionary File (`classified_map.json`).
+- Orchestrator reviews and validates the Master Dictionary File before proceeding.
 
-### 3. Deterministic Extraction & Zero-Token Payload Assembly
-- A deterministic Python script parses tagged files in `.staging_unified/sources/`:
-  - **Regex Parsing**: Matches `%% BLOCK-START ... %%` to `%% BLOCK-END %%`.
-  - **Demultiplexing**: Groups extracted blocks by topic tag.
-  - **Zero-Token Payload Writing**: Writes single-topic payload files to `.staging_unified/payloads/payload_<topic_slug>.md`.
-  - Each extracted block retains its source citation header (`> [Source: <ref>]`).
+### 3. Reduce Phase: Zero-Token Payload Builder (`payload_builder.py`)
+USAGE: `python3 scripts/payload_builder.py <master_map.json> <sources_dir> <payloads_output_dir>`
+- A purely mechanical and deterministic Python script.
+- Iterates over `classified_map.json`, opens the raw source files, and does deterministic slicing `lines[start_line : end_line]`.
+- Groups fragments by topic and generates focused payload files `payloads/payload_<topic>.md`.
+- Each payload combines all raw sources that speak about that specific topic.
 
-### 4. Topic-Specialized Sub-Agents (Lossless Generation)
-- Orchestrator dispatches topic-specialized sub-agents per topic (or 2-3 topic cluster).
-- Sub-agents receive **ONLY** their assigned `payload_<topic_slug>.md` file (100% relevant context, zero noise).
+### 4. Topic-Specialized Sub-Agents (Lossless Generation & Direct Write)
+- Orchestrator dispatches **topic-specialized** sub-agents receiving **ONLY** their focused micro-payloads (leveraging the full 8192-token output limit for a single topic without overflow).
 - **CRITICAL DIRECTIVE**: Sub-agents must perform a **Lossless Reorganization**. They must not drop details, summarize out nuances, or skip bullet points.
 - Sub-agents must structure the output strictly in this 5-layer format:
   1. **Narrative/Theory**: Exhaustive prose combining slide bullets, transcript intuition, and book concepts.
@@ -109,11 +106,11 @@ Native text and code sources do **not** need temporary staging files. Read them 
   3. **Callouts (Tips/Traps)**: Isolate transcript warnings into `> [!warning] Exam Trap` and practical quizzes into `> [!tip] Slide Quiz`.
   4. **Code Implementation**: Verbatim R/Python code blocks with line-by-line comments linking code mechanics to the theory.
   5. **Visual Context**: Preserve every image placeholder (e.g., `![[slide-04.png]]`, `![[Rplot_kmeans.png]]`) from the payload and add a detailed didactic caption explaining the visual insights.
-- Output saved to `.staging_unified/drafts/<topic_slug>.md`.
+- **Direct Injection**: The Sub-Agent writes the generated structured output **directly into the Master Note** (`<Course Name>.md`), creating or replacing the corresponding section under `### <Topic Name>`. No intermediate drafts are needed.
 
-### 5. Master Note Merging (NEW vs DELTA Integration)
-- Orchestrator integrates completed drafts into `<Course Name>.md`:
-  - **NEW Topics**: Append the full properly-layered concept block.
+### 5. Master Note Direct Integration (Sub-Agent Task)
+- **Direct Injection**: Sub-Agents do NOT save intermediate drafts. They write their 5-Layer formatted output **directly into the Master Note** (`<Course Name>.md`).
+  - **NEW Topics**: Append or create the full properly-layered concept block directly under `### <Concept Name>`.
     ```markdown
     ### <Concept Name>
     [[<source-file-1>]] · [[<source-file-2>]]
@@ -142,28 +139,19 @@ Native text and code sources do **not** need temporary staging files. Read them 
 ---
 
 ### 6. Append Complete Source Record (Audit Manifest)
-At the bottom of `<Course Name>.md`, append all newly processed sources (both Track A and Track B) to the manifest with their SHA-256 hashes (enabling future zero-token diffing):
+**Fully mechanical — never compile manually.** Run the dedicated script which:
+- Calls `update_source_record.py --json` internally.
+USAGE: `python3 scripts/update_source_record.py <course_dir> <note_path> [--force-include <regex>]`
+- Strips and rebuilds the entire `## Complete source record` section with all known sources (new + ingested + modified), SHA-256 hashes, and type labels.
 
-```markdown
-## Complete source record
-
-### Source: `Modules/Module 1/Lecture1-Introduction to data mining.pdf`
-- **SHA256**: `819db41f70a3118991a0c7104d49a62ee7192be43cb7ca9d63870bbbb5292c21`
-- **Type**: Slide Deck Extract
-
-### Source: `Materials/Recordings/26 09 03 S&M.m4a`
-- **SHA256**: `a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e`
-- **Type**: Audio Transcript
-
-### Source: `Practical/week2/Week2_Coding.ipynb`
-- **SHA256**: `6ec5dbfdc5d3989ad87e59bcf81987513d2fa112a95c5567b43a28b030fa42bc`
-- **Type**: Native Code Notebook
+```bash
+python3 scripts/update_source_record.py <course_dir> <note_path> [--force-include <regex>]
 ```
 
 ---
 
 ### 7. Formatting Standards
-- **LaTeX Math**: Inline math with `$...$`, multi-line blocks with `$$\n...\n$$`.
+- **LaTeX Math**: Inline math with `$...$`, multi-line blocks with `$$Z = XW$$`.
 - **Currency**: Escape dollar signs as `\$1,000` or write `1,000 USD` to prevent MathJax parsing collisions.
 - **Highlights**: Use ` == ` and ` = ` always with spaces around `==` for reliable Obsidian rendering.
 - **Language**: Match the primary language of the course materials (English/Italian).
@@ -171,15 +159,18 @@ At the bottom of `<Course Name>.md`, append all newly processed sources (both Tr
 
 ---
 
-### 8. Reconciliation Audit Gate & Cleanup
-Run the verification script before completing the task:
+### 8. Reconciliation Audit Gate & Final Verification
+1. Automated Structural Check
+Run the verification script to mechanically clear structural integrity:
 ```bash
 python3 scripts/verify_note.py "<note_path>"
 ```
-The audit gate verifies:
-- [ ] **100% Source Exhaustiveness**: Every file detected in `diff_sources.py` is recorded in `## Complete source record`.
-- [ ] **Visual Asset Integrity**: Embedded images referenced in markdown exist on disk under `images/`.
-- [ ] **Navigation & TOC**: Table of contents wikilinks (`- [[#Topic]]`) resolve cleanly to document headers.
-- [ ] **Fence & Tag Symmetry**: Code fences and `<details>` blocks are properly balanced and closed.
-- [ ] **Formula Completeness**: Every equation has an accompanying parameter breakdown table.
+- [ ] Confirms TOC wikilink resolution and embedded image (images/) presence.
+- [ ] Confirms Code fences, <details>, and $/$$ tag symmetry.
 
+2. Orchestrator Semantic Re-Read
+Before handing off as "done", the Orchestrator MUST read back the newly integrated topic sections to mathematically ensure:
+- [ ] Zero-Loss Data Integrity: No transcript nuance or slide bullet was summarized away. Deduplication must merge facts into dense wording, not erase them.
+- [ ] 5-Layer Coherence: Verify that Math Parameter Tables correctly map the preceding $$ equation, and Code implementation aligns strictly with the theory.
+- [ ] Clean Output: Complete eradication of [placeholders], hallucinated fragments, and generic AI boilerplate prose.
+- [ ] Source Exhaustiveness (End-to-End): Ensure the classification map successfully transferred data from every source detected by diff_sources.py into the Master Note text.
