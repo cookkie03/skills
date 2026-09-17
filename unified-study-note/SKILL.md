@@ -3,11 +3,11 @@ name: unified-study-note
 description: Synthesize slides, audio transcripts, lab code, and quizzes into an Obsidian master study note. Use when compiling, merging, or updating university course master notes.
 ---
 
-# Unified Study Note Generator
+# Unified Study Note Orchestration Playbook
 
-Converts raw multi-source course materials (slides, workbooks, transcripts, practice scripts, quizzes) into a single, deduplicated, concept-centric Obsidian master note (`<Course Name>.md`).
+You orchestrate the conversion of raw multi-source course materials (slides, workbooks, transcripts, practice scripts, quizzes) into a single, concept-centric Obsidian master note (`<Course Name>.md`).
 
-Every source across the entire course directory tree is ingested as an authoritative input and synthesized into an exhaustive, fully self-contained study guide.
+**Your role is strictly orchestration**: drive the pipeline via `scripts/`, dispatch subagents to synthesize every source across the entire course directory tree into an exhaustive, fully self-contained study guide.
 
 ---
 
@@ -18,8 +18,8 @@ Every source across the entire course directory tree is ingested as an authorita
 3. **Topical Deduplication & Co-Location**: Group knowledge strictly by concept (`### <Topic>`). When a topic reappears across lectures or labs, fuse details directly into the existing section with inline citations (`[[<source-file>]]`). Avoid disconnected slide-by-slide summaries.
 4. **100% Source Exhaustiveness & Lossless Reorganization**: Do not drop any bullet points, variables, or definitions present in the payload. Group, sequence, and deduplicate information, but NEVER summarize or omit details. The goal is a definitive, exhaustive university manual.
 5. **Textual Self-Sufficiency**: The prose must be 100% self-contained. Explain all definitions, causal mechanisms, mathematical parameter interpretations, and graphical insights directly in the surrounding text, using visual embeds and code blocks as supportive anchors.
-6. **Uniform Taxonomy**: Pair LaTeX formulas with parameter breakdown tables, verbatim code fences with line-by-line commentary, and dedicated callouts for exam traps and practical quiz questions.
-7. **Visual Integration**: Never drop image placeholders (`![[...]]`) like slide snippets, diagrams, tables, or RStudio plots. Retain the placeholder and write a comprehensive educational caption below it.
+6. **Dynamic Component Freedom**: You have full freedom to design the structure of each section using tables, nested callouts, snippets, and lists to maximize output quality, as long as information retention is strictly lossless.
+7. **Active Visual Curation**: Treat image placeholders (`![[...]]`) as visual data. Use `vision_analyze` to look at them. **Always** retain structural diagrams, tables, and plots, and embed them with a caption explaining the insights you observed.
 
 ---
 
@@ -86,6 +86,7 @@ USAGE: `python3 scripts/llm_classifier.py <sources_dir> <output.json> --topics "
 - Run the classifier script on the raw files/folders. 
 - The script preprocesses raw context by injecting line numbers (`1| ...\n2| ...`).
 - It iterates using `auto/best-free` (or `auto/best-cheap`) via OmniRoute.
+- **Aggressive Multi‑Tagging (Zero‑Drop)**: The classifier must be *highly permissive* and assign **multiple tags** to every fragment whenever any plausible topic connection exists. This applies to **all** sources (personal notes, slides, PDFs, code, audio). The goal is to guarantee that no semantic fragment is stranded; overlapping tags create redundancy that preserves full coverage.
 - Forces JSON responses mapping `start_line`, `end_line`, `topic` (matched from vocabulary), and `source_granularity` (slide/minute marker).
 - Results are appended to a Master Dictionary File (`classified_map.json`).
 - Orchestrator reviews and validates the Master Dictionary File before proceeding.
@@ -98,14 +99,16 @@ USAGE: `python3 scripts/payload_builder.py <master_map.json> <sources_dir> <payl
 - Each payload combines all raw sources that speak about that specific topic.
 
 ### 4. Topic-Specialized Sub-Agents (Lossless Generation & Direct Write)
-- Orchestrator dispatches **topic-specialized** sub-agents receiving **ONLY** their focused micro-payloads (leveraging the full 8192-token output limit for a single topic without overflow).
-- **CRITICAL DIRECTIVE**: Sub-agents must perform a **Lossless Reorganization**. They must not drop details, summarize out nuances, or skip bullet points.
-- Sub-agents must structure the output strictly in this 5-layer format:
-  1. **Narrative/Theory**: Exhaustive prose combining slide bullets, transcript intuition, and book concepts.
-  2. **Math & Formulas**: LaTeX block (`$$...$$`) immediately followed by a Parameter Breakdown Table (Variable, Meaning, Domain).
-  3. **Callouts (Tips/Traps)**: Isolate transcript warnings into `> [!warning] Exam Trap` and practical quizzes into `> [!tip] Slide Quiz`.
-  4. **Code Implementation**: Verbatim R/Python code blocks with line-by-line comments linking code mechanics to the theory.
-  5. **Visual Context**: Preserve every image placeholder (e.g., `![[slide-04.png]]`, `![[Rplot_kmeans.png]]`) from the payload and add a detailed didactic caption explaining the visual insights.
+- You dispatch **topic-specialized** sub-agents receiving **ONLY** their focused micro-payloads.
+- **CRITICAL DIRECTIVE**: Sub-agents must perform a **Lossless Reorganization**, keeping every explanation, code blocks, code results, math blocks, quiz and questions with justifications and any other relevant information. They must not drop details, summarize out nuances, or skip bullet points.
+- **Personal Notes as Meta-Directives**: Sub-agents must watch for source chunks derived from personal notes. These are not only passive data, but usually **design rules and structural directives** for how to format or explain that specific topic. Sub-agents must obey them.
+- **Active Vision Analysis**: Payloads contain local image pathways (e.g., `![[slide-04.png]]`). You must instruct sub-agents (via `delegate_task` context) to actively use the `vision_analyze` tool on these images. They must look at diagrams and extract tables mathematically, embedding the actual image combined with an analytical markdown caption based on their visual findings.
+- **High-Density Component Library**: Give them architectural freedom to design the structure using Obsidian Markdown components optimally to maximize quality, provided they retain strict limits:
+  1. **Exhaustive Prose** (High‑Density Technical Exposition): Write every concept as a compact, information‑dense block. Use a Definition → Mechanism → Intuition → Edge‑Case pattern. Avoid narrative filler (“then we see…”, “in this slide”), keep sentences short and fact‑centric, and never omit a bullet, parameter, or nuance.
+  2. **Math & Formulas**: Every LaTeX block (`$$...$$`) MUST be paired with a Parameter Breakdown Table (Variable, Meaning, Constraints).
+  3. **Strategic Callouts**: Use Obsidian callouts (`> [!warning]`, `> [!tip]`, `> [!quote]`) to isolate traps, quiz questions, and critical notes.
+  4. **Code with Theory**: Verbatim code blocks must include line-by-line theoretical comments.
+  5. **Visual Context**: Never omit images from the payload; embed them with the detailed didactic caption created by `vision_analyze`.
 - **Direct Injection**: The Sub-Agent writes the generated structured output **directly into the Master Note** (`<Course Name>.md`), creating or replacing the corresponding section under `### <Topic Name>`. No intermediate drafts are needed.
 
 ### 5. Master Note Direct Integration (Sub-Agent Task)
@@ -132,8 +135,7 @@ USAGE: `python3 scripts/payload_builder.py <master_map.json> <sources_dir> <payl
     ```
     
     ![[slide-04.png]]
-    *Figura: [Caption esplicativa dettagliata estratta dal testo/audio relativo]*
-    ```
+    *Figura: [Caption esplicativa dettagliata estratta dal testo/audio relativo]
   - **DELTA Topics**: Surgically inject missing definitions, formulas, or code snippets inline into existing sections, appending source citations to top section headers.
 
 ---
