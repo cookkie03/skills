@@ -90,6 +90,7 @@ Native text and code sources do **not** need temporary staging files. Read them 
   %% BLOCK-END %%
   ```
   - Supports **multi-tagging** (a single block can belong to multiple topic tags).
+  - **Exhaustive coverage**: Tag unconditionally every single extracted detail; leave zero raw data outside a tagged block.
 
 ### 3. Deterministic Extraction & Zero-Token Payload Assembly
 - A deterministic Python script parses tagged files in `.staging_unified/sources/`:
@@ -181,4 +182,4 @@ The audit gate verifies:
 - [ ] **Navigation & TOC**: Table of contents wikilinks (`- [[#Topic]]`) resolve cleanly to document headers.
 - [ ] **Fence & Tag Symmetry**: Code fences and `<details>` blocks are properly balanced and closed.
 - [ ] **Formula Completeness**: Every equation has an accompanying parameter breakdown table.
-- [ ] **Staging Cleanup**: Delete `.staging_unified/` once audit passes.
+

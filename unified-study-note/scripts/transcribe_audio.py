@@ -131,7 +131,7 @@ def process_audio_file(audio_path: str, chunk_duration_min: int = 10, output_pat
         split_cmd = [
             "ffmpeg", "-y", "-i", audio_path,
             "-f", "segment", "-segment_time", str(chunk_secs),
-            "-c", "copy", chunk_pattern
+            "-c:a", "libmp3lame", "-q:a", "4", chunk_pattern
         ]
         subprocess.run(split_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
 

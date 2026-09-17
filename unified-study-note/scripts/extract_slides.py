@@ -16,6 +16,27 @@ import argparse
 import subprocess
 from typing import Optional
 
+def bootstrap_dependencies():
+    missing = []
+    try:
+        import pypdf
+    except ImportError:
+        missing.append("pypdf")
+    try:
+        import fitz
+    except ImportError:
+        missing.append("pymupdf")
+        
+    if missing:
+        print(f"Installing missing dependencies: {', '.join(missing)}...")
+        try:
+            subprocess.run([sys.executable, "-m", "pip", "install"] + missing, check=True, stdout=subprocess.DEVNULL)
+            print("Dependencies installed successfully.")
+        except subprocess.CalledProcessError as e:
+            print(f"Warning: Failed to install dependencies automatically: {e}")
+
+bootstrap_dependencies()
+
 try:
     import pypdf
 except ImportError:

@@ -138,7 +138,7 @@ def extract_processed_manifest_from_note(note_path: str) -> Tuple[Dict[str, str]
     return name_to_hash, hashes_set
 
 
-def diff_sources(course_dir: str, note_path: str = None) -> Dict:
+def diff_sources(course_dir: str, note_path: Optional[str] = None, force_include_pattern: Optional[str] = None) -> Dict:
     course_dir = os.path.abspath(course_dir)
     if not os.path.isdir(course_dir):
         raise FileNotFoundError(f"Course directory not found: {course_dir}")
@@ -186,6 +186,10 @@ def diff_sources(course_dir: str, note_path: str = None) -> Dict:
                 "sha256": file_hash
             }
 
+            if force_include_pattern and re.search(force_include_pattern, rel_path, re.IGNORECASE):
+                new_sources.append(item)
+                continue
+
             if file_hash and file_hash in hashes_set:
                 already_processed.append(item)
             elif f_lower in name_to_hash:
@@ -217,10 +221,11 @@ def main():
     parser.add_argument("course_dir", help="Directory containing the course files.")
     parser.add_argument("note_path", nargs="?", default=None, help="Optional explicit path to the Master Note .md file.")
     parser.add_argument("--json", action="store_true", help="Output raw JSON only.")
+    parser.add_argument("--force-include", default=None, help="Force include files matching this pattern (regex) even if already ingested.")
     args = parser.parse_args()
 
     try:
-        res = diff_sources(args.course_dir, args.note_path)
+        res = diff_sources(args.course_dir, args.note_path, args.force_include)
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
