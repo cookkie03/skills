@@ -13,22 +13,19 @@ Every source across the entire course directory tree is ingested as an authorita
 
 ## Core Rules
 
-1. **Exhaustive Lossless MERGE (Never a Summary)**: The output is **strictly a comprehensive MERGE of all raw source materials, never a high-level summary or abstraction**. Every single concept, bullet point, definition, formula derivation, parameter table row, verbatim code block, line-by-line commentary, practical case study, quiz question with arithmetic justification, and personal note reflection must be fully merged and preserved without condensation or loss.
-2. **Single Master Note**: All course knowledge unifies into `<Course Name>.md` at `/Second-Brain/learning/tilburg-university/<Course Name>/`.
-3. **Recursive Course Coverage**: Every single file across all folders and subfolders (`Modules/`, `Practical/`, `Canvas/`, `Materials/`, `Extended Tutorials/`, `Syllabus/`, etc.) must be evaluated and ingested.
-4. **Topical Deduplication & Co-Location**: Group knowledge strictly by concept (`### <Topic>`). When a topic reappears across lectures or labs, fuse details directly into the existing section with inline citations (`[[<source-file>]]`). Avoid disconnected slide-by-slide summaries.
-5. **100% Slide & Source Exhaustiveness**: Every bullet point, definition, formula ($$...$$), derivation, parameter interpretation, verbatim code snippet, edge case, diagram takeaway, and lecture quiz must be explicitly articulated in full prose. High-level condensations or silent omissions are strictly forbidden.
-6. **Textual Self-Sufficiency**: The prose must be 100% self-contained. Explain all definitions, causal mechanisms, mathematical parameter interpretations, and graphical insights directly in the surrounding text, using visual embeds and code blocks as supportive anchors.
-7. **Uniform Taxonomy & Intuitive Math Explanations**:
-   - **Plain-Language Formula Deconstruction ("Spiegazioni Umane")**: Deconstruct every mathematical formula into simple, plain-language mechanics explaining what each symbol represents intuitively, paired with a formal LaTeX parameter breakdown table.
-   - **Exam Calculation Highlighting**: Explicitly tag formulas that must be **memorized and calculated by hand** during the exam using `> [!important] 🎯 Formula d'Esame: Da Sapere a Memoria & Calcolare`. Distinguish these from high-level algorithmic formulas evaluated by software.
-   - Pair verbatim code fences with line-by-line commentary, and maintain dedicated callouts for exam traps and practical quiz questions.
+1. **Single Master Note**: All course knowledge unifies into `<Course Name>.md` at `/Second-Brain/learning/tilburg-university/<Course Name>/`.
+2. **Recursive Course Coverage**: Every single file across all folders and subfolders (`Modules/`, `Practical/`, `Canvas/`, `Materials/`, `Extended Tutorials/`, `Syllabus/`, etc.) must be evaluated and ingested.
+3. **Topical Deduplication & Co-Location**: Group knowledge strictly by concept (`### <Topic>`). When a topic reappears across lectures or labs, fuse details directly into the existing section with inline citations (`[[<source-file>]]`). Avoid disconnected slide-by-slide summaries.
+4. **100% Source Exhaustiveness & Lossless Reorganization**: Do not drop any bullet points, variables, or definitions present in the payload. Group, sequence, and deduplicate information, but NEVER summarize or omit details. The goal is a definitive, exhaustive university manual.
+5. **Textual Self-Sufficiency**: The prose must be 100% self-contained. Explain all definitions, causal mechanisms, mathematical parameter interpretations, and graphical insights directly in the surrounding text, using visual embeds and code blocks as supportive anchors.
+6. **Uniform Taxonomy**: Pair LaTeX formulas with parameter breakdown tables, verbatim code fences with line-by-line commentary, and dedicated callouts for exam traps and practical quiz questions.
+7. **Visual Integration**: Never drop image placeholders (`![[...]]`) like slide snippets, diagrams, tables, or RStudio plots. Retain the placeholder and write a comprehensive educational caption below it.
 
 ---
 
 ## Input Ingestion Pipeline (Recursive Diff & Dual-Track Processing)
 
-Ingest course materials recursively across two tracks: pre-extract binary media (PDF/PPTX slides, audio) to `.staging_unified/`, and read native text/code (`.ipynb`, `.R`, `.py`, `.md`) directly in-place.
+Ingest course materials recursively across two tracks: pre-extract binary media (PDF/PPTX slides, audio) to `.staging_unified/`, and read native text/code from every format directly in-place.
 
 ### 0. Deterministic Source Diffing (Closed-Loop Ingestion Gate)
 Scan the entire course folder and all nested subdirectories recursively:
@@ -42,12 +39,12 @@ python3 scripts/diff_sources.py "<course_dir>" "<note_path>"
 
 ---
 
-### Track A: Binary & Media Sources (Pre-Extraction to `.staging_unified/`)
+### Track A: Binary & Media Sources (Pre-Extraction to `.staging_unified/extracts/`)
 
 1. **Slide Decks (Deterministic Text Extraction & Image Rendering)**:
-   Extract full slide text and render high-resolution 150 DPI slide images into staging:
+   Extract full slide text and render high-resolution 150 DPI slide images:
    ```bash
-   python3 scripts/extract_slides.py "<pdf_path>" -o ".staging_unified/extracts/<deck_name>_extract.md" --images-dir ".staging_unified/images"
+   python3 scripts/extract_slides.py "<pdf_path>" -o ".staging_unified/extracts/<deck_name>_extract.md"  --images-dir ".staging_unified/images"
    ```
    - Renders all slide PNGs to `.staging_unified/images/slide-XX.png` via macOS native Swift/PDFKit (with pdftoppm fallback).
    - Generates `.staging_unified/extracts/<deck_name>_extract.md` containing slide-by-slide text paired with corresponding image links (`![[slide-XX.png]]`).
@@ -81,84 +78,69 @@ Native text and code sources do **not** need temporary staging files. Read them 
 
 ### 1. Pre-Read Master Note
 - Open `<Course Name>.md` and inspect existing sections and Table of Contents (TOC).
-- Inspect the top of the Master Study Note for note-specific comment directives (`%% MASTER NOTE DIRECTIVE ... %%`). If missing, initialize it. If the user requests specific recurring behaviors, embed them into the directive block for future runs.
+- Inspect top comment directives (`%% MASTER NOTE DIRECTIVE ... %%`). Follow declared course-specific rules.
 
-### 2. Raw Inventory & Topic Roadmap
-Inspect extracted files from Track A (`.staging_unified/extracts/`) and native files from Track B. Map each incoming item to a **Target Topic** (`### <Topic>`) and categorize as **`NEW`** or **`DELTA`**:
-- **Prose**: Core theoretical definitions, causal mechanisms, intuitions, and formal arguments.
-- **Formulas & Parameter Tables**: Mathematical statements (`$$...$$`) and parameter tables.
-- **Verbatim Code & Exercises**: Full runnable scripts with line-by-line walkthroughs.
-- **Exam Traps**: Common mistakes, subtle bugs, and syntax collisions (`> [!warning] Exam Trap`).
-- **Quizzes**: Slide questions and step-by-step solutions (`> [!tip] Slide Quiz & Practical Application`).
-- **Visuals**: Identify every slide with diagrams, plots, architecture schemas, tables, drawings, or decision workflows to carry forward into the concept blocks.
+### 2. Zero-Token Staging Copy & Tagging Sub-Agent
+- **Zero-Token Staging Copy**: Copy all raw materials (Track A extracts and Track B native/material files) into `.staging_unified/sources/` using OS/Python copy tools (`shutil.copy2`). **NEVER tag or write into original source files.**
+- **Topic Roadmap**: Master Orchestrator establishes the target topic list (`#topic-slug`).
+- **Tagging Sub-Agent**: Dispatched to scan staged files in `.staging_unified/sources/` and insert standard boundary tags around sentences, paragraphs, code fences, and formulas:
+  ```markdown
+  %% BLOCK-START | id:<unique_id> | ref:<source_relative_path> | tags: #topic-1, #topic-2 %%
+  <Raw text / formula / code snippet>
+  %% BLOCK-END %%
+  ```
+  - Supports **multi-tagging** (a single block can belong to multiple topic tags).
 
-### 3. Sub-Agent Delegation & Exhaustive Synthesis
-The Master Orchestrator oversees the **Big Picture** (topic roadmap, TOC, and audit gate) and delegates drafting topic-by-topic to dedicated sub-agents to guarantee **zero information loss and maximum exhaustiveness**:
+### 3. Deterministic Extraction & Zero-Token Payload Assembly
+- A deterministic Python script parses tagged files in `.staging_unified/sources/`:
+  - **Regex Parsing**: Matches `%% BLOCK-START ... %%` to `%% BLOCK-END %%`.
+  - **Demultiplexing**: Groups extracted blocks by topic tag.
+  - **Zero-Token Payload Writing**: Writes single-topic payload files to `.staging_unified/payloads/payload_<topic_slug>.md`.
+  - Each extracted block retains its source citation header (`> [Source: <ref>]`).
 
-- **Mandatory Sub-Agent Isolation**:
-  - Whenever updating or creating master note modules, dispatch parallel sub-agents (`delegate_task`) per module/topic cluster.
-  - Each sub-agent is given an isolated task prompt instructing it to **maximize information retention** from its assigned raw sources (slides, Notion workbooks, code notebooks, practice scripts, quizzes, recordings). High-level summaries, condensations, or silent omissions are strictly forbidden.
-  - Sub-agent Prompt Blueprint:
-    ```text
-    Goal: Draft an exhaustive, high-density concept section for [Topic/Module Name].
-    Context:
-    - Primary Sources: <list of specific slide extracts, notion guides, notebooks, quiz files>
-    - Output Path: .staging_unified/drafts/<topic_slug>.md
-    - Mandate: 100% information exhaustiveness. Translate EVERY bullet point, formula derivation, parameter table, verbatim code snippet with line-by-line commentary, [!important] 🎯 Formula d'Esame callout, [!warning] Exam Trap, and [!tip] Slide Quiz with full arithmetic. Do NOT summarize or condense.
+### 4. Topic-Specialized Sub-Agents (Lossless Generation)
+- Orchestrator dispatches topic-specialized sub-agents per topic (or 2-3 topic cluster).
+- Sub-agents receive **ONLY** their assigned `payload_<topic_slug>.md` file (100% relevant context, zero noise).
+- **CRITICAL DIRECTIVE**: Sub-agents must perform a **Lossless Reorganization**. They must not drop details, summarize out nuances, or skip bullet points.
+- Sub-agents must structure the output strictly in this 5-layer format:
+  1. **Narrative/Theory**: Exhaustive prose combining slide bullets, transcript intuition, and book concepts.
+  2. **Math & Formulas**: LaTeX block (`$$...$$`) immediately followed by a Parameter Breakdown Table (Variable, Meaning, Domain).
+  3. **Callouts (Tips/Traps)**: Isolate transcript warnings into `> [!warning] Exam Trap` and practical quizzes into `> [!tip] Slide Quiz`.
+  4. **Code Implementation**: Verbatim R/Python code blocks with line-by-line comments linking code mechanics to the theory.
+  5. **Visual Context**: Preserve every image placeholder (e.g., `![[slide-04.png]]`, `![[Rplot_kmeans.png]]`) from the payload and add a detailed didactic caption explaining the visual insights.
+- Output saved to `.staging_unified/drafts/<topic_slug>.md`.
+
+### 5. Master Note Merging (NEW vs DELTA Integration)
+- Orchestrator integrates completed drafts into `<Course Name>.md`:
+  - **NEW Topics**: Append the full properly-layered concept block.
+    ```markdown
+    ### <Concept Name>
+    [[<source-file-1>]] · [[<source-file-2>]]
+    
+    <Lossless narrative combining theory, definitions, and transcript intuitions...>
+    
+    $$ Z = XW $$
+    
+    | Parameter | Mathematical Meaning | Dimension / Domain | Interpretation & Constraints |
+    | :--- | :--- | :--- | :--- |
+    | $X$ | Dati originali | $\mathbb{R}^{n \times p}$ | Deve essere centrato |
+    
+    > [!warning] Exam Trap: Standardizzazione
+    > [Dettaglio dall'audio o slide su possibili errori comuni]
+    
+    ```R
+    # Il parametro center e scale sono fondamentali
+    pca_result <- prcomp(data, center = TRUE, scale. = TRUE)
     ```
-  - The Orchestrator collects all completed drafts from `.staging_unified/drafts/`, integrates them into `<Course Name>.md`, and executes `verify_note.py`.
+    
+    ![[slide-04.png]]
+    *Figura: [Caption esplicativa dettagliata estratta dal testo/audio relativo]*
+    ```
+  - **DELTA Topics**: Surgically inject missing definitions, formulas, or code snippets inline into existing sections, appending source citations to top section headers.
 
 ---
 
-### 4. Build & Update Concept Blocks (NEW vs DELTA)
-
-#### A. If Topic is NEW: Build Full Concept Block
-Construct the complete high-density section:
-
-```markdown
-### <Concept Name>
-[[<source-file-1>]] · [[<source-file-2>]] · [[#Related Concept]]
-
-<Exhaustive narrative fusing slide bullets, workbook theory, and lecturer explanations into a coherent explanation.>
-
-$$
-\text{Formula}
-$$
-
-| Parameter | Mathematical Meaning | Dimension / Domain | Interpretation & Constraints |
-| :--- | :--- | :--- | :--- |
-| $x$ | Predictor feature vector | $\mathbb{R}^P$ | Input covariates without intercept |
-| $\beta$ | Parameter coefficient vector | $\mathbb{R}^P$ | Rate of change in $y$ per unit change in $x$ |
-
-```<language>
-# Verbatim code snippet or workbook exercise solution
-def execute_pipeline(data):
-    # Line-by-line commentary linking code mechanics to theory
-    pass
-```
-
-> [!warning] Exam Trap / Common Mistake
-> Specific error identified in slides, practice quizzes, or lecture transcripts.
-
-> [!tip] Slide Quiz & Practical Application
-> Classroom exercise and solution walkthrough extracted directly from the lecture slides.
-
-![[slide-XX.png]]
-*Detailed caption articulating the visual insight and takeaway.*
-```
-
-#### B. If Topic ALREADY EXISTS: Surgical DELTA-Enrichment
-Preserve existing theoretical narrative verbatim and inject only delta additions:
-1. **Source Citation**: Append the new source wikilink to the header line (`[[Lab_02.R]]`).
-2. **Parameter Table**: Append new parameter rows to the existing LaTeX table.
-3. **Verbatim Code**: Add new practical code fences with line-by-line explanations.
-4. **Exam Traps & Nuances**: Append new `> [!warning] Exam Trap` callouts for lecturer warnings or edge cases.
-5. **Slide Quizzes**: Append new `> [!tip] Slide Quiz & Practical Application` callouts.
-6. **Visual Embeds**: Whenever a slide contains a diagram, table, drawing, plot, architecture schema, or decision workflow, embed the image directly adjacent to the concept (`![[slide-XX.png]]`), move the referenced PNG from `.staging_unified/images/` into the course `images/` directory, and accompany with exhaustive prose explaining the visual insights.
-
----
-
-### 5. Append Complete Source Record (Audit Manifest)
+### 6. Append Complete Source Record (Audit Manifest)
 At the bottom of `<Course Name>.md`, append all newly processed sources (both Track A and Track B) to the manifest with their SHA-256 hashes (enabling future zero-token diffing):
 
 ```markdown
@@ -167,12 +149,10 @@ At the bottom of `<Course Name>.md`, append all newly processed sources (both Tr
 ### Source: `Modules/Module 1/Lecture1-Introduction to data mining.pdf`
 - **SHA256**: `819db41f70a3118991a0c7104d49a62ee7192be43cb7ca9d63870bbbb5292c21`
 - **Type**: Slide Deck Extract
-<full extracted slide text>
 
 ### Source: `Materials/Recordings/26 09 03 S&M.m4a`
 - **SHA256**: `a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e`
 - **Type**: Audio Transcript
-<full transcript text>
 
 ### Source: `Practical/week2/Week2_Coding.ipynb`
 - **SHA256**: `6ec5dbfdc5d3989ad87e59bcf81987513d2fa112a95c5567b43a28b030fa42bc`
@@ -181,11 +161,8 @@ At the bottom of `<Course Name>.md`, append all newly processed sources (both Tr
 
 ---
 
-### 6. Formatting Standards
-- **LaTeX Math & String Escaping**:
-  - Inline math with `$...$`, multi-line blocks with `$$\n...\n$$`.
-  - **Raw String & Script Escapes**: When assembling or generating Markdown notes programmatically (in Python, JS, or Bash), **always use raw strings (`r"""..."""`) or write directly to separate `.md` files**. Never let Python/Bash string evaluation decode LaTeX backslashes into ASCII control characters (`\t` $\to$ tab, `\f` $\to$ form feed `\x0c`, `\b` $\to$ backspace `\x08`, `\a` $\to$ bell `\x07`, `\r` $\to$ carriage return `\x0d`, `\v` $\to$ vertical tab `\x0b`).
-  - **No Corrupted LaTeX Macros**: Ensure macros like `\text`, `\frac`, `\bar`, `\alpha`, `\approx`, `\theta`, `\times`, `\sigma`, `\tau`, `\nabla`, `\right]`, `\left[` preserve their leading backslash.
+### 7. Formatting Standards
+- **LaTeX Math**: Inline math with `$...$`, multi-line blocks with `$$\n...\n$$`.
 - **Currency**: Escape dollar signs as `\$1,000` or write `1,000 USD` to prevent MathJax parsing collisions.
 - **Highlights**: Use ` == ` and ` = ` always with spaces around `==` for reliable Obsidian rendering.
 - **Language**: Match the primary language of the course materials (English/Italian).
@@ -193,16 +170,15 @@ At the bottom of `<Course Name>.md`, append all newly processed sources (both Tr
 
 ---
 
-### 7. Reconciliation Audit Gate & Cleanup
+### 8. Reconciliation Audit Gate & Cleanup
 Run the verification script before completing the task:
 ```bash
 python3 scripts/verify_note.py "<note_path>"
 ```
 The audit gate verifies:
-- [ ] **100% Source Accounting**: All definitions, formulas, code logic, and quiz questions from all new sources across all subfolders are fully articulated.
-- [ ] **Formula Completeness & LaTeX Integrity**: Every equation has an accompanying parameter breakdown table, with zero unescaped ASCII control characters or corrupted LaTeX macros.
+- [ ] **100% Source Exhaustiveness**: Every file detected in `diff_sources.py` is recorded in `## Complete source record`.
+- [ ] **Visual Asset Integrity**: Embedded images referenced in markdown exist on disk under `images/`.
 - [ ] **Navigation & TOC**: Table of contents wikilinks (`- [[#Topic]]`) resolve cleanly to document headers.
 - [ ] **Fence & Tag Symmetry**: Code fences and `<details>` blocks are properly balanced and closed.
-- [ ] **Audit Trail Integrity**: All newly processed sources (Track A and Track B) are recorded in `## Complete source record` with zero truncation markers.
-
-
+- [ ] **Formula Completeness**: Every equation has an accompanying parameter breakdown table.
+- [ ] **Staging Cleanup**: Delete `.staging_unified/` once audit passes.
