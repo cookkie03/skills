@@ -74,7 +74,8 @@ Before downloading or processing any asset, perform a differential parity check 
 - **No `_transcript.md` Artifact Generation**: Do not generate separate transcript markdown files in the vault. Transcription is performed on-demand in temporary staging (`.staging_unified/`) by `unified-study-note` and recorded directly into the master note's source audit record.
 
 ### F. Notion Workspaces Delegation (`notion-to-obsidian`)
-- When a module item points to Notion (`notion.site`, `notion.so`), invoke the `notion-to-obsidian` skill to recursively extract pages, toggles, LaTeX math, code blocks, and local image assets.
+- When a module item points to Notion (`notion.site`, `notion.so`), invoke the `notion-to-obsidian` skill to recursively extract pages, toggles, LaTeX math, code blocks, and all media/attachments.
+- **Strict Local Assets Policy**: All Notion images and file attachments must be downloaded into a local `Attachments/` folder adjacent to the workbooks, linked via Obsidian wikilinks (`![[Pasted image ...]]` / `[[...]]`). Remote proxy image URLs (`/image/...`) are strictly prohibited.
 
 ### G. University Google Drive Mirroring (`/u/1/`)
 - Access Tilburg University Google Drive (`/u/1/` / `[EMAIL_REDACTED]`).

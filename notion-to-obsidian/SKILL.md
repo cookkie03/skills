@@ -50,15 +50,21 @@ Notion virtualizes DOM blocks and unmounts nodes outside the active viewport. Ex
 #### 4. Tables & Structural Blocks
 - **Tables**: Convert `.notion-table-block` into standard Markdown pipe tables with header dividers (`| Col 1 | Col 2 |\n|---|---|\n| Val 1 | Val 2 |`). Replace internal newlines in cells with spaces.
 - **Callouts**: Map `.notion-callout-block` to Obsidian callouts (`> [!note]`, `> [!tip]`, `> [!warning]`, `> [!info]`), preserving emoji icons.
-- **Typography & Lists**: Preserve Headings (H1–H3), nested bullet/numbered lists, bold (`**text**`), italics (`*text*`), and inline code (`` `code` ``). **Do not use bold inside headers** — it glitches Obsidian formatting.
+- **Typography & Lists**: Preserve Headings (H1–H3), nested bullet/numbered lists, bold (`**text**`), italics (`*text*`), strikethrough, and quotes.
+
+#### 5. Local Images & File Attachments (Zero Remote Links)
+- **Local Download Requirement**: Never leave Notion proxy image URLs (`/image/http...`, `https://...amazonaws.com/...`) or remote asset references in the Markdown note.
+- **Images**: Download all images locally to the `Attachments/` folder adjacent to the markdown note. Name them following Obsidian paste conventions (`Pasted image YYYYMMDDHHmmss.png` or `Pasted image YYYYMMDDHHmmss_N.<ext>`) and embed them using Obsidian wikilinks (`![[Pasted image ...]]`).
+- **File Attachments**: Download attached files, datasets, and PDFs into `Attachments/` and link them using wikilinks (`[[filename]]` or `![[filename]]` for embedded PDFs). italics (`*text*`), and inline code (`` `code` ``). **Do not use bold inside headers** — it glitches Obsidian formatting.
 
 #### 5. Local Image Downloads (Asset Expiration Prevention)
 - Notion embeds images on temporary AWS S3 signed URLs that expire within hours.
 - Download all image assets locally into the vault asset directory (`/Users/luca/Documents/Second-Brain/learning/tilburg-university/<Course>/Workbooks/images/`).
 - Name images with unique slugs (e.g. `<workbook-slug>-fig-01.png`) and replace remote URLs in Markdown with local embeds (`![[image.png]]` or `![alt](images/image.png)`).
 
-### Phase 4: Vault Placement & Non-Destructive Update
-- Write converted Markdown files and images to the target vault directory.
+### Phase 4: Vault Placement & Local Asset Download
+- Write converted Markdown files to the target vault directory.
+- Ensure all discovered images and file attachments are downloaded into an `Attachments/` subfolder in the same directory and referenced via standard Obsidian wikilinks (`![[image.png]]`, `[[attachment.csv]]`).
 - Include standard YAML frontmatter (`title`, `source`, `tags`, `date_extracted`).
 - **Non-Destructive Merge**: If a note already exists with user annotations or custom callouts, preserve user additions intact while updating structural content.
 
@@ -105,9 +111,10 @@ async function expandAllNotionToggles(p) {
   });
 }
 
-// 2. Parse DOM AST to Obsidian Markdown
+// 2. Parse DOM AST to Obsidian Markdown and harvest assets
 async function convertNotionToMarkdown(p, pageTitle, pageUrl) {
   return await p.evaluate(({ title, url }) => {
+    const assets = [];
     const pageEl = document.querySelector('.notion-page-content') || document.querySelector('main') || document.body;
     const clone = pageEl.cloneNode(true);
 
@@ -227,10 +234,46 @@ async function convertNotionToMarkdown(p, pageTitle, pageUrl) {
           return inner ? ` *${inner}* ` : '';
         }
 
-        // Images
+        // File attachments & PDFs
+        if (className.includes('notion-file-block') || className.includes('notion-pdf-block') || (tag === 'a' && (node.getAttribute('href')?.includes('amazonaws.com') || node.getAttribute('href')?.includes('/signed/')))) {
+          let fileUrl = node.getAttribute('href') || node.querySelector('a')?.getAttribute('href');
+          if (fileUrl) {
+            if (fileUrl.startsWith('/')) {
+              fileUrl = new URL(fileUrl, window.location.origin).href;
+            }
+            const rawText = node.innerText.trim();
+            let cleanName = rawText.split('\n')[0].replace(/[/\\?%*:|"<>]/g, '_').trim() || `attachment_${assets.length + 1}`;
+            if (!cleanName.includes('.')) {
+              cleanName += '.pdf';
+            }
+            assets.push({ url: fileUrl, filename: cleanName, type: 'file' });
+            return `\n\n[[${cleanName}]]\n\n`;
+          }
+        }
+
+        // Images: Harvest URL and emit Obsidian wikilink
         if (tag === 'img') {
-          const src = node.getAttribute('src');
-          return src ? `\n\n![Image](${src})\n\n` : '';
+          let src = node.getAttribute('src') || '';
+          if (src.startsWith('/')) {
+            src = new URL(src, window.location.origin).href;
+          }
+          if (src && !src.startsWith('data:image/svg+xml')) {
+            let ext = 'png';
+            try {
+              const parsedUrl = new URL(src);
+              const pathname = parsedUrl.pathname;
+              const match = pathname.match(/\.(png|jpe?g|gif|webp|svg)/i) || src.match(/\.(png|jpe?g|gif|webp|svg)/i);
+              if (match) ext = match[1].toLowerCase();
+            } catch(e) {}
+
+            const now = new Date();
+            const ts = now.toISOString().replace(/[-:T]/g, '').slice(0, 14);
+            const index = assets.length + 1;
+            const filename = `Pasted image ${ts}${index > 1 ? `_${index}` : ''}.${ext}`;
+            assets.push({ url: src, filename, type: 'image' });
+            return `\n\n![[${filename}]]\n\n`;
+          }
+          return '';
         }
 
         // Headings
@@ -273,7 +316,37 @@ async function convertNotionToMarkdown(p, pageTitle, pageUrl) {
     const rawBody = parseNode(clone);
     const cleanedBody = rawBody.replace(/\n{3,}/g, '\n\n').trim();
 
-    return `# ${title}\n\n> **Source**: [Notion Guide](${url})\n\n${cleanedBody}`;
+    return {
+      markdown: `# ${title}\n\n> **Source**: [Notion Guide](${url})\n\n${cleanedBody}`,
+      assets
+    };
   }, { title: pageTitle, url: pageUrl });
+}
+
+// 3. Save Markdown and download all referenced assets locally
+async function saveNoteWithAssets(targetDir, fileName, { markdown, assets }) {
+  await fs.mkdir(targetDir, { recursive: true });
+  const notePath = path.join(targetDir, fileName);
+  await fs.writeFile(notePath, markdown, 'utf8');
+
+  if (assets && assets.length > 0) {
+    const attachmentsDir = path.join(targetDir, 'Attachments');
+    await fs.mkdir(attachmentsDir, { recursive: true });
+
+    for (const asset of assets) {
+      try {
+        const res = await fetch(asset.url);
+        if (res.ok) {
+          const buffer = Buffer.from(await res.arrayBuffer());
+          await fs.writeFile(path.join(attachmentsDir, asset.filename), buffer);
+          console.log(`Saved asset: ${asset.filename}`);
+        } else {
+          console.error(`HTTP ${res.status} fetching ${asset.url}`);
+        }
+      } catch (err) {
+        console.error(`Failed downloading ${asset.filename}:`, err);
+      }
+    }
+  }
 }
 ```

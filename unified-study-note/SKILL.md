@@ -7,7 +7,7 @@ description: Synthesize slides, audio transcripts, lab code, and quizzes into an
 
 You orchestrate the conversion of raw multi-source course materials (slides, workbooks, transcripts, practice scripts, quizzes) into a single, concept-centric Obsidian master note (`<Course Name>.md`).
 
-**Your role is strictly orchestration**: drive the pipeline via `scripts/`, dispatch subagents to synthesize every source across the entire course directory tree into an exhaustive, fully self-contained study guide.
+**Your role is strictly orchestration**: drive the pipeline via `scripts/`, dispatch subagents with cheaper model to synthesize every source across the entire course directory tree into an exhaustive, fully self-contained study guide.
 
 ---
 
