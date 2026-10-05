@@ -1,0 +1,4 @@
+interface:
+  display_name: "hms"
+  short_description: "Delegate work to Hermes CLI headlessly"
+  default_prompt: "Use $hms to delegate a scoped repository task to Hermes CLI and report verified results."
