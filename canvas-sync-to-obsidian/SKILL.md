@@ -20,6 +20,7 @@ Audit and synchronize Tilburg University Canvas courses, university Google Drive
    - Do not generate arbitrary new folder structures, synthetic module containers, or hardcoded path templates on your own.
 3. **Ask the User When Unclear (`ask_user_question`)**:
    - If a new module, week, or asset does not match an unambiguous existing folder pattern in the course, **always ask the user where the files should be placed** before writing or downloading anything.
+4. **Source-specific destinations**: Place Canvas and linked course assets under the course's established `Materials/` hierarchy. Place university Google Drive-derived assets under a separate course-level `Google Drive/` folder, preserving meaningful existing subfolders. Respect explicit user-approved exceptions and do not relocate existing personal work automatically.
 
 ---
 
@@ -42,7 +43,7 @@ Before downloading or processing any asset, perform a differential parity check 
    | State | Check | Action |
    |---|---|---|
    | **Identical** | Hash/size/timestamp matches local file | **Skip (No-op)**: Do not re-download, re-transcribe, or re-parse. |
-   | **Modified** | Remote timestamp newer or content altered | **In-Place Update**: Overwrite and update the matching file at its exact existing path. |
+   | **Modified** | Remote timestamp newer or content altered | Preserve personal edits and annotations. For user work, save a separately labelled version rather than overwriting. Update an unmodified source mirror only when safe. |
    | **New / Missing** | File does not exist locally | **Route to Resolved User Path**: Place into the user-confirmed or established directory. |
 
 ---
@@ -57,6 +58,7 @@ Before downloading or processing any asset, perform a differential parity check 
 ### B. Canvas Content Pages
 - Convert Canvas pages (`/pages/:url`) to clean Obsidian Markdown (preserving headings, pipe tables, KaTeX math `$$...$$`, inline code, and escaping standalone currency `\$`).
 - Download embedded page images locally and reference them via wikilinks (`![[image.png]]`).
+- Deduplicate repeated links to the same Canvas page by page ID: keep one canonical local page. For Machine Learning, the shared reading page belongs at `Materials/Reading materials.md`, not once per week.
 
 ### C. Canvas Announcements (`/announcements`)
 - Ingest and synchronize course announcements into the course hierarchy (e.g. `<Course>/Materials/Announcements/` or the designated module location).
@@ -68,9 +70,8 @@ Before downloading or processing any asset, perform a differential parity check 
 - **Skip Rule**: Consider all files, but if inspecting interactive Canvas quiz pages requires clicking "Start/Take Quiz" or initiating an active attempt, **SKIP the interactive quiz page immediately** and record it in the sync summary as skipped to protect student attempts.
 
 ### E. Media Extraction (Audio Streams Only)
-- Extract audio streams (HLS/master stream) from Panopto / YouTube links without downloading bulky video files.
-- Save the consolidated audio file directly inside the designated user folder for that lecture/topic:
-  - Audio: `<prefix>_merged_audio.mp3`
+- Extract audio streams from Panopto / YouTube links and save `.m4a` audio in the designated course Materials folder. Preserve valid existing formats without duplicating them solely for conversion.
+- Compare the extracted audio duration with the source duration, verify an audio stream with ffprobe, and remove any intermediate video after a successful extraction. A nonzero file or valid codec alone does not establish completeness.
 - **No `_transcript.md` Artifact Generation**: Do not generate separate transcript markdown files in the vault. Transcription is performed on-demand in temporary staging (`.staging_unified/`) by `unified-study-note` and recorded directly into the master note's source audit record.
 
 ### F. Notion Workspaces Delegation (`notion-to-obsidian`)
@@ -79,11 +80,13 @@ Before downloading or processing any asset, perform a differential parity check 
 
 ### G. University Google Drive Mirroring (`/u/1/`)
 - Access Tilburg University Google Drive (`/u/1/` / `[EMAIL_REDACTED]`).
-- Check if files from Google Drive are identical to existing files (keep/skip) or new/modified (intelligently place in existing Obsidian folder tree without creating generic Google Drive subfolders).
+- Compare by content hash where possible. Place new or distinct Drive-derived files under `<Course>/Google Drive/`, separate from `Materials/`; preserve existing student work and meaningful structure. Skip byte-identical copies, and do not relocate existing user files without permission.
 
 ---
 
 ## 5. Parity & Verification Summary
+
+A resource is complete only after verifying (1) file presence, (2) content integrity and completeness, including source-duration comparison for audio, (3) the correct destination, and (4) a resolving local wikilink. Persist an inventory of pending and failed items for resumption. Report inaccessible, ambiguous, unverified, and skipped items explicitly; do not claim parity from partial checks.
 
 At the completion of synchronization, provide an audit report:
 
