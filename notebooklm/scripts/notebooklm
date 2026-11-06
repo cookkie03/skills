@@ -1,3 +1,0 @@
-#!/bin/sh
-# Aside may export PYTHONHOME for its embedded interpreter. Do not pass it to this venv.
-exec env -u PYTHONHOME -u PYTHONPATH /Users/luca/.aside/u/0/gemini-notebook-client/bin/notebooklm "$@"

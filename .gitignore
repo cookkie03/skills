@@ -3,3 +3,14 @@
 .serena
 .venv
 .env
+
+# Third-party skills remain local; install from their original repositories.
+/notebooklm/
+/defuddle/
+/json-canvas/
+/obsidian-markdown/
+/obsidian-bases/
+/obsidian-cli/
+/grilling/
+/handoff/
+/crawl4ai/
