@@ -40,12 +40,12 @@
       "repo": "https://github.com/obsidianmd/obsidian-skills.git",
       "branch": "main",
       "include": [
-        "skills/defuddle",
-        "skills/json-canvas",
-        "skills/obsidian-bases",
-        "skills/obsidian-markdown"
+        "plugins/obsidian/skills/defuddle",
+        "plugins/obsidian/skills/json-canvas",
+        "plugins/obsidian/skills/obsidian-bases",
+        "plugins/obsidian/skills/obsidian-markdown"
       ],
-      "source_path_prefix": "skills",
+      "source_path_prefix": "plugins/obsidian/skills",
       "destination": "third_party/kepano/obsidian-skills"
     },
     {
