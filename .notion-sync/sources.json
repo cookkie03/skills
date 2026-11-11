@@ -11,6 +11,159 @@
       ],
       "source_path_prefix": "skills",
       "destination": "third_party/mattpocock/skills"
+    },
+    {
+      "id": "third_party:obra/superpowers",
+      "label": "obra/superpowers",
+      "repo": "https://github.com/obra/superpowers.git",
+      "branch": "main",
+      "include": [
+        "skills/brainstorming"
+      ],
+      "source_path_prefix": "skills",
+      "destination": "third_party/obra/superpowers"
+    },
+    {
+      "id": "third_party:anthropics/skills",
+      "label": "Anthropic Skills",
+      "repo": "https://github.com/anthropics/skills.git",
+      "branch": "main",
+      "include": [
+        "skills/frontend-design"
+      ],
+      "source_path_prefix": "skills",
+      "destination": "third_party/anthropics/skills"
+    },
+    {
+      "id": "third_party:kepano/obsidian-skills",
+      "label": "Kepano Obsidian Skills",
+      "repo": "https://github.com/kepano/obsidian-skills.git",
+      "branch": "main",
+      "include": [
+        "skills/defuddle",
+        "skills/json-canvas",
+        "skills/obsidian-bases",
+        "skills/obsidian-markdown"
+      ],
+      "source_path_prefix": "skills",
+      "destination": "third_party/kepano/obsidian-skills"
+    },
+    {
+      "id": "third_party:harmeet10000/AgentNexus-LangChain-FastAPI",
+      "label": "Harmeet10000 AgentNexus",
+      "repo": "https://github.com/harmeet10000/AgentNexus-LangChain-FastAPI.git",
+      "branch": "main",
+      "include": [
+        ".github/skills/crawl4ai-skill"
+      ],
+      "source_path_prefix": ".github/skills",
+      "destination": "third_party/harmeet10000/AgentNexus-LangChain-FastAPI"
+    },
+    {
+      "id": "third_party:vercel-labs/skills",
+      "label": "Vercel Skills",
+      "repo": "https://github.com/vercel-labs/skills.git",
+      "branch": "main",
+      "include": [
+        "skills/find-skills"
+      ],
+      "source_path_prefix": "skills",
+      "destination": "third_party/vercel-labs/skills"
+    },
+    {
+      "id": "third_party:sorty-organizer/Sorty",
+      "label": "Sorty",
+      "repo": "https://github.com/sorty-organizer/Sorty.git",
+      "branch": "main",
+      "include": [
+        ".agents/skills/sorty"
+      ],
+      "source_path_prefix": ".agents/skills",
+      "destination": "third_party/sorty-organizer/Sorty"
+    },
+    {
+      "id": "third_party:Rizzo-AI-Academy/rizzo-flow",
+      "label": "Rizzo Flow",
+      "repo": "https://github.com/Rizzo-AI-Academy/rizzo-flow.git",
+      "branch": "main",
+      "include": [
+        "skills/rizzo-flow"
+      ],
+      "source_path_prefix": "skills",
+      "destination": "third_party/Rizzo-AI-Academy/rizzo-flow"
+    },
+    {
+      "id": "third_party:tailscale/tailscale-skill",
+      "label": "Tailscale Skill",
+      "repo": "https://github.com/tailscale/tailscale-skill.git",
+      "branch": "main",
+      "include": [
+        "skills/tailscale"
+      ],
+      "source_path_prefix": "skills",
+      "destination": "third_party/tailscale/tailscale-skill"
+    },
+    {
+      "id": "third_party:Nebutra/MinerU-Skill",
+      "label": "Nebutra MinerU",
+      "repo": "https://github.com/Nebutra/MinerU-Skill.git",
+      "branch": "main",
+      "include": [
+        "."
+      ],
+      "source_path_prefix": ".",
+      "root_skill_name": "mineru",
+      "exclude_skill_paths": [
+        "mineru/skills/mineru/SKILL.md"
+      ],
+      "destination": "third_party/Nebutra/MinerU-Skill"
+    },
+    {
+      "id": "third_party:Graphify-Labs/graphify",
+      "label": "Graphify",
+      "repo": "https://github.com/Graphify-Labs/graphify.git",
+      "branch": "v8",
+      "include": [
+        "graphify"
+      ],
+      "source_path_prefix": ".",
+      "destination": "third_party/Graphify-Labs/graphify"
+    },
+    {
+      "id": "third_party:codeflash-ai/locality",
+      "label": "Locality",
+      "repo": "https://github.com/codeflash-ai/locality.git",
+      "branch": "main",
+      "include": [
+        "apps/desktop/src-tauri/src/agent_guidance.rs"
+      ],
+      "destination": "third_party/codeflash-ai/locality",
+      "extractor_type": "locality_rust",
+      "extractor_file": "apps/desktop/src-tauri/src/agent_guidance.rs",
+      "skill_dir": "locality",
+      "mount_path": "/Users/luca/Library/CloudStorage/Locality/notion"
+    },
+    {
+      "id": "third_party:morluto/rea",
+      "label": "Reverse Engineer Anything",
+      "repo": "https://github.com/morluto/rea.git",
+      "branch": "main",
+      "include": [
+        ".agents/skills/reverse-engineer-anything"
+      ],
+      "source_path_prefix": ".agents/skills",
+      "destination": "third_party/morluto/rea"
+    },
+    {
+      "id": "third_party:claude-office-skills/skills",
+      "label": "Claude Office Skills",
+      "repo": "https://github.com/claude-office-skills/skills.git",
+      "branch": "main",
+      "include": [
+        "spotify-automation"
+      ],
+      "source_path_prefix": ".",
+      "destination": "third_party/claude-office-skills/skills"
     }
   ]
 }
