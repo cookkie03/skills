@@ -453,9 +453,9 @@
     },
     "github-skills:third_party:codeflash-ai/locality:locality": {
       "page_id": "4152e441-b0e5-814f-9b02-ec89cdab7ae3",
-      "fingerprint": "df6cd6984c38475826869272a6357d26536b9d8efb1af4e0621e385259cefcfe",
+      "fingerprint": "cfce9ad88c38fdd96130db362a0e619fd5ed049a9f5b122dedfc149964937939",
       "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "notion_last_edited_time": "2026-11-11T14:01:00.000Z",
+      "notion_last_edited_time": "2026-11-11T14:03:00.000Z",
       "repository_path": "third_party/codeflash-ai/locality/locality/SKILL.md"
     },
     "github-skills:third_party:morluto/rea:reverse-engineer-anything": {
@@ -471,7 +471,14 @@
       "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "notion_last_edited_time": "2026-11-11T14:01:00.000Z",
       "repository_path": "third_party/claude-office-skills/skills/spotify-automation/SKILL.md"
+    },
+    "github-skills:third_party:paki81/qwen-tts:qwen-tts": {
+      "page_id": "4152e441-b0e5-8126-8a6c-e1820ce2a570",
+      "fingerprint": "794576e865e9869799d5a13a28c5d670e93fd08646b6653acfa886d54847834e",
+      "files_hash": "349f666905d669b13a06f33e80bd0aa18dd5eb18c3181be064c52877df119389",
+      "notion_last_edited_time": "2026-11-11T14:03:00.000Z",
+      "repository_path": "third_party/paki81/qwen-tts/qwen-tts/SKILL.md"
     }
   },
-  "last_sync_utc": "2026-11-11T14:02:24Z"
+  "last_sync_utc": "2026-11-11T14:03:15Z"
 }
