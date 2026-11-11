@@ -10,6 +10,14 @@ This file documents the editable selection in `sources.json`. GitHub is the sour
 - `destination` is the dedicated local mirror path below `third_party/`. It is generated and replaced during each refresh.
 - Keep all selected skills from the same upstream repository in one source entry and one destination.
 
+## Personal skills selected automatically
+
+Personal skill paths are top-level folders in the repository root. The folder is included when it contains `SKILL.md` or `skill.md`:
+
+`agy/`, `aside/`, `caldav/`, `canvas-sync-to-obsidian/`, `cdx/`, `daily-notes/`, `glm-ocr/`, `hms/`, `lecture-scratchpad/`, `light-rag/`, `notion-to-obsidian/`, `obsidian-bases-superpowers/`, `obsidian-rendering-traps/`, `provider-privacy-analysis/`, `spotipy/`, `unified-study-note/`, `wiki-artifact/`, `wiki-ingest/`, `wiki-init/`, `wiki-lint/`, `wiki-preprocess/`, `wiki-query/`, `wiki-save/`, `workspace-setup/`.
+
+Add a new folder at the repository root to add a personal skill; delete its folder to remove it. Personal folders do not need an entry in `sources.json`.
+
 ## Current upstream selections
 
 | Upstream repository | `include` paths (upstream-relative) | Selected skill(s) | Local mirror |
