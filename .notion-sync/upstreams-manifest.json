@@ -21,7 +21,7 @@
     },
     {
       "id": "third_party:kepano/obsidian-skills",
-      "repo": "https://github.com/kepano/obsidian-skills.git",
+      "repo": "https://github.com/obsidianmd/obsidian-skills.git",
       "branch": "main",
       "destination": "third_party/kepano/obsidian-skills"
     },
