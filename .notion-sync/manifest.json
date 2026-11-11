@@ -143,6 +143,13 @@
       "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
       "repository_path": "wiki-lint/SKILL.md"
     },
+    "github-skills:local:wiki-preprocess": {
+      "page_id": "4152e441-b0e5-81db-a64f-d7e3a8907479",
+      "fingerprint": "3bdfc3b146bb9ae2d8b33f4a278b7497052755144ad7643cebf9c0971d73c401",
+      "files_hash": "b15cdf1d0cfdc10438a48f30078cd8760e72972899394be566a68b575b8a948c",
+      "notion_last_edited_time": "2026-11-11T14:00:00.000Z",
+      "repository_path": "wiki-preprocess/skill.md"
+    },
     "github-skills:local:wiki-query": {
       "page_id": "4152e441-b0e5-81f4-9ca5-d624ed335a96",
       "fingerprint": "fee4a2cd46247e62f18373d58416fe3ec101379c060c07ea911934198ffe4226",
@@ -352,7 +359,119 @@
       "files_hash": "8d7545c135b17ef19d3873369c0a5b140200ab57403947a616d6dc5f1bcbb49f",
       "notion_last_edited_time": "2026-11-11T13:28:00.000Z",
       "repository_path": "third_party/mattpocock/skills/productivity/writing-for-agents/SKILL.md"
+    },
+    "github-skills:third_party:obra/superpowers:brainstorming": {
+      "page_id": "4152e441-b0e5-81ee-994a-e985a6adccea",
+      "fingerprint": "db34859b11e14a7ce56194cad60ff45c5a5fd207c72a8be2b4e92b62251a8616",
+      "files_hash": "312f4a757112de2f21ab71e0ffa6d0477e76f2dd426a211781f40e5e6031fa92",
+      "notion_last_edited_time": "2026-11-11T14:00:00.000Z",
+      "repository_path": "third_party/obra/superpowers/brainstorming/SKILL.md"
+    },
+    "github-skills:third_party:anthropics/skills:frontend-design": {
+      "page_id": "4152e441-b0e5-818e-ae11-e398d7d2769b",
+      "fingerprint": "61eb8f8d681ae2c976ece499af9541b26387e7cad68effaa1d270e685c4ac730",
+      "files_hash": "773d12323a2c797c933e5030b77fcb1a3095f3855c838f57e0c9665b449db94f",
+      "notion_last_edited_time": "2026-11-11T14:00:00.000Z",
+      "repository_path": "third_party/anthropics/skills/frontend-design/SKILL.md"
+    },
+    "github-skills:third_party:kepano/obsidian-skills:defuddle": {
+      "page_id": "4152e441-b0e5-8164-aad3-eac2b7295597",
+      "fingerprint": "3ce263f3710786a97742d1b2ad6206e7c4e1eb17a4b7fad908340aeec7bf70f6",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T14:00:00.000Z",
+      "repository_path": "third_party/kepano/obsidian-skills/defuddle/SKILL.md"
+    },
+    "github-skills:third_party:kepano/obsidian-skills:json-canvas": {
+      "page_id": "4152e441-b0e5-81ad-8bdc-db5e5c6cc1ba",
+      "fingerprint": "a3a1b6a975587e9edf26c4b18631376a584212ca7785f98b732d5078bb389d3d",
+      "files_hash": "29e7772386f2f6e1d6d26e71008561016b43b68e5579e1f2afde3e2445fd88ff",
+      "notion_last_edited_time": "2026-11-11T14:00:00.000Z",
+      "repository_path": "third_party/kepano/obsidian-skills/json-canvas/SKILL.md"
+    },
+    "github-skills:third_party:kepano/obsidian-skills:obsidian-bases": {
+      "page_id": "4152e441-b0e5-8128-9c1a-ecb874fda31f",
+      "fingerprint": "1ab225865f49b11047196c841a21e986eee40e01cbbeb94cc444d9c6493585ec",
+      "files_hash": "5624267617890285db36b3d6ca7fb00bf0d8cbee7f013a21cb06cb93c3dbe86c",
+      "notion_last_edited_time": "2026-11-11T14:00:00.000Z",
+      "repository_path": "third_party/kepano/obsidian-skills/obsidian-bases/SKILL.md"
+    },
+    "github-skills:third_party:kepano/obsidian-skills:obsidian-markdown": {
+      "page_id": "4152e441-b0e5-8167-8af2-fd801f908af4",
+      "fingerprint": "4ec8318dca109d12a89ad3941fcfad7ff9dd02db724b4b71960c09e07e0a52c6",
+      "files_hash": "0f60a927416fe68ef956dee32fbd3edafd6bd7fde966afbd9525337123b7d779",
+      "notion_last_edited_time": "2026-11-11T14:00:00.000Z",
+      "repository_path": "third_party/kepano/obsidian-skills/obsidian-markdown/SKILL.md"
+    },
+    "github-skills:third_party:harmeet10000/AgentNexus-LangChain-FastAPI:crawl4ai-skill": {
+      "page_id": "4152e441-b0e5-81c5-b7ee-f252df752e6d",
+      "fingerprint": "47f0f963b89f8ac9c05a0d30dd44b2a6efb260f0a490f42f34b1687f46233a1b",
+      "files_hash": "6351bf78bbe83544f4aedecc8ee96157fa3d92188accca38b0d3ddacea8f6b8f",
+      "notion_last_edited_time": "2026-11-11T14:00:00.000Z",
+      "repository_path": "third_party/harmeet10000/AgentNexus-LangChain-FastAPI/crawl4ai-skill/SKILL.md"
+    },
+    "github-skills:third_party:vercel-labs/skills:find-skills": {
+      "page_id": "4152e441-b0e5-815e-a6fd-ccf8a0aff86d",
+      "fingerprint": "ff9c192ea7070a16fbc1d80f33dfb8eed6ec591e7c38bcc2fb256e78bad6304b",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T14:00:00.000Z",
+      "repository_path": "third_party/vercel-labs/skills/find-skills/SKILL.md"
+    },
+    "github-skills:third_party:sorty-organizer/Sorty:sorty": {
+      "page_id": "4152e441-b0e5-817c-b8a5-e700e01ed535",
+      "fingerprint": "709b0b9d089939533b2acc83043d9dc8deded6d613e054fa8ab14b3f651916e2",
+      "files_hash": "1dc9876864f6fc3885aebbbbbd8bfdde980f7ea33eb54faab1028cfeb8b4bc7d",
+      "notion_last_edited_time": "2026-11-11T14:01:00.000Z",
+      "repository_path": "third_party/sorty-organizer/Sorty/sorty/SKILL.md"
+    },
+    "github-skills:third_party:Rizzo-AI-Academy/rizzo-flow:rizzo-flow": {
+      "page_id": "4152e441-b0e5-8157-a9f5-cf852d1dc392",
+      "fingerprint": "addec1ad8bf58bed5d6e2c99551538cac12ddc4b3e1d781639fa75992419ea33",
+      "files_hash": "bbaba5f8e28cfc1a6969632c9b9b1e2088e95f0dd1b9c347d14d8115cb128751",
+      "notion_last_edited_time": "2026-11-11T14:01:00.000Z",
+      "repository_path": "third_party/Rizzo-AI-Academy/rizzo-flow/rizzo-flow/SKILL.md"
+    },
+    "github-skills:third_party:tailscale/tailscale-skill:tailscale": {
+      "page_id": "4152e441-b0e5-81db-9e97-fab5d159e67e",
+      "fingerprint": "7405cbce17f01e71c6db0948b9d4d4f35fb00d57200be509e175171403227a67",
+      "files_hash": "e71cb02c180482c0bd1a41800aec8a78554c76fb16da75dd7c3dbcd3a7ba2397",
+      "notion_last_edited_time": "2026-11-11T14:01:00.000Z",
+      "repository_path": "third_party/tailscale/tailscale-skill/tailscale/SKILL.md"
+    },
+    "github-skills:third_party:Nebutra/MinerU-Skill:mineru": {
+      "page_id": "4152e441-b0e5-8185-a31e-d21809d7702c",
+      "fingerprint": "d2c3160fb63ad059daddf83812eee778189554f4d7845aec98834a041a04b1c8",
+      "files_hash": "f31c680b101eac948f0d15033364f5c852aef466ac95c9f9e8aed57db42744b7",
+      "notion_last_edited_time": "2026-11-11T14:01:00.000Z",
+      "repository_path": "third_party/Nebutra/MinerU-Skill/mineru/SKILL.md"
+    },
+    "github-skills:third_party:Graphify-Labs/graphify:graphify": {
+      "page_id": "4152e441-b0e5-817e-9b4a-cb6d5333e37d",
+      "fingerprint": "f61290b12fae24e49f28351b79b7615230812cd0c03579af187bc5ea39d4ac44",
+      "files_hash": "b2f62e1aa08902d9b178e4e979484cfd187bef9d85b0fdf7252b5f7268fee4ed",
+      "notion_last_edited_time": "2026-11-11T14:01:00.000Z",
+      "repository_path": "third_party/Graphify-Labs/graphify/graphify/skill.md"
+    },
+    "github-skills:third_party:codeflash-ai/locality:locality": {
+      "page_id": "4152e441-b0e5-814f-9b02-ec89cdab7ae3",
+      "fingerprint": "df6cd6984c38475826869272a6357d26536b9d8efb1af4e0621e385259cefcfe",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T14:01:00.000Z",
+      "repository_path": "third_party/codeflash-ai/locality/locality/SKILL.md"
+    },
+    "github-skills:third_party:morluto/rea:reverse-engineer-anything": {
+      "page_id": "4152e441-b0e5-8120-ba7c-df193aa25e30",
+      "fingerprint": "b924abc55b70c6e150cfac51ac9465dcaccf8f943d644e7798d47949991081f6",
+      "files_hash": "450f27d110271543e64ba7d5dae08f57a5693ac03eaa03e6257118ea58e2d8dc",
+      "notion_last_edited_time": "2026-11-11T14:01:00.000Z",
+      "repository_path": "third_party/morluto/rea/reverse-engineer-anything/SKILL.md"
+    },
+    "github-skills:third_party:claude-office-skills/skills:spotify-automation": {
+      "page_id": "4152e441-b0e5-8117-8972-c07305531bcf",
+      "fingerprint": "de0c841abac1d2dce8011aed8fc3faece7e4134f4d1e36bcfb9e96ccbbb28235",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T14:01:00.000Z",
+      "repository_path": "third_party/claude-office-skills/skills/spotify-automation/SKILL.md"
     }
   },
-  "last_sync_utc": "2026-11-11T13:28:36Z"
+  "last_sync_utc": "2026-11-11T14:01:16Z"
 }
