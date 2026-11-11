@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": "third_party:mattpocock/skills",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "branch": "main",
+      "destination": "third_party/mattpocock/skills"
+    },
+    {
+      "id": "third_party:obra/superpowers",
+      "repo": "https://github.com/obra/superpowers.git",
+      "branch": "main",
+      "destination": "third_party/obra/superpowers"
+    },
+    {
+      "id": "third_party:anthropics/skills",
+      "repo": "https://github.com/anthropics/skills.git",
+      "branch": "main",
+      "destination": "third_party/anthropics/skills"
+    },
+    {
+      "id": "third_party:kepano/obsidian-skills",
+      "repo": "https://github.com/kepano/obsidian-skills.git",
+      "branch": "main",
+      "destination": "third_party/kepano/obsidian-skills"
+    },
+    {
+      "id": "third_party:harmeet10000/AgentNexus-LangChain-FastAPI",
+      "repo": "https://github.com/Harmeet10000/skills.git",
+      "branch": "main",
+      "destination": "third_party/harmeet10000/AgentNexus-LangChain-FastAPI"
+    },
+    {
+      "id": "third_party:vercel-labs/skills",
+      "repo": "https://github.com/vercel-labs/skills.git",
+      "branch": "main",
+      "destination": "third_party/vercel-labs/skills"
+    },
+    {
+      "id": "third_party:sorty-organizer/Sorty",
+      "repo": "https://github.com/sorty-organizer/Sorty.git",
+      "branch": "main",
+      "destination": "third_party/sorty-organizer/Sorty"
+    },
+    {
+      "id": "third_party:Rizzo-AI-Academy/rizzo-flow",
+      "repo": "https://github.com/Rizzo-AI-Academy/rizzo-flow.git",
+      "branch": "main",
+      "destination": "third_party/Rizzo-AI-Academy/rizzo-flow"
+    },
+    {
+      "id": "third_party:tailscale/tailscale-skill",
+      "repo": "https://github.com/tailscale/tailscale-skill.git",
+      "branch": "main",
+      "destination": "third_party/tailscale/tailscale-skill"
+    },
+    {
+      "id": "third_party:Nebutra/MinerU-Skill",
+      "repo": "https://github.com/Nebutra/MinerU-Skill.git",
+      "branch": "main",
+      "destination": "third_party/Nebutra/MinerU-Skill"
+    },
+    {
+      "id": "third_party:Graphify-Labs/graphify",
+      "repo": "https://github.com/Graphify-Labs/graphify.git",
+      "branch": "v8",
+      "destination": "third_party/Graphify-Labs/graphify"
+    },
+    {
+      "id": "third_party:codeflash-ai/locality",
+      "repo": "https://github.com/codeflash-ai/locality.git",
+      "branch": "main",
+      "destination": "third_party/codeflash-ai/locality"
+    },
+    {
+      "id": "third_party:morluto/rea",
+      "repo": "https://github.com/morluto/rea.git",
+      "branch": "main",
+      "destination": "third_party/morluto/rea"
+    },
+    {
+      "id": "third_party:claude-office-skills/skills",
+      "repo": "https://github.com/claude-office-skills/skills.git",
+      "branch": "main",
+      "destination": "third_party/claude-office-skills/skills"
+    },
+    {
+      "id": "third_party:paki81/qwen-tts",
+      "repo": "https://github.com/paki81/qwen-tts.git",
+      "branch": "main",
+      "destination": "third_party/paki81/qwen-tts"
+    }
+  ]
+}
