@@ -47,9 +47,18 @@ jobs:
         run: python -m pip install -r .notion-sync/requirements.txt
 
       - name: Refresh third-party skill snapshots
+        id: upstream_refresh
+        continue-on-error: true
         run: python .notion-sync/sync_upstreams.py
 
+      - name: Restore last-known third-party snapshots after refresh failure
+        if: steps.upstream_refresh.outcome == 'failure'
+        run: |
+          git reset --hard HEAD
+          git clean -fd -- third_party/
+
       - name: Commit upstream snapshot changes
+        if: steps.upstream_refresh.outcome == 'success'
         run: |
           git add -A -- third_party/ .notion-sync/upstreams-manifest.json
           if ! git diff --cached --quiet; then
@@ -67,6 +76,10 @@ jobs:
               sleep 2
             done
           fi
+
+      - name: Warn when upstream refresh is unavailable
+        if: steps.upstream_refresh.outcome == 'failure'
+        run: echo "::warning::Upstream refresh failed; restored committed third_party snapshots and continuing with Notion sync."
 
       - name: Mirror repository skills into Notion
         run: python .notion-sync/sync_notion.py

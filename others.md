@@ -1,4 +1,4 @@
-npx skills add https://github.com/kepano/obsidian-skills
+npx skills add https://github.com/obsidianmd/obsidian-skills
 
 npx skills add https://github.com/mattpocock/skills
 
