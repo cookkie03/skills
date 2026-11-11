@@ -390,9 +390,9 @@
     },
     "github-skills:third_party:kepano/obsidian-skills:obsidian-bases": {
       "page_id": "4152e441-b0e5-8128-9c1a-ecb874fda31f",
-      "fingerprint": "cba455c819089aeb235cdb5362c1218ac7f86320e124c97ee902179ed7f4c4ae",
+      "fingerprint": "194172152aba1ac56d1a8cdb08972e89222e28594cf06a713958fac11b0c4ee9",
       "files_hash": "5624267617890285db36b3d6ca7fb00bf0d8cbee7f013a21cb06cb93c3dbe86c",
-      "notion_last_edited_time": "2026-11-11T15:54:00.000Z",
+      "notion_last_edited_time": "2026-11-11T17:33:00.000Z",
       "repository_path": "third_party/kepano/obsidian-skills/obsidian-bases/SKILL.md"
     },
     "github-skills:third_party:kepano/obsidian-skills:obsidian-markdown": {
@@ -494,5 +494,5 @@
       "repository_path": "third_party/github/awesome-copilot/readme-blueprint-generator/SKILL.md"
     }
   },
-  "last_sync_utc": "2026-11-11T15:55:06Z"
+  "last_sync_utc": "2026-11-11T17:33:22Z"
 }
