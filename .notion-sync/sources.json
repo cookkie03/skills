@@ -183,9 +183,9 @@
       "repo": "https://github.com/pbakaus/impeccable.git",
       "branch": "main",
       "include": [
-        "skills"
+        ".agents/skills/impeccable"
       ],
-      "source_path_prefix": "skills",
+      "source_path_prefix": ".agents/skills",
       "destination": "third_party/pbakaus/impeccable"
     },
     {
