@@ -176,6 +176,28 @@
       "source_path_prefix": ".",
       "root_skill_name": "qwen-tts",
       "destination": "third_party/paki81/qwen-tts"
+    },
+    {
+      "id": "third_party:pbakaus/impeccable",
+      "label": "Impeccable",
+      "repo": "https://github.com/pbakaus/impeccable.git",
+      "branch": "main",
+      "include": [
+        "skills"
+      ],
+      "source_path_prefix": "skills",
+      "destination": "third_party/pbakaus/impeccable"
+    },
+    {
+      "id": "third_party:github/awesome-copilot",
+      "label": "GitHub Awesome Copilot",
+      "repo": "https://github.com/github/awesome-copilot.git",
+      "branch": "main",
+      "include": [
+        "skills/readme-blueprint-generator"
+      ],
+      "source_path_prefix": "skills",
+      "destination": "third_party/github/awesome-copilot"
     }
   ]
 }
