@@ -141,7 +141,7 @@
       "extractor_type": "locality_rust",
       "extractor_file": "apps/desktop/src-tauri/src/agent_guidance.rs",
       "skill_dir": "locality",
-      "mount_path": "/Users/luca/Library/CloudStorage/Locality/notion"
+      "mount_path": "~/Library/CloudStorage/Locality/notion"
     },
     {
       "id": "third_party:morluto/rea",
@@ -164,6 +164,18 @@
       ],
       "source_path_prefix": ".",
       "destination": "third_party/claude-office-skills/skills"
+    },
+    {
+      "id": "third_party:paki81/qwen-tts",
+      "label": "paki81 Qwen TTS",
+      "repo": "https://github.com/paki81/qwen-tts.git",
+      "branch": "main",
+      "include": [
+        "."
+      ],
+      "source_path_prefix": ".",
+      "root_skill_name": "qwen-tts",
+      "destination": "third_party/paki81/qwen-tts"
     }
   ]
 }
