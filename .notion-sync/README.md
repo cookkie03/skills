@@ -14,7 +14,14 @@ GitHub is the source of truth. The scheduled workflow refreshes configured third
 
 ## Configuration
 
-Add upstreams to `sources.json`. Each upstream uses a dedicated destination directory. That destination is a read-only mirror of the upstream and is replaced on every upstream refresh.
+Edit `sources.json` to control the selected paths. The current path inventory and add/remove instructions are in [SOURCES.md](./SOURCES.md).
+
+- `include` selects one skill directory or a category directory containing skill directories.
+- `exclude_skill_paths` omits individual skills, using paths relative to the source's `destination`.
+- Removing a source object removes its managed `third_party/` destination on the next successful refresh and moves its Notion pages to Trash.
+- Personal skills are discovered automatically in top-level folders containing `SKILL.md` or `skill.md`.
+
+Each upstream uses a dedicated destination directory. That destination is a generated mirror and is replaced on every upstream refresh. Do not edit it manually.
 
 ## Required GitHub secret
 
