@@ -55,17 +55,17 @@ jobs:
           if ! git diff --cached --quiet; then
             git commit -m "chore: refresh third-party Agent Skills"
             for attempt in 1 2 3; do
-  git fetch origin main:refs/remotes/origin/main
-  git rebase origin/main
-  if git push origin HEAD:main; then
-    break
-  fi
-  if [ "$attempt" -eq 3 ]; then
-    echo "Push to main failed after 3 attempts."
-    exit 1
-  fi
-  sleep 2
-done
+              git fetch origin main:refs/remotes/origin/main
+              git rebase origin/main
+              if git push origin HEAD:main; then
+                break
+              fi
+              if [ "$attempt" -eq 3 ]; then
+                echo "Push to main failed after 3 attempts."
+                exit 1
+              fi
+              sleep 2
+            done
           fi
 
       - name: Mirror repository skills into Notion
@@ -77,15 +77,15 @@ done
           if ! git diff --cached --quiet; then
             git commit -m "chore: update Notion skills sync manifest"
             for attempt in 1 2 3; do
-  git fetch origin main:refs/remotes/origin/main
-  git rebase origin/main
-  if git push origin HEAD:main; then
-    break
-  fi
-  if [ "$attempt" -eq 3 ]; then
-    echo "Push to main failed after 3 attempts."
-    exit 1
-  fi
-  sleep 2
-done
+              git fetch origin main:refs/remotes/origin/main
+              git rebase origin/main
+              if git push origin HEAD:main; then
+                break
+              fi
+              if [ "$attempt" -eq 3 ]; then
+                echo "Push to main failed after 3 attempts."
+                exit 1
+              fi
+              sleep 2
+            done
           fi
