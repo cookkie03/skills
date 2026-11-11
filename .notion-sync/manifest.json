@@ -3,96 +3,166 @@
   "database_id": "4152e441-b0e5-803b-9e37-ec1ee98cd465",
   "data_source_id": "4152e441-b0e5-80c8-97f3-000b5cea319d",
   "skills": {
-    "github-skills:local:agy": {
-      "page_id": "4152e441-b0e5-8178-9531-c96b8e28e93a",
-      "fingerprint": "6c9df39cc330a7eb52d529e18ec096e7978b61d61189fe4347e3e5abdb1dabf8",
-      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
-      "repository_path": "agy/SKILL.md"
-    },
-    "github-skills:local:aside": {
-      "page_id": "4152e441-b0e5-811d-bb5d-eb68f91890a2",
-      "fingerprint": "ce48d930955576f720b14fcaec0af1a3d6c820fdd5169aa6516d614cbe9ff511",
-      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
-      "repository_path": "aside/SKILL.md"
-    },
-    "github-skills:local:caldav": {
-      "page_id": "4152e441-b0e5-817b-b545-ee7e28fb9ad3",
-      "fingerprint": "dd803fa8a62aa5693a5145a71497fb5b67efe5f62ca5cf1762a47a0241d05374",
-      "files_hash": "2d9df009195a8a8afecc7cafb3e0680b8769da3b5261c80b612b5660efd81c3b",
-      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
-      "repository_path": "caldav/SKILL.md"
-    },
     "github-skills:local:canvas-sync-to-obsidian": {
       "page_id": "4152e441-b0e5-8133-a36f-fe90515dc5df",
-      "fingerprint": "e4398be41c7495ad61390a9cbf3558d9bdcc7d9be693c69b5bb5d18b2e3b1988",
+      "fingerprint": "ffa0b74c2518a8a0c9a06f3e194c7e0ce21bf2eb04ad6f2b74c5c6651b40b5b0",
       "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
-      "repository_path": "canvas-sync-to-obsidian/SKILL.md"
-    },
-    "github-skills:local:cdx": {
-      "page_id": "4152e441-b0e5-8146-99d1-dfa584a6e85b",
-      "fingerprint": "10e88b7286bf58a0c81068b9c4e36b45db078296b9abfe5448df426bfb7c03cb",
-      "files_hash": "40a8d919f0f1f22cfbf4b9460e83c56719e8c81b5bf4f2aaa4e4aac78f6a5fd6",
-      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
-      "repository_path": "cdx/SKILL.md"
-    },
-    "github-skills:local:daily-notes": {
-      "page_id": "4152e441-b0e5-8109-821d-c61656398a94",
-      "fingerprint": "1df646b9f6b4126dcf2fa0bbb251836662fd903645bf9a139ffc1e9321aaec5a",
-      "files_hash": "cbb89aa588a362d2c6182f54c995e5608f7db2dbe9fbb91a56908db661124185",
-      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
-      "repository_path": "daily-notes/SKILL.md"
-    },
-    "github-skills:local:glm-ocr": {
-      "page_id": "4152e441-b0e5-812d-896c-eb0c8776719c",
-      "fingerprint": "8bbf3b37b8fbcaff1a2415ac742596805a0ccfeae163f7e6e456009ee515b734",
-      "files_hash": "fe4277fb69b1878eb4d8a03e23b03ab7b645e4aa7e9af3618ca3dabd9470d3c0",
-      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
-      "repository_path": "glm-ocr/SKILL.md"
-    },
-    "github-skills:local:hms": {
-      "page_id": "4152e441-b0e5-815b-a860-cbbbd988e198",
-      "fingerprint": "b54743afda0c545b62ce3b8a848a9110f9164f4c5e936653d0125877ab65b0eb",
-      "files_hash": "88b8724e675aaedb23782cbbea7596eb0600bfe6d3d4e9a9a22d44548e029916",
-      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
-      "repository_path": "hms/SKILL.md"
+      "notion_last_edited_time": "2026-11-11T14:33:00.000Z",
+      "repository_path": "Education Workflow/canvas-sync-to-obsidian/SKILL.md"
     },
     "github-skills:local:lecture-scratchpad": {
       "page_id": "4152e441-b0e5-8136-99c6-fc36c11163af",
-      "fingerprint": "9f6d779bbe3fecc1817dcf96b4c31004ed9e84750932b1a17c8c2d2515d287ac",
+      "fingerprint": "a8555ade47d678dfcf8addc12d1571a8f01f3bebd9a925b76d9e9c1c12c513f1",
       "files_hash": "9c587cd692f0d168ce6ab07b47f91bde43da0fcba68fa32195a64c161af3a2b1",
-      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
-      "repository_path": "lecture-scratchpad/SKILL.md"
-    },
-    "github-skills:local:light-rag": {
-      "page_id": "4152e441-b0e5-8161-81fb-da3ea874c267",
-      "fingerprint": "9dbcd5606206fc8e52d25e3c2b1a48817ee0a1d1e5814101f408bdc6a43ca300",
-      "files_hash": "7dd1e76c5c87c56e87c24d96b921cf059da3eefb20df4824656392cb0423efbd",
-      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
-      "repository_path": "light-rag/SKILL.md"
+      "notion_last_edited_time": "2026-11-11T14:33:00.000Z",
+      "repository_path": "Education Workflow/lecture-scratchpad/SKILL.md"
     },
     "github-skills:local:notion-to-obsidian": {
       "page_id": "4152e441-b0e5-815c-a2dc-de631dd43d01",
-      "fingerprint": "3877bdac44e5304ebe33ba76473a71fd5497fda9c8a843a2c6f31bc6d93d6691",
+      "fingerprint": "025b82485bf504c843dcf8ad4d803ae2f924ae86f3f82ca2527b6de61d11a50b",
       "files_hash": "e9f750ba419b1f53292e7b5b6fe1eac57bc2c8ccfe762529470954b4049b611f",
-      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
-      "repository_path": "notion-to-obsidian/SKILL.md"
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Education Workflow/notion-to-obsidian/SKILL.md"
+    },
+    "github-skills:local:unified-study-note": {
+      "page_id": "4152e441-b0e5-813c-a4b5-cf606f447f15",
+      "fingerprint": "4fb5773b8651d2f4e1f855e0db7418bc2939e8fdb72aca571df54069c80d8e30",
+      "files_hash": "8818d1036b5df700c4d56f1b94b77c62aab8eb8ce3569616eee7b978a3e7d738",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Education Workflow/unified-study-note/SKILL.md"
+    },
+    "github-skills:local:agy": {
+      "page_id": "4152e441-b0e5-8178-9531-c96b8e28e93a",
+      "fingerprint": "efa329033de96039e9b02d33463b927cd713819a425b6205c9b8b2068a1fa02c",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Packages/agy/SKILL.md"
+    },
+    "github-skills:local:aside-browser": {
+      "page_id": "4152e441-b0e5-819e-8142-e4add3d8bd2f",
+      "fingerprint": "8a31050968399381500b607c022fbe3033cd1561bb7893e9f1a8bcf9e9cd5ce6",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Packages/aside-browser/SKILL.md"
+    },
+    "github-skills:local:caldav": {
+      "page_id": "4152e441-b0e5-817b-b545-ee7e28fb9ad3",
+      "fingerprint": "0421bbb99cf59f3fc13f342937df0271c034d4e5c74a857efa2ec6d86cac5800",
+      "files_hash": "2d9df009195a8a8afecc7cafb3e0680b8769da3b5261c80b612b5660efd81c3b",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Packages/caldav/SKILL.md"
+    },
+    "github-skills:local:cdx": {
+      "page_id": "4152e441-b0e5-8146-99d1-dfa584a6e85b",
+      "fingerprint": "2e1069591705e0b8808493a552afbfb9ad618a6c0da13af27cf9d6656c24e0b8",
+      "files_hash": "40a8d919f0f1f22cfbf4b9460e83c56719e8c81b5bf4f2aaa4e4aac78f6a5fd6",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Packages/cdx/SKILL.md"
+    },
+    "github-skills:local:glm-ocr": {
+      "page_id": "4152e441-b0e5-812d-896c-eb0c8776719c",
+      "fingerprint": "307a27464e577aeb5188f510c3b0fbe4f761bfca8021e0cfd8050dc9d644a4c5",
+      "files_hash": "fe4277fb69b1878eb4d8a03e23b03ab7b645e4aa7e9af3618ca3dabd9470d3c0",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Packages/glm-ocr/SKILL.md"
+    },
+    "github-skills:local:hms": {
+      "page_id": "4152e441-b0e5-815b-a860-cbbbd988e198",
+      "fingerprint": "ebffeb46dcd451bd6d6cac0cfb45ed259b0e33085a26ac8f531b882ae37acb3f",
+      "files_hash": "88b8724e675aaedb23782cbbea7596eb0600bfe6d3d4e9a9a22d44548e029916",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Packages/hms/SKILL.md"
+    },
+    "github-skills:local:light-rag": {
+      "page_id": "4152e441-b0e5-8161-81fb-da3ea874c267",
+      "fingerprint": "09c680517d54e078b22e20bca76d228d23eae68b0cf83ab34f3803c055d5a991",
+      "files_hash": "7dd1e76c5c87c56e87c24d96b921cf059da3eefb20df4824656392cb0423efbd",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Packages/light-rag/SKILL.md"
     },
     "github-skills:local:obsidian-bases-superpowers": {
       "page_id": "4152e441-b0e5-81f3-85b2-f6c6d9c7ddea",
-      "fingerprint": "32fd40fe88fce28447257677ae0f68dba628e816d5a8bf40f644735f150f5451",
+      "fingerprint": "79522b9e645569755294691b58a6f5b9bf8211befdbd1e282bf1f57da2742912",
       "files_hash": "f78fd59a69afffa9b2fffba230dce9b1dac74d869e80fb302cf4434bed754152",
-      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
-      "repository_path": "obsidian-bases-superpowers/SKILL.md"
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Packages/obsidian-bases-superpowers/SKILL.md"
     },
     "github-skills:local:obsidian-rendering-traps": {
       "page_id": "4152e441-b0e5-8139-ba98-db0c60a7934f",
-      "fingerprint": "96fa8bc511288e36b33c4b02275540f5bbc030dad8f7e8f6fb596a6d19fb2008",
+      "fingerprint": "0850d8f12c78cd116a40f460d621910bd34c29b7f9a3a5a808cccff6ca7bb3a1",
       "files_hash": "a0bcbd19b714ef6eeb34c0b9fc06b1d168b454884bb34cd6ac8c4f2181416c3f",
-      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
-      "repository_path": "obsidian-rendering-traps/SKILL.md"
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Packages/obsidian-rendering-traps/SKILL.md"
+    },
+    "github-skills:local:spotipy": {
+      "page_id": "4152e441-b0e5-81fa-8860-e9c3d8118e20",
+      "fingerprint": "20bf709784948980e6c5f15e0fa8807c5e29cecf48defaa72ffa82040b73e524",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Packages/spotipy/SKILL.md"
+    },
+    "github-skills:local:daily-notes": {
+      "page_id": "4152e441-b0e5-8109-821d-c61656398a94",
+      "fingerprint": "d97aea812c26f5620d28d9d4b86248a19f879146100dc5b6b779c9d6b2d2ff94",
+      "files_hash": "cbb89aa588a362d2c6182f54c995e5608f7db2dbe9fbb91a56908db661124185",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Wiki/daily-notes/SKILL.md"
+    },
+    "github-skills:local:wiki-artifact": {
+      "page_id": "4152e441-b0e5-81b0-85b3-c0a144a8c60c",
+      "fingerprint": "1b36dfdb8ea82f34672c581a9a6d1f92552aad3b65ad8af1e4bfefb50bac339b",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Wiki/wiki-artifact/SKILL.md"
+    },
+    "github-skills:local:wiki-ingest": {
+      "page_id": "4152e441-b0e5-81b2-a392-e1b6ad3d50d7",
+      "fingerprint": "0c61a83bce2f99901e24158e9b17554603b97d914ca783b24d06c06c7d9eda14",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Wiki/wiki-ingest/SKILL.md"
+    },
+    "github-skills:local:wiki-init": {
+      "page_id": "4152e441-b0e5-813a-ad6b-c9dbe2cc56f1",
+      "fingerprint": "40b57eb7a46d41bce18842d26db9907011727730d196bc987b62df821b25b8a0",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Wiki/wiki-init/SKILL.md"
+    },
+    "github-skills:local:wiki-lint": {
+      "page_id": "4152e441-b0e5-81c6-bfef-c1e1c2d158e9",
+      "fingerprint": "20c292dc8231f9f5e300d4804a21b78d678416a50f6d11d1ff0d7ca7abd3c40e",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Wiki/wiki-lint/SKILL.md"
+    },
+    "github-skills:local:wiki-preprocess": {
+      "page_id": "4152e441-b0e5-81db-a64f-d7e3a8907479",
+      "fingerprint": "4cb62178820f6a1358067d93045be69b0e829e531a456867d7103c64607b8529",
+      "files_hash": "b15cdf1d0cfdc10438a48f30078cd8760e72972899394be566a68b575b8a948c",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Wiki/wiki-preprocess/skill.md"
+    },
+    "github-skills:local:wiki-query": {
+      "page_id": "4152e441-b0e5-81f4-9ca5-d624ed335a96",
+      "fingerprint": "2484928f62afac18c6cd83eceddd0db88857f9dfefeca7017c2da187ff817038",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Wiki/wiki-query/SKILL.md"
+    },
+    "github-skills:local:wiki-save": {
+      "page_id": "4152e441-b0e5-817f-abd8-f6718e474276",
+      "fingerprint": "18c9eab0b108d7756e0c4ab31bc644a5706871e28a87d6777181f09d1be74ff2",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Wiki/wiki-save/SKILL.md"
+    },
+    "github-skills:local:workspace-setup": {
+      "page_id": "4152e441-b0e5-81f0-a195-c5b330760f7d",
+      "fingerprint": "6ffbf6e8473d933d61279af9918cf199454a4e6328057e1611b25a074ca676b8",
+      "files_hash": "8636dfde45cb1c631c1d3485507c6a5794fcaa6cdb345ea2d723bc5b27221fbf",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
+      "repository_path": "Wiki/workspace-setup/SKILL.md"
     },
     "github-skills:local:provider-privacy-analysis": {
       "page_id": "4152e441-b0e5-8165-b3af-da3b4f7b30b3",
@@ -100,76 +170,6 @@
       "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
       "repository_path": "provider-privacy-analysis/SKILL.md"
-    },
-    "github-skills:local:spotipy": {
-      "page_id": "4152e441-b0e5-81fa-8860-e9c3d8118e20",
-      "fingerprint": "23a97d056a3a52238b2b68289e51fadd142b4163afe39d999a9115595122b221",
-      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
-      "repository_path": "spotipy/SKILL.md"
-    },
-    "github-skills:local:unified-study-note": {
-      "page_id": "4152e441-b0e5-813c-a4b5-cf606f447f15",
-      "fingerprint": "5f835ac4668f03cba2950d559b8f84a5f4e43ea539cdaea28d774b7794ea5eaf",
-      "files_hash": "8818d1036b5df700c4d56f1b94b77c62aab8eb8ce3569616eee7b978a3e7d738",
-      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
-      "repository_path": "unified-study-note/SKILL.md"
-    },
-    "github-skills:local:wiki-artifact": {
-      "page_id": "4152e441-b0e5-81b0-85b3-c0a144a8c60c",
-      "fingerprint": "debb9f6d9c40f8c99f8bc66d5453a84854a13cfc41027f9298c3438a1f8a705a",
-      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
-      "repository_path": "wiki-artifact/SKILL.md"
-    },
-    "github-skills:local:wiki-ingest": {
-      "page_id": "4152e441-b0e5-81b2-a392-e1b6ad3d50d7",
-      "fingerprint": "9aa78e45e8ebb868f74578b65de59af09c78ec36b3663be6f679f3bbeded1821",
-      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
-      "repository_path": "wiki-ingest/SKILL.md"
-    },
-    "github-skills:local:wiki-init": {
-      "page_id": "4152e441-b0e5-813a-ad6b-c9dbe2cc56f1",
-      "fingerprint": "b69910a922774380fb7d3a2eea7ecf9253267ceb800e7579576656bcabb39dad",
-      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
-      "repository_path": "wiki-init/SKILL.md"
-    },
-    "github-skills:local:wiki-lint": {
-      "page_id": "4152e441-b0e5-81c6-bfef-c1e1c2d158e9",
-      "fingerprint": "b2d6a4f4eb463ae41316a2b89cd11cc2886f625529dc90c64a75166b446ff7d1",
-      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
-      "repository_path": "wiki-lint/SKILL.md"
-    },
-    "github-skills:local:wiki-preprocess": {
-      "page_id": "4152e441-b0e5-81db-a64f-d7e3a8907479",
-      "fingerprint": "3bdfc3b146bb9ae2d8b33f4a278b7497052755144ad7643cebf9c0971d73c401",
-      "files_hash": "b15cdf1d0cfdc10438a48f30078cd8760e72972899394be566a68b575b8a948c",
-      "notion_last_edited_time": "2026-11-11T14:00:00.000Z",
-      "repository_path": "wiki-preprocess/skill.md"
-    },
-    "github-skills:local:wiki-query": {
-      "page_id": "4152e441-b0e5-81f4-9ca5-d624ed335a96",
-      "fingerprint": "fee4a2cd46247e62f18373d58416fe3ec101379c060c07ea911934198ffe4226",
-      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
-      "repository_path": "wiki-query/SKILL.md"
-    },
-    "github-skills:local:wiki-save": {
-      "page_id": "4152e441-b0e5-817f-abd8-f6718e474276",
-      "fingerprint": "d397249c928895c6cb12333073f5e48ae0d071bac571275bbb5cbb14f9e7e34b",
-      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
-      "repository_path": "wiki-save/SKILL.md"
-    },
-    "github-skills:local:workspace-setup": {
-      "page_id": "4152e441-b0e5-81f0-a195-c5b330760f7d",
-      "fingerprint": "5a6698a98193b364cedffaad5e540215feaa02f7ae8014dbb8847c2cccd5a613",
-      "files_hash": "8636dfde45cb1c631c1d3485507c6a5794fcaa6cdb345ea2d723bc5b27221fbf",
-      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
-      "repository_path": "workspace-setup/SKILL.md"
     },
     "github-skills:third_party:mattpocock/skills:ask-matt": {
       "page_id": "4152e441-b0e5-8139-a6cb-c46ab3ebabba",
@@ -376,30 +376,30 @@
     },
     "github-skills:third_party:kepano/obsidian-skills:defuddle": {
       "page_id": "4152e441-b0e5-8164-aad3-eac2b7295597",
-      "fingerprint": "3ce263f3710786a97742d1b2ad6206e7c4e1eb17a4b7fad908340aeec7bf70f6",
+      "fingerprint": "4b2793ebe741a952eb7cf8188ab59718cc144f0a971da3289e665cd083c77ab6",
       "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "notion_last_edited_time": "2026-11-11T14:00:00.000Z",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
       "repository_path": "third_party/kepano/obsidian-skills/defuddle/SKILL.md"
     },
     "github-skills:third_party:kepano/obsidian-skills:json-canvas": {
       "page_id": "4152e441-b0e5-81ad-8bdc-db5e5c6cc1ba",
-      "fingerprint": "a3a1b6a975587e9edf26c4b18631376a584212ca7785f98b732d5078bb389d3d",
+      "fingerprint": "3c71dbddb4390fb910bfa9d6b4cf08529424db9fb9e4d5ab41a55ad527bd0d71",
       "files_hash": "29e7772386f2f6e1d6d26e71008561016b43b68e5579e1f2afde3e2445fd88ff",
-      "notion_last_edited_time": "2026-11-11T14:00:00.000Z",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
       "repository_path": "third_party/kepano/obsidian-skills/json-canvas/SKILL.md"
     },
     "github-skills:third_party:kepano/obsidian-skills:obsidian-bases": {
       "page_id": "4152e441-b0e5-8128-9c1a-ecb874fda31f",
-      "fingerprint": "1ab225865f49b11047196c841a21e986eee40e01cbbeb94cc444d9c6493585ec",
+      "fingerprint": "def2a6969cfae5fc877f8bbd497008880238246e96194748b7515c73736909e7",
       "files_hash": "5624267617890285db36b3d6ca7fb00bf0d8cbee7f013a21cb06cb93c3dbe86c",
-      "notion_last_edited_time": "2026-11-11T14:00:00.000Z",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
       "repository_path": "third_party/kepano/obsidian-skills/obsidian-bases/SKILL.md"
     },
     "github-skills:third_party:kepano/obsidian-skills:obsidian-markdown": {
       "page_id": "4152e441-b0e5-8167-8af2-fd801f908af4",
-      "fingerprint": "4ec8318dca109d12a89ad3941fcfad7ff9dd02db724b4b71960c09e07e0a52c6",
+      "fingerprint": "7fe75beb71b6c98d183a75dbe6e35282335945b780202f304b1bcec36e6cdb79",
       "files_hash": "0f60a927416fe68ef956dee32fbd3edafd6bd7fde966afbd9525337123b7d779",
-      "notion_last_edited_time": "2026-11-11T14:00:00.000Z",
+      "notion_last_edited_time": "2026-11-11T14:34:00.000Z",
       "repository_path": "third_party/kepano/obsidian-skills/obsidian-markdown/SKILL.md"
     },
     "github-skills:third_party:harmeet10000/AgentNexus-LangChain-FastAPI:crawl4ai-skill": {
@@ -480,5 +480,5 @@
       "repository_path": "third_party/paki81/qwen-tts/qwen-tts/SKILL.md"
     }
   },
-  "last_sync_utc": "2026-11-11T14:15:37Z"
+  "last_sync_utc": "2026-11-11T14:34:48Z"
 }
