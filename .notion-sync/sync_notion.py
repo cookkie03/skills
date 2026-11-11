@@ -281,9 +281,17 @@ def discover_skills() -> list[dict]:
     for child in sorted(ROOT.iterdir()):
         if child.name in EXCLUDED_ROOTS or child.name.startswith("."):
             continue
-        if child.is_dir() and (child / "SKILL.md").is_file():
+        if not child.is_dir() or child.is_symlink():
+            continue
+        personal_skill_files = sorted(
+            path for path in child.iterdir()
+            if path.is_file()
+            and not path.is_symlink()
+            and path.name.casefold() == "skill.md"
+        )
+        if personal_skill_files:
             entries.append(build_entry(
-                child / "SKILL.md",
+                personal_skill_files[0],
                 "local",
                 "Personal",
                 "Personal",
