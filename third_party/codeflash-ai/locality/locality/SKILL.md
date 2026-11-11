@@ -10,7 +10,7 @@ Connected sources can include Notion, Google Docs, Google Calendar, Gmail, Linea
 
 ## Where to work
 
-- Connected source files are under `/Users/luca/Library/CloudStorage/Locality/notion`.
+- Connected source files are under `~/Library/CloudStorage/Locality/notion`.
 - Read the nearest mount-local `AGENTS.md` before source-specific edits. `CLAUDE.md` is usually an alias for the same rules.
 - Online-only files hydrate automatically when opened by the filesystem.
 
@@ -36,7 +36,7 @@ Connected sources can include Notion, Google Docs, Google Calendar, Gmail, Linea
 
 ## Creating Notion Content
 
-- Read `/Users/luca/Library/CloudStorage/Locality/notion/AGENTS.md` for connector-specific creation rules.
+- Read `~/Library/CloudStorage/Locality/notion/AGENTS.md` for connector-specific creation rules.
 - Prefer `loc create page --title "New Page" --parent <parent-directory>` for new pages.
 - Create a Notion database with `loc create database --title "Tasks" --parent <page-dir>`, edit its draft `_schema.yaml`, inspect with `loc diff <path>`, then push explicitly.
 - Pages are directories; edit or create the `page.md` inside the page directory.
@@ -63,7 +63,7 @@ another isolated agent runtime, fall back to the Locality MCP tool named `loc`.
 Pass the same CLI arguments as JSON `argv`, for example:
 
 ```json
-{"argv":["status","/Users/luca/Library/CloudStorage/Locality/notion","--json"]}
+{"argv":["status","~/Library/CloudStorage/Locality/notion","--json"]}
 ```
 
 Locality configures this MCP fallback automatically for supported local agents.
@@ -72,5 +72,5 @@ Prefer direct CLI execution whenever it is available.
 ## Suggested user prompt
 
 ```text
-Use Locality to work with my connected sources under /Users/luca/Library/CloudStorage/Locality/notion. Discover context by browsing mounted folders and using normal filesystem tools. Use `loc locate <url-or-title>` only for Notion page or database URLs/titles. Edit mounted Markdown directly, use `loc status <path>` and `loc diff <path>` to inspect pending work, and leave changes pending for Locality review unless I ask you to apply them remotely. When I do, follow the nearest mount-local `AGENTS.md` and run `loc push <path> -y` for safe plans.
+Use Locality to work with my connected sources under ~/Library/CloudStorage/Locality/notion. Discover context by browsing mounted folders and using normal filesystem tools. Use `loc locate <url-or-title>` only for Notion page or database URLs/titles. Edit mounted Markdown directly, use `loc status <path>` and `loc diff <path>` to inspect pending work, and leave changes pending for Locality review unless I ask you to apply them remotely. When I do, follow the nearest mount-local `AGENTS.md` and run `loc push <path> -y` for safe plans.
 ```
