@@ -90,6 +90,18 @@
       "repo": "https://github.com/paki81/qwen-tts.git",
       "branch": "main",
       "destination": "third_party/paki81/qwen-tts"
+    },
+    {
+      "id": "third_party:pbakaus/impeccable",
+      "repo": "https://github.com/pbakaus/impeccable.git",
+      "branch": "main",
+      "destination": "third_party/pbakaus/impeccable"
+    },
+    {
+      "id": "third_party:github/awesome-copilot",
+      "repo": "https://github.com/github/awesome-copilot.git",
+      "branch": "main",
+      "destination": "third_party/github/awesome-copilot"
     }
   ]
 }
