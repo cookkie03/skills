@@ -1,0 +1,358 @@
+{
+  "version": 1,
+  "database_id": "4152e441-b0e5-803b-9e37-ec1ee98cd465",
+  "data_source_id": "4152e441-b0e5-80c8-97f3-000b5cea319d",
+  "skills": {
+    "github-skills:local:agy": {
+      "page_id": "4152e441-b0e5-8178-9531-c96b8e28e93a",
+      "fingerprint": "6c9df39cc330a7eb52d529e18ec096e7978b61d61189fe4347e3e5abdb1dabf8",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
+      "repository_path": "agy/SKILL.md"
+    },
+    "github-skills:local:aside": {
+      "page_id": "4152e441-b0e5-811d-bb5d-eb68f91890a2",
+      "fingerprint": "ce48d930955576f720b14fcaec0af1a3d6c820fdd5169aa6516d614cbe9ff511",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
+      "repository_path": "aside/SKILL.md"
+    },
+    "github-skills:local:caldav": {
+      "page_id": "4152e441-b0e5-817b-b545-ee7e28fb9ad3",
+      "fingerprint": "dd803fa8a62aa5693a5145a71497fb5b67efe5f62ca5cf1762a47a0241d05374",
+      "files_hash": "2d9df009195a8a8afecc7cafb3e0680b8769da3b5261c80b612b5660efd81c3b",
+      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
+      "repository_path": "caldav/SKILL.md"
+    },
+    "github-skills:local:canvas-sync-to-obsidian": {
+      "page_id": "4152e441-b0e5-8133-a36f-fe90515dc5df",
+      "fingerprint": "e4398be41c7495ad61390a9cbf3558d9bdcc7d9be693c69b5bb5d18b2e3b1988",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
+      "repository_path": "canvas-sync-to-obsidian/SKILL.md"
+    },
+    "github-skills:local:cdx": {
+      "page_id": "4152e441-b0e5-8146-99d1-dfa584a6e85b",
+      "fingerprint": "10e88b7286bf58a0c81068b9c4e36b45db078296b9abfe5448df426bfb7c03cb",
+      "files_hash": "40a8d919f0f1f22cfbf4b9460e83c56719e8c81b5bf4f2aaa4e4aac78f6a5fd6",
+      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
+      "repository_path": "cdx/SKILL.md"
+    },
+    "github-skills:local:daily-notes": {
+      "page_id": "4152e441-b0e5-8109-821d-c61656398a94",
+      "fingerprint": "1df646b9f6b4126dcf2fa0bbb251836662fd903645bf9a139ffc1e9321aaec5a",
+      "files_hash": "cbb89aa588a362d2c6182f54c995e5608f7db2dbe9fbb91a56908db661124185",
+      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
+      "repository_path": "daily-notes/SKILL.md"
+    },
+    "github-skills:local:glm-ocr": {
+      "page_id": "4152e441-b0e5-812d-896c-eb0c8776719c",
+      "fingerprint": "8bbf3b37b8fbcaff1a2415ac742596805a0ccfeae163f7e6e456009ee515b734",
+      "files_hash": "fe4277fb69b1878eb4d8a03e23b03ab7b645e4aa7e9af3618ca3dabd9470d3c0",
+      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
+      "repository_path": "glm-ocr/SKILL.md"
+    },
+    "github-skills:local:hms": {
+      "page_id": "4152e441-b0e5-815b-a860-cbbbd988e198",
+      "fingerprint": "b54743afda0c545b62ce3b8a848a9110f9164f4c5e936653d0125877ab65b0eb",
+      "files_hash": "88b8724e675aaedb23782cbbea7596eb0600bfe6d3d4e9a9a22d44548e029916",
+      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
+      "repository_path": "hms/SKILL.md"
+    },
+    "github-skills:local:lecture-scratchpad": {
+      "page_id": "4152e441-b0e5-8136-99c6-fc36c11163af",
+      "fingerprint": "9f6d779bbe3fecc1817dcf96b4c31004ed9e84750932b1a17c8c2d2515d287ac",
+      "files_hash": "9c587cd692f0d168ce6ab07b47f91bde43da0fcba68fa32195a64c161af3a2b1",
+      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
+      "repository_path": "lecture-scratchpad/SKILL.md"
+    },
+    "github-skills:local:light-rag": {
+      "page_id": "4152e441-b0e5-8161-81fb-da3ea874c267",
+      "fingerprint": "9dbcd5606206fc8e52d25e3c2b1a48817ee0a1d1e5814101f408bdc6a43ca300",
+      "files_hash": "7dd1e76c5c87c56e87c24d96b921cf059da3eefb20df4824656392cb0423efbd",
+      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
+      "repository_path": "light-rag/SKILL.md"
+    },
+    "github-skills:local:notion-to-obsidian": {
+      "page_id": "4152e441-b0e5-815c-a2dc-de631dd43d01",
+      "fingerprint": "3877bdac44e5304ebe33ba76473a71fd5497fda9c8a843a2c6f31bc6d93d6691",
+      "files_hash": "e9f750ba419b1f53292e7b5b6fe1eac57bc2c8ccfe762529470954b4049b611f",
+      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
+      "repository_path": "notion-to-obsidian/SKILL.md"
+    },
+    "github-skills:local:obsidian-bases-superpowers": {
+      "page_id": "4152e441-b0e5-81f3-85b2-f6c6d9c7ddea",
+      "fingerprint": "32fd40fe88fce28447257677ae0f68dba628e816d5a8bf40f644735f150f5451",
+      "files_hash": "f78fd59a69afffa9b2fffba230dce9b1dac74d869e80fb302cf4434bed754152",
+      "notion_last_edited_time": "2026-11-11T13:26:00.000Z",
+      "repository_path": "obsidian-bases-superpowers/SKILL.md"
+    },
+    "github-skills:local:obsidian-rendering-traps": {
+      "page_id": "4152e441-b0e5-8139-ba98-db0c60a7934f",
+      "fingerprint": "96fa8bc511288e36b33c4b02275540f5bbc030dad8f7e8f6fb596a6d19fb2008",
+      "files_hash": "a0bcbd19b714ef6eeb34c0b9fc06b1d168b454884bb34cd6ac8c4f2181416c3f",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "obsidian-rendering-traps/SKILL.md"
+    },
+    "github-skills:local:provider-privacy-analysis": {
+      "page_id": "4152e441-b0e5-8165-b3af-da3b4f7b30b3",
+      "fingerprint": "e1e1dd841c733393874f0d57d3f49278ac4531a17e73614c8827f123d717fb86",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "provider-privacy-analysis/SKILL.md"
+    },
+    "github-skills:local:spotipy": {
+      "page_id": "4152e441-b0e5-81fa-8860-e9c3d8118e20",
+      "fingerprint": "23a97d056a3a52238b2b68289e51fadd142b4163afe39d999a9115595122b221",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "spotipy/SKILL.md"
+    },
+    "github-skills:local:unified-study-note": {
+      "page_id": "4152e441-b0e5-813c-a4b5-cf606f447f15",
+      "fingerprint": "5f835ac4668f03cba2950d559b8f84a5f4e43ea539cdaea28d774b7794ea5eaf",
+      "files_hash": "8818d1036b5df700c4d56f1b94b77c62aab8eb8ce3569616eee7b978a3e7d738",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "unified-study-note/SKILL.md"
+    },
+    "github-skills:local:wiki-artifact": {
+      "page_id": "4152e441-b0e5-81b0-85b3-c0a144a8c60c",
+      "fingerprint": "debb9f6d9c40f8c99f8bc66d5453a84854a13cfc41027f9298c3438a1f8a705a",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "wiki-artifact/SKILL.md"
+    },
+    "github-skills:local:wiki-ingest": {
+      "page_id": "4152e441-b0e5-81b2-a392-e1b6ad3d50d7",
+      "fingerprint": "9aa78e45e8ebb868f74578b65de59af09c78ec36b3663be6f679f3bbeded1821",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "wiki-ingest/SKILL.md"
+    },
+    "github-skills:local:wiki-init": {
+      "page_id": "4152e441-b0e5-813a-ad6b-c9dbe2cc56f1",
+      "fingerprint": "b69910a922774380fb7d3a2eea7ecf9253267ceb800e7579576656bcabb39dad",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "wiki-init/SKILL.md"
+    },
+    "github-skills:local:wiki-lint": {
+      "page_id": "4152e441-b0e5-81c6-bfef-c1e1c2d158e9",
+      "fingerprint": "b2d6a4f4eb463ae41316a2b89cd11cc2886f625529dc90c64a75166b446ff7d1",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "wiki-lint/SKILL.md"
+    },
+    "github-skills:local:wiki-query": {
+      "page_id": "4152e441-b0e5-81f4-9ca5-d624ed335a96",
+      "fingerprint": "fee4a2cd46247e62f18373d58416fe3ec101379c060c07ea911934198ffe4226",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "wiki-query/SKILL.md"
+    },
+    "github-skills:local:wiki-save": {
+      "page_id": "4152e441-b0e5-817f-abd8-f6718e474276",
+      "fingerprint": "d397249c928895c6cb12333073f5e48ae0d071bac571275bbb5cbb14f9e7e34b",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "wiki-save/SKILL.md"
+    },
+    "github-skills:local:workspace-setup": {
+      "page_id": "4152e441-b0e5-81f0-a195-c5b330760f7d",
+      "fingerprint": "5a6698a98193b364cedffaad5e540215feaa02f7ae8014dbb8847c2cccd5a613",
+      "files_hash": "8636dfde45cb1c631c1d3485507c6a5794fcaa6cdb345ea2d723bc5b27221fbf",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "workspace-setup/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:ask-matt": {
+      "page_id": "4152e441-b0e5-8139-a6cb-c46ab3ebabba",
+      "fingerprint": "c68719db22e91f7412e19b4e4045ce1e08c9b1e055aeea91bb53966e992cc195",
+      "files_hash": "4da942f7728ee39821797cdc279e7b1cb324d4cda90cba8b00286f93af3ee310",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/ask-matt/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:code-review": {
+      "page_id": "4152e441-b0e5-817b-ac27-e70cee02a592",
+      "fingerprint": "7f3cddad6023779d6c61994fc53b59da2d4aeee9d11d966bf2ce3e7f5e741073",
+      "files_hash": "aefa50398f0b3901451b41c134f3a0d353f1e6f8cea1746306178af5ccf5c597",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/code-review/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:codebase-design": {
+      "page_id": "4152e441-b0e5-814b-999d-deace584bb55",
+      "fingerprint": "96ce7c99e877b32e0873b0bef8cf685534e617e3810277049c2d866659650707",
+      "files_hash": "31efbd9c8e4163a8e6157f1972e7477a740b1d4097193d7fdce64b9f9737b6fe",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/codebase-design/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:diagnosing-bugs": {
+      "page_id": "4152e441-b0e5-8171-a564-e1b6a87fc452",
+      "fingerprint": "fb4f10445548b3d2d6ad6ed25b76067b32fb35a494fc163786cac3b4b3b96abc",
+      "files_hash": "f99d546ed9ba0fb7bc224711d8bc5bfe9745b8c3db623b332102ab21ebbc5f4c",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/diagnosing-bugs/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:domain-modeling": {
+      "page_id": "4152e441-b0e5-814c-a77e-c69697db5133",
+      "fingerprint": "a0b6ef71f7478490d13e0f1c594b6d8427b7038f0608aa0743c2ee96616ae0ba",
+      "files_hash": "2da6d5bfd57af49ac54bb269d31a35ad93d61418447b39d9637fe8361ed7848f",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/domain-modeling/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:grill-with-docs": {
+      "page_id": "4152e441-b0e5-8187-bd0e-f6d154eb69ba",
+      "fingerprint": "adf40c83676642a48d579da240e698af9d799ef914bb237b91a28707ece15df1",
+      "files_hash": "c0e00be236a2dabda8b098464b34a0f5f207c3e9533861d606a0724046a3711a",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/grill-with-docs/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:implement": {
+      "page_id": "4152e441-b0e5-81c3-96d0-f77ff0ba4e2b",
+      "fingerprint": "e716836c62b8d71fff77ab84109e61550339b7e66925ac1a596eae08fdc75100",
+      "files_hash": "f884b5781230d83241150326b8f354bc3a7d16680f903bf5bd885bebb0ca7292",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/implement/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:implement-spec": {
+      "page_id": "4152e441-b0e5-818b-a14b-fcb5eae0bc41",
+      "fingerprint": "fa95fc450979028ec7584ee6ab0725d0402218dd3b932ef15f2748f7ac051495",
+      "files_hash": "a9521827a8a5be81eb2598aa1e3d1d5a848272b865642e5cf4fa4b1df2ec7ff5",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/implement-spec/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:improve-codebase-architecture": {
+      "page_id": "4152e441-b0e5-8172-97ac-daa434f2c9ed",
+      "fingerprint": "8b7208a1c82454a04cfe5c334f223171b8db24aec0088c4e44dfdbb495570456",
+      "files_hash": "eb09d299d60e2ac0abdb4cecb63d0047dcf402ae1514d4e8c51a7833f57d9d6a",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/improve-codebase-architecture/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:pr": {
+      "page_id": "4152e441-b0e5-816a-9671-d5affd8dd250",
+      "fingerprint": "e5d9e4935d6c8c2e453e8c39137359544c329f0693b739447e636f7e26790e8e",
+      "files_hash": "7aaeb22a02a76bae84023858a68dca066ab10547c3c14b84a27cade4f4615b9a",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/pr/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:prototype": {
+      "page_id": "4152e441-b0e5-81d0-9556-e82679872d59",
+      "fingerprint": "004085fb925c8b7814df68a09957880e631d323987a255b5abd1f25ffdbd4555",
+      "files_hash": "d7948d129d6c249f3868633a6bbbe9584f1a1a9bf13b1250bf45babf18f1ac84",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/prototype/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:research": {
+      "page_id": "4152e441-b0e5-8165-b5a8-ddb31d329d2b",
+      "fingerprint": "dbe1991d32100c5e6eaa57bfefeeabbb57c46963c601357f194ab0c14e928dea",
+      "files_hash": "a20bd4ec9c9b846f0cde37780a2b3ecb4bc948af6d279fcff02e12cb87373223",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/research/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:retro": {
+      "page_id": "4152e441-b0e5-815e-a59b-eb5a78a90e52",
+      "fingerprint": "2c2752584b5ae0bfa474a29cbafeb62d286335df3223073e3aac7e2c8ca38745",
+      "files_hash": "6700c7994e49c4bc4f3d514237dffff0bfc9dc7c4e1df490b14213ce5fe33ccb",
+      "notion_last_edited_time": "2026-11-11T13:27:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/retro/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:setup-matt-pocock-skills": {
+      "page_id": "4152e441-b0e5-814f-8724-cd76d741b848",
+      "fingerprint": "4e953b8a8b5336ee5098ea3b0adc18aa5ac069a865e67f65fc088f69ae44dde3",
+      "files_hash": "57b82ee643ccc610352b2d537057f7ea76b379c1a03c27c1ba82652432c2fbbc",
+      "notion_last_edited_time": "2026-11-11T13:28:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/setup-matt-pocock-skills/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:tdd": {
+      "page_id": "4152e441-b0e5-81af-84dd-cfe906cfee3c",
+      "fingerprint": "cb2733687d9b9d5f6523cd60b82f19e868980ce2bb38c20d904ed5b1877b3506",
+      "files_hash": "c11d78197e7f91e216e0993124eff5a4497a1fa610156558c289f313eb0a1296",
+      "notion_last_edited_time": "2026-11-11T13:28:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/tdd/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:to-spec": {
+      "page_id": "4152e441-b0e5-8153-a093-e148513493f7",
+      "fingerprint": "5f25b5ab66ba8f8082a2aaf0b2962f1eabc112651c161d60bce776f48b5ba846",
+      "files_hash": "c8446d4c4d2abdbbdacb34d99ab3a862b22b6157ef7a28a711890692356c4529",
+      "notion_last_edited_time": "2026-11-11T13:28:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/to-spec/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:to-tickets": {
+      "page_id": "4152e441-b0e5-8161-b885-ec72360dae3a",
+      "fingerprint": "a7d6a48b3443aef0e9b69802e3aac541c9cbceef12d43eb5016fd8d9c0ae56e6",
+      "files_hash": "b41c4cbd7107505b4d2093ddcd4fcfa87cede3822d4895749b1369bd520e75a3",
+      "notion_last_edited_time": "2026-11-11T13:28:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/to-tickets/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:triage": {
+      "page_id": "4152e441-b0e5-81c3-9dd6-de42c1b72d74",
+      "fingerprint": "bbac2b814d8825cd438bfe0e437e43f065b05079b8e2bd076cf43c9234544a21",
+      "files_hash": "09d0e119a8bb5ebdaa9b3d484dc9b6b9cdd80eb4702adec122b8761435092820",
+      "notion_last_edited_time": "2026-11-11T13:28:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/triage/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:wayfinder": {
+      "page_id": "4152e441-b0e5-8138-af29-e3e5e65922f5",
+      "fingerprint": "06c8c1201550fbae8b1a99d9316bf366cbf256e16e4e6e35a6bf3f5d961daa99",
+      "files_hash": "2513cb37d2a84ed35253157f031a96812d683c17bb4a027d970f88933e8ecbed",
+      "notion_last_edited_time": "2026-11-11T13:28:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/wayfinder/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:wizard": {
+      "page_id": "4152e441-b0e5-8129-8d53-d579dec8fa0a",
+      "fingerprint": "b241b09c4b0e6877bab3253c118172cef33d0049619ae1dec2da85a8a871a838",
+      "files_hash": "4e94c0c8ad4fa31eb248bfbe5f760e62ec09ec9c033e175bda798eabba4aa68a",
+      "notion_last_edited_time": "2026-11-11T13:28:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/engineering/wizard/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:grill-me": {
+      "page_id": "4152e441-b0e5-817b-b4bd-f87904068278",
+      "fingerprint": "b2b5eb14c8facb5f2522816463125c12aace7877717196ee57c60b86559a3b7d",
+      "files_hash": "ba63402ef71cb011ba3b3eb37089a2dc16f83e379ce5bde7e4aa6e02175a2b1c",
+      "notion_last_edited_time": "2026-11-11T13:28:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/productivity/grill-me/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:grilling": {
+      "page_id": "4152e441-b0e5-8133-b829-cb54ba3e413b",
+      "fingerprint": "795b927ff693d197e4f9d9d56fc9d28f8210375edfae718d0b7aa7ac7e521a24",
+      "files_hash": "c639cf7cf0693919585283a1cbfbfc8b4d42f9042e929f76c78768c83d31c5bf",
+      "notion_last_edited_time": "2026-11-11T13:28:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/productivity/grilling/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:handoff": {
+      "page_id": "4152e441-b0e5-81e4-9ab9-f28338fc36c2",
+      "fingerprint": "cd2da7d68743f867e6dde5afc9d7f62b1773d12fd6fa2124921344a78104839c",
+      "files_hash": "87d2dde1edd7cc21d52c374059231afb25a69d930e80956b7cff7c7f72b02b17",
+      "notion_last_edited_time": "2026-11-11T13:28:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/productivity/handoff/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:teach": {
+      "page_id": "4152e441-b0e5-8152-9621-ec8ffddf3607",
+      "fingerprint": "5f168390cf3a21c60c3577d2d284c2509d9458a74d9b293c4596805b466d1fab",
+      "files_hash": "c5256fde42d4b71851ca562a16de07cb68f6c41d556f2b448bacedd68fe7bbd1",
+      "notion_last_edited_time": "2026-11-11T13:28:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/productivity/teach/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:to-questionnaire": {
+      "page_id": "4152e441-b0e5-814a-b739-dbb600a133e5",
+      "fingerprint": "39c6bb7821a4c0762471308283b32e7a56ca77d4f63927eb41f15ae0f2248ee3",
+      "files_hash": "bcf48443300d1b0d176cb1a7fe576ba014aec69a6abf325ec7498be418ee57aa",
+      "notion_last_edited_time": "2026-11-11T13:28:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/productivity/to-questionnaire/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:wait-what": {
+      "page_id": "4152e441-b0e5-81b8-94d6-f24e81e02bf9",
+      "fingerprint": "1dae0446436833499bf36a25fd30e8c47b28d83e038f2a30f9f43281cbc6d1be",
+      "files_hash": "f56ab6f599772c51614f2d0bd8959abdb78d77d98c730dffa448e274931b742d",
+      "notion_last_edited_time": "2026-11-11T13:28:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/productivity/wait-what/SKILL.md"
+    },
+    "github-skills:third_party:mattpocock/skills:writing-for-agents": {
+      "page_id": "4152e441-b0e5-81f2-8c86-cf28cf38fbf9",
+      "fingerprint": "7249136ffcdc214143b39f3842804c8b02e18cb1f0613a4a291ee131d69a5603",
+      "files_hash": "8d7545c135b17ef19d3873369c0a5b140200ab57403947a616d6dc5f1bcbb49f",
+      "notion_last_edited_time": "2026-11-11T13:28:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/productivity/writing-for-agents/SKILL.md"
+    }
+  },
+  "last_sync_utc": "2026-11-11T13:28:36Z"
+}
