@@ -50,13 +50,13 @@
     },
     {
       "id": "third_party:harmeet10000/AgentNexus-LangChain-FastAPI",
-      "label": "Harmeet10000 AgentNexus",
-      "repo": "https://github.com/harmeet10000/AgentNexus-LangChain-FastAPI.git",
+      "label": "Harmeet10000 Skills",
+      "repo": "https://github.com/Harmeet10000/skills.git",
       "branch": "main",
       "include": [
-        ".github/skills/crawl4ai-skill"
+        "skills/ai-ml/crawl4ai-skill"
       ],
-      "source_path_prefix": ".github/skills",
+      "source_path_prefix": "skills/ai-ml",
       "destination": "third_party/harmeet10000/AgentNexus-LangChain-FastAPI"
     },
     {
