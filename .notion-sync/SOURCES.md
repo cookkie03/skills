@@ -12,11 +12,21 @@ This file documents the editable selection in `sources.json`. GitHub is the sour
 
 ## Personal skills selected automatically
 
-Personal skill paths are top-level folders in the repository root. The folder is included when it contains `SKILL.md` or `skill.md`:
+Personal skills are discovered recursively in root-level skill folders and in one-level category folders. Each skill folder must contain `SKILL.md` or `skill.md`. The category folder also becomes the Notion `Category` property.
 
-`agy/`, `aside/`, `caldav/`, `canvas-sync-to-obsidian/`, `cdx/`, `daily-notes/`, `glm-ocr/`, `hms/`, `lecture-scratchpad/`, `light-rag/`, `notion-to-obsidian/`, `obsidian-bases-superpowers/`, `obsidian-rendering-traps/`, `provider-privacy-analysis/`, `spotipy/`, `unified-study-note/`, `wiki-artifact/`, `wiki-ingest/`, `wiki-init/`, `wiki-lint/`, `wiki-preprocess/`, `wiki-query/`, `wiki-save/`, `workspace-setup/`.
+### `Wiki/`
+`daily-notes/`, `wiki-artifact/`, `wiki-ingest/`, `wiki-init/`, `wiki-lint/`, `wiki-preprocess/`, `wiki-query/`, `wiki-save/`, `workspace-setup/`.
 
-Add a new folder at the repository root to add a personal skill; delete its folder to remove it. Personal folders do not need an entry in `sources.json`.
+### `Packages/`
+`agy/` (Antigravity CLI), `aside-browser/` (Aside Browser CLI), `caldav/`, `cdx/` (Codex CLI), `glm-ocr/`, `hms/` (Hermes CLI), `light-rag/`, `obsidian-bases-superpowers/`, `obsidian-rendering-traps/`, `spotipy/` (Spotify).
+
+### `Education Workflow/`
+`canvas-sync-to-obsidian/`, `lecture-scratchpad/`, `notion-to-obsidian/`, `unified-study-note/`.
+
+### Standalone
+`provider-privacy-analysis/` remains at the repository root because it does not fit the three groups above.
+
+Add a new skill under one of these category folders (for example, `Packages/my-tool/SKILL.md`) or keep it as a root-level folder. Delete its folder to remove the managed Notion page. Moving an existing skill between categories preserves its Notion page identity as long as its skill-folder name stays the same.
 
 ## Current upstream selections
 

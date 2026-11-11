@@ -277,25 +277,30 @@ def discover_skills() -> list[dict]:
     config = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
     entries: list[dict] = []
 
-    # Personal skills are one directory deep at the repository root.
-    for child in sorted(ROOT.iterdir()):
-        if child.name in EXCLUDED_ROOTS or child.name.startswith("."):
-            continue
-        if not child.is_dir() or child.is_symlink():
-            continue
-        personal_skill_files = sorted(
-            path for path in child.iterdir()
-            if path.is_file()
-            and not path.is_symlink()
-            and path.name.casefold() == "skill.md"
+    # Personal skills may live at the root or one level below a category folder.
+    personal_skill_files = sorted(
+        path for path in ROOT.rglob("*")
+        if path.is_file()
+        and not path.is_symlink()
+        and path.name.casefold() == "skill.md"
+        and not any(
+            part in EXCLUDED_ROOTS or part.startswith(".")
+            for part in path.relative_to(ROOT).parts[:-1]
         )
-        if personal_skill_files:
-            entries.append(build_entry(
-                personal_skill_files[0],
-                "local",
-                "Personal",
-                "Personal",
-            ))
+    )
+    for skill_file in personal_skill_files:
+        relative = skill_file.relative_to(ROOT)
+        category = (
+            relative.parts[0].replace("-", " ").title()
+            if len(relative.parts) > 2
+            else "Personal"
+        )
+        entries.append(build_entry(
+            skill_file,
+            "local",
+            "Personal",
+            category,
+        ))
 
     # Third-party snapshots are constrained to explicit configured destinations.
     for source in config.get("sources", []):

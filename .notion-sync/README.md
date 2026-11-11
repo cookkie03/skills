@@ -4,7 +4,7 @@ GitHub is the source of truth. The scheduled workflow refreshes configured third
 
 ## Behaviour
 
-- Personal skills are discovered as top-level directories containing `SKILL.md`.
+- Personal skills are discovered in root-level skill folders and in skill folders nested one category level below the repository root.
 - Third-party sources are configured in `sources.json` and copied below their dedicated `third_party/<owner>/<repo>/` directory.
 - Skill body, Name, Description, source, category, repository path, GitHub URL, and supporting files are mirrored.
 - Supporting files are attached as one ZIP in Notion's Files property, preserving relative paths.
@@ -19,7 +19,7 @@ Edit `sources.json` to control the selected paths. The current path inventory an
 - `include` selects one skill directory or a category directory containing skill directories.
 - `exclude_skill_paths` omits individual skills, using paths relative to the source's `destination`.
 - Removing a source object removes its managed `third_party/` destination on the next successful refresh and moves its Notion pages to Trash.
-- Personal skills are discovered automatically in top-level folders containing `SKILL.md` or `skill.md`.
+- Personal skills are discovered automatically in root-level folders and one-level category folders (for example `Wiki/<skill>/SKILL.md`, `Packages/<skill>/SKILL.md`, or `Education Workflow/<skill>/SKILL.md`).
 
 Each upstream uses a dedicated destination directory. That destination is a generated mirror and is replaced on every upstream refresh. Do not edit it manually.
 

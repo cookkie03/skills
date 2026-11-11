@@ -34,7 +34,7 @@ pip install 'glmocr[layout]'
 import os
 from glmocr import GlmOcr
 
-SKILL_DIR = "/path/to/skills/glm-ocr"   # adatta al path reale
+SKILL_DIR = "/path/to/skills/Packages/glm-ocr"   # adatta al path reale
 CONFIG_PATH = os.path.join(SKILL_DIR, "config.yaml")
 
 with GlmOcr(config_path=CONFIG_PATH) as ocr:
