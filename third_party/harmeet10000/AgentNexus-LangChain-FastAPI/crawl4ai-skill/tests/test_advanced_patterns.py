@@ -3,9 +3,7 @@
 Test advanced patterns from SKILL.md
 """
 import asyncio
-
 from crawl4ai import AsyncWebCrawler, BrowserConfig, CrawlerRunConfig
-
 
 async def test_session_management():
     """Test session management"""

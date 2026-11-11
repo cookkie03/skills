@@ -13,16 +13,9 @@ Usage examples:
 """
 
 import asyncio
-import json
 import sys
+import json
 from pathlib import Path
-
-from crawl4ai import AsyncWebCrawler, BrowserConfig, CrawlerRunConfig
-from crawl4ai.extraction_strategy import (
-    CosineStrategy,
-    JsonCssExtractionStrategy,
-    LLMExtractionStrategy,
-)
 
 # Version check
 MIN_CRAWL4AI_VERSION = "0.7.4"
@@ -34,6 +27,12 @@ try:
 except ImportError:
     print(f"ℹ️  Crawl4AI {MIN_CRAWL4AI_VERSION}+ required")
 
+from crawl4ai import AsyncWebCrawler, BrowserConfig, CrawlerRunConfig
+from crawl4ai.extraction_strategy import (
+    LLMExtractionStrategy,
+    JsonCssExtractionStrategy,
+    CosineStrategy
+)
 
 # =============================================================================
 # APPROACH 1: Generate Schema (Most Efficient for Repetitive Patterns)
