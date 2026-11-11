@@ -195,7 +195,7 @@ def make_archive(skill_dir: Path) -> tuple[bytes | None, str]:
         if not path.is_file() or path.is_symlink():
             continue
         relative = path.relative_to(skill_dir)
-        if path.name == "SKILL.md" or path.name == ".DS_Store":
+        if path.name.casefold() == "skill.md" or path.name == ".DS_Store":
             continue
         if any(part in {".git", "__pycache__"} for part in relative.parts):
             continue
@@ -294,7 +294,17 @@ def discover_skills() -> list[dict]:
         source_root = ROOT / source["destination"]
         if not source_root.exists():
             fail(f"Configured third-party snapshot is missing: {source['destination']}")
-        found = sorted(source_root.rglob("SKILL.md"))
+        excluded_skill_paths = {
+            Path(path).as_posix()
+            for path in source.get("exclude_skill_paths", [])
+        }
+        found = sorted(
+            path for path in source_root.rglob("*")
+            if path.is_file()
+            and not path.is_symlink()
+            and path.name.casefold() == "skill.md"
+            and path.relative_to(source_root).as_posix() not in excluded_skill_paths
+        )
         if not found:
             fail(f"No skills found under configured source {source['id']}.")
         for skill_file in found:
