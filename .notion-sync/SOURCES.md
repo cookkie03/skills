@@ -35,7 +35,7 @@ Add a new skill under one of these category folders (for example, `Packages/my-t
 | [mattpocock/skills](https://github.com/mattpocock/skills) | `skills/engineering`, `skills/productivity` | 20 Engineering + 7 Productivity | `third_party/mattpocock/skills` |
 | [obra/superpowers](https://github.com/obra/superpowers) | `skills/brainstorming` | `brainstorming` | `third_party/obra/superpowers` |
 | [anthropics/skills](https://github.com/anthropics/skills) | `skills/frontend-design` | `frontend-design` | `third_party/anthropics/skills` |
-| [kepano/obsidian-skills](https://github.com/kepano/obsidian-skills) | `skills/defuddle`, `skills/json-canvas`, `skills/obsidian-bases`, `skills/obsidian-markdown` | `defuddle`, `json-canvas`, `obsidian-bases`, `obsidian-markdown` | `third_party/kepano/obsidian-skills` |
+| [obsidianmd/obsidian-skills](https://github.com/obsidianmd/obsidian-skills) | `skills/defuddle`, `skills/json-canvas`, `skills/obsidian-bases`, `skills/obsidian-markdown` | `defuddle`, `json-canvas`, `obsidian-bases`, `obsidian-markdown` | `third_party/kepano/obsidian-skills` |
 | [Harmeet10000/skills](https://github.com/Harmeet10000/skills) | `skills/ai-ml/crawl4ai-skill` | `crawl4ai` | `third_party/harmeet10000/AgentNexus-LangChain-FastAPI` |
 | [vercel-labs/skills](https://github.com/vercel-labs/skills) | `skills/find-skills` | `find-skills` | `third_party/vercel-labs/skills` |
 | [sorty-organizer/Sorty](https://github.com/sorty-organizer/Sorty) | `.agents/skills/sorty` | `sorty` | `third_party/sorty-organizer/Sorty` |
@@ -82,7 +82,7 @@ Keep all selected skills from the same repository in one source object and one d
 
 ### Add or remove a personal skill
 
-Personal skills are detected automatically in top-level directories of this repository. Add a folder such as `my-skill/SKILL.md` (or `my-skill/skill.md`). Deleting that folder removes the managed Notion page on the next sync.
+Personal skills are detected automatically in root-level directories and in one-level category folders. Add a folder such as `Packages/my-skill/SKILL.md`, `Wiki/my-skill/SKILL.md`, or `Education Workflow/my-skill/SKILL.md` (or keep a standalone root-level folder). Deleting that skill folder removes its managed Notion page on the next sync.
 
 ## Important
 

@@ -36,8 +36,8 @@
     },
     {
       "id": "third_party:kepano/obsidian-skills",
-      "label": "Kepano Obsidian Skills",
-      "repo": "https://github.com/kepano/obsidian-skills.git",
+      "label": "Obsidian Skills",
+      "repo": "https://github.com/obsidianmd/obsidian-skills.git",
       "branch": "main",
       "include": [
         "skills/defuddle",
