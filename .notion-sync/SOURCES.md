@@ -91,5 +91,5 @@ Personal skills are detected automatically in root-level directories and in one-
 - A removed Notion page is moved to Trash, not permanently deleted.
 - Only pages carrying this sync's `Sync ID` are managed; other Notion pages are left untouched.
 
-| [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | `skills` | `impeccable` | `third_party/pbakaus/impeccable` |
+| [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | `.agents/skills/impeccable` | `impeccable` | `third_party/pbakaus/impeccable` |
 | [github/awesome-copilot](https://github.com/github/awesome-copilot) | `skills/readme-blueprint-generator` | `readme-blueprint-generator` | `third_party/github/awesome-copilot` |
