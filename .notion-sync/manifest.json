@@ -446,9 +446,9 @@
     },
     "github-skills:third_party:Graphify-Labs/graphify:graphify": {
       "page_id": "4152e441-b0e5-817e-9b4a-cb6d5333e37d",
-      "fingerprint": "f61290b12fae24e49f28351b79b7615230812cd0c03579af187bc5ea39d4ac44",
-      "files_hash": "b2f62e1aa08902d9b178e4e979484cfd187bef9d85b0fdf7252b5f7268fee4ed",
-      "notion_last_edited_time": "2026-11-11T14:01:00.000Z",
+      "fingerprint": "b30ff69aa3d2de6be180e3f0887f773d1628eed4f0a5cc4579b7651eb7c762fc",
+      "files_hash": "909d15764203e28c9f84fc8e5abf01c6dea5bf79f00330aab2a8096022c689c0",
+      "notion_last_edited_time": "2026-11-11T21:26:00.000Z",
       "repository_path": "third_party/Graphify-Labs/graphify/graphify/skill.md"
     },
     "github-skills:third_party:codeflash-ai/locality:locality": {
@@ -494,5 +494,5 @@
       "repository_path": "third_party/github/awesome-copilot/readme-blueprint-generator/SKILL.md"
     }
   },
-  "last_sync_utc": "2026-11-11T17:33:22Z"
+  "last_sync_utc": "2026-11-11T21:26:49Z"
 }
