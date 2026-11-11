@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      NOTION_API_TOKEN: \${{ secrets.NOTION_API_TOKEN }}
+      NOTION_API_TOKEN: ${{ secrets.NOTION_API_TOKEN }}
       NOTION_DATABASE_ID: "4152e441-b0e5-803b-9e37-ec1ee98cd465"
       NOTION_DATA_SOURCE_ID: "4152e441-b0e5-80c8-97f3-000b5cea319d"
       NOTION_VERSION: "2026-03-11"
