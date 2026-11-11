@@ -1,0 +1,16 @@
+{
+  "sources": [
+    {
+      "id": "third_party:mattpocock/skills",
+      "label": "Matt Pocock",
+      "repo": "https://github.com/mattpocock/skills.git",
+      "branch": "main",
+      "include": [
+        "skills/engineering",
+        "skills/productivity"
+      ],
+      "source_path_prefix": "skills",
+      "destination": "third_party/mattpocock/skills"
+    }
+  ]
+}
