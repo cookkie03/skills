@@ -57,10 +57,14 @@ def sync_source(source: dict) -> int:
             include_path = checkout / include
             if not include_path.exists():
                 continue
-            for skill_file in sorted(include_path.rglob("SKILL.md")):
-                if skill_file.is_symlink() or not skill_file.is_file():
+            # Each selected category contains skill folders directly. Keep traversal
+            # at this level to avoid accidentally nesting one skill inside another.
+            for skill_dir in sorted(include_path.iterdir()):
+                skill_file = skill_dir / "SKILL.md"
+                if skill_dir.is_symlink() or not skill_dir.is_dir():
                     continue
-                skill_dir = skill_file.parent
+                if not skill_file.is_file() or skill_file.is_symlink():
+                    continue
                 relative = skill_dir.relative_to(checkout / path_prefix)
                 target = stage / relative
                 copy_skill_tree(skill_dir, target)
