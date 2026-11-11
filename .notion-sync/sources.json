@@ -135,7 +135,7 @@
       "repo": "https://github.com/codeflash-ai/locality.git",
       "branch": "main",
       "include": [
-        "apps/desktop/src-tauri/src/agent_guidance.rs"
+        "apps/desktop/src-tauri/src"
       ],
       "destination": "third_party/codeflash-ai/locality",
       "extractor_type": "locality_rust",
