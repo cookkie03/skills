@@ -387,7 +387,7 @@ def create_page(entry: dict) -> dict:
         "POST",
         "/pages",
         json={
-            "parent": {"database_id": DATABASE_ID},
+            "parent": {"type": "data_source_id", "data_source_id": DATA_SOURCE_ID},
             "properties": notion_properties(entry, files=file_values),
         },
     )
