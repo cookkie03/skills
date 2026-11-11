@@ -90,3 +90,6 @@ Personal skills are detected automatically in root-level directories and in one-
 - Do not edit files inside `third_party/` to customise a skill: they are replaced from upstream on the next refresh.
 - A removed Notion page is moved to Trash, not permanently deleted.
 - Only pages carrying this sync's `Sync ID` are managed; other Notion pages are left untouched.
+
+| [pbakaus/impeccable](https://github.com/pbakaus/impeccable) | `skills` | `impeccable` | `third_party/pbakaus/impeccable` |
+| [github/awesome-copilot](https://github.com/github/awesome-copilot) | `skills/readme-blueprint-generator` | `readme-blueprint-generator` | `third_party/github/awesome-copilot` |
