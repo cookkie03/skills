@@ -16,8 +16,8 @@ CONFIG = ROOT / ".notion-sync" / "sources.json"
 MANIFEST = ROOT / ".notion-sync" / "upstreams-manifest.json"
 
 
-def run(command: list[str]) -> None:
-    subprocess.run(command, check=True)
+def run(command: list[str], *, cwd: Path | None = None) -> None:
+    subprocess.run(command, check=True, cwd=cwd)
 
 
 def find_skill_file(skill_dir: Path) -> Path | None:
@@ -138,10 +138,14 @@ def sync_source(source: dict) -> int:
     with tempfile.TemporaryDirectory(prefix="skills-upstream-") as temp:
         checkout = Path(temp) / "checkout"
         stage = Path(temp) / "stage"
+        # Run outside the main repository checkout. actions/checkout stores
+        # its GITHUB_TOKEN as a repository-local Git extraheader; launching
+        # clone from ROOT could accidentally send that credential to unrelated
+        # public upstream repositories.
         run([
             "git", "clone", "--depth", "1", "--filter=blob:none", "--sparse",
             "--single-branch", "--branch", branch, repo_url, str(checkout),
-        ])
+        ], cwd=Path(temp))
         run(["git", "-C", str(checkout), "sparse-checkout", "set", *includes])
 
         if source.get("extractor_type") == "locality_rust":
