@@ -213,9 +213,6 @@ def sync_source(source: dict) -> int:
 def main() -> None:
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
     sources = config.get("sources", [])
-    if not sources:
-        raise RuntimeError("No third-party sources configured.")
-
     ids = [source["id"] for source in sources]
     destinations = [source["destination"] for source in sources]
     if len(ids) != len(set(ids)):
@@ -254,7 +251,20 @@ def main() -> None:
 
     for source_id, old_destination in previous.items():
         old_path = managed_destination(old_destination)
-        if str(old_path) not in current_destinations and old_path.exists():
+        old_resolved = str(old_path)
+        if old_resolved in current_destinations:
+            continue
+        for active_destination in current_destinations:
+            if (
+                active_destination.startswith(old_resolved + "/")
+                or old_resolved.startswith(active_destination + "/")
+            ):
+                raise RuntimeError(
+                    "An old mirror overlaps a currently configured destination. "
+                    "Move the destination manually before syncing: "
+                    f"{old_destination} vs {active_destination}"
+                )
+        if old_path.exists():
             shutil.rmtree(old_path)
             print(
                 f"Removed upstream mirror no longer configured: "
