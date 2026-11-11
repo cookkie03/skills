@@ -51,7 +51,7 @@ jobs:
 
       - name: Commit upstream snapshot changes
         run: |
-          git add -A -- third_party/
+          git add -A -- third_party/ .notion-sync/upstreams-manifest.json
           if ! git diff --cached --quiet; then
             git commit -m "chore: refresh third-party Agent Skills"
             git push origin HEAD:main
