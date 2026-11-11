@@ -13,6 +13,7 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / ".notion-sync" / "sources.json"
+MANIFEST = ROOT / ".notion-sync" / "upstreams-manifest.json"
 
 
 def run(command: list[str]) -> None:
@@ -90,6 +91,42 @@ def extract_locality_skill(checkout: Path, source: dict, stage: Path) -> int:
     return 1
 
 
+def managed_destination(value: str) -> Path:
+    """Resolve a configured mirror path and ensure it stays inside third_party/."""
+    base = (ROOT / "third_party").resolve()
+    target = (ROOT / value).resolve()
+    try:
+        relative = target.relative_to(base)
+    except ValueError as exc:
+        raise RuntimeError(
+            f"Managed destination must be inside third_party/: {value}"
+        ) from exc
+    if not relative.parts:
+        raise RuntimeError("A source cannot own the third_party/ root itself.")
+    return target
+
+
+def prune_excluded_skill_paths(stage: Path, source: dict) -> None:
+    """Remove excluded skill directories from the snapshot before it reaches GitHub."""
+    for raw_path in source.get("exclude_skill_paths", []):
+        relative = Path(raw_path)
+        if relative.is_absolute() or ".." in relative.parts:
+            raise RuntimeError(
+                f"{source['id']}: unsafe exclude_skill_paths entry: {raw_path}"
+            )
+        target = stage / relative
+        if not target.exists():
+            continue
+        if target.is_dir():
+            shutil.rmtree(target)
+        elif target.name.casefold() == "skill.md":
+            # Remove the complete excluded skill directory, not just its entrypoint.
+            shutil.rmtree(target.parent)
+        else:
+            target.unlink()
+        print(f"{source['id']}: excluded {relative.as_posix()}")
+
+
 def sync_source(source: dict) -> int:
     repo_url = source["repo"]
     branch = source.get("branch", "main")
@@ -146,6 +183,7 @@ def sync_source(source: dict) -> int:
                     copy_skill_tree(skill_dir, stage / relative)
                     count += 1
 
+        prune_excluded_skill_paths(stage, source)
         staged_skill_files = [
             path for path in stage.rglob("*")
             if path.is_file() and path.name.casefold() == "skill.md"
@@ -178,11 +216,71 @@ def main() -> None:
     if not sources:
         raise RuntimeError("No third-party sources configured.")
 
+    ids = [source["id"] for source in sources]
+    destinations = [source["destination"] for source in sources]
+    if len(ids) != len(set(ids)):
+        raise RuntimeError("Duplicate upstream source IDs in sources.json.")
+    if len(destinations) != len(set(destinations)):
+        raise RuntimeError("Duplicate upstream destinations in sources.json.")
+
+    current_destinations = {
+        str(managed_destination(source["destination"]))
+        for source in sources
+    }
+    # Do not allow nested mirrors: removing one must never remove another source.
+    ordered_destinations = sorted(current_destinations)
+    for index, destination in enumerate(ordered_destinations):
+        for other in ordered_destinations[index + 1:]:
+            if other.startswith(destination + "/"):
+                raise RuntimeError(
+                    f"Overlapping upstream destinations are not allowed: "
+                    f"{destination} and {other}"
+                )
+
+    previous = {}
+    if MANIFEST.is_file():
+        previous_data = json.loads(MANIFEST.read_text(encoding="utf-8"))
+        previous = {
+            item["id"]: item["destination"]
+            for item in previous_data.get("sources", [])
+        }
+
+    # Refresh every configured source first. A failure preserves old mirrors and
+    # the previous manifest, so the Notion sync cannot interpret a partial run
+    # as intentional deletion.
     total = 0
     for source in sources:
         total += sync_source(source)
 
-    print(f"Third-party refresh complete: {total} selected skills across {len(sources)} sources.")
+    for source_id, old_destination in previous.items():
+        old_path = managed_destination(old_destination)
+        if str(old_path) not in current_destinations and old_path.exists():
+            shutil.rmtree(old_path)
+            print(
+                f"Removed upstream mirror no longer configured: "
+                f"{source_id} -> {old_destination}"
+            )
+
+    manifest = {
+        "version": 1,
+        "sources": [
+            {
+                "id": source["id"],
+                "repo": source["repo"],
+                "branch": source.get("branch", "main"),
+                "destination": source["destination"],
+            }
+            for source in sources
+        ],
+    }
+    MANIFEST.write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    print(
+        f"Third-party refresh complete: {total} selected skills "
+        f"across {len(sources)} sources."
+    )
 
 
 if __name__ == "__main__":
