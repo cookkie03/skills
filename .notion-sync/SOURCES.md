@@ -32,10 +32,10 @@ Add a new skill under one of these category folders (for example, `Packages/my-t
 
 | Upstream repository | `include` paths (upstream-relative) | Selected skill(s) | Local mirror |
 |---|---|---|---|
-| [mattpocock/skills](https://github.com/mattpocock/skills) | `skills/engineering`, `skills/productivity` | 20 Engineering + 7 Productivity | `third_party/mattpocock/skills` |
-| [obra/superpowers](https://github.com/obra/superpowers) | `skills/brainstorming` | `brainstorming` | `third_party/obra/superpowers` |
-| [anthropics/skills](https://github.com/anthropics/skills) | `skills/frontend-design` | `frontend-design` | `third_party/anthropics/skills` |
-| [obsidianmd/obsidian-skills](https://github.com/obsidianmd/obsidian-skills) | `skills/defuddle`, `skills/json-canvas`, `skills/obsidian-bases`, `skills/obsidian-markdown` | `defuddle`, `json-canvas`, `obsidian-bases`, `obsidian-markdown` | `third_party/kepano/obsidian-skills` |
+| [mattpocock/skills](https://github.com/mattpocock/skills) | `skills/engineering`, `skills/productivity`, `skills/in-progress`, `skills/misc` | 39 skills across four categories | `third_party/mattpocock/skills` |
+| [obra/superpowers](https://github.com/obra/superpowers) | `skills` | 15 skills | `third_party/obra/superpowers` |
+| [anthropics/skills](https://github.com/anthropics/skills) | `skills` | 19 skills | `third_party/anthropics/skills` |
+| [obsidianmd/obsidian-skills](https://github.com/obsidianmd/obsidian-skills) | `plugins/obsidian/skills` | 7 skills | `third_party/kepano/obsidian-skills` |
 | [Harmeet10000/skills](https://github.com/Harmeet10000/skills) | `skills/ai-ml/crawl4ai-skill` | `crawl4ai` | `third_party/harmeet10000/AgentNexus-LangChain-FastAPI` |
 | [vercel-labs/skills](https://github.com/vercel-labs/skills) | `skills/find-skills` | `find-skills` | `third_party/vercel-labs/skills` |
 | [sorty-organizer/Sorty](https://github.com/sorty-organizer/Sorty) | `.agents/skills/sorty` | `sorty` | `third_party/sorty-organizer/Sorty` |
@@ -47,6 +47,12 @@ Add a new skill under one of these category folders (for example, `Packages/my-t
 | [morluto/rea](https://github.com/morluto/rea) | `.agents/skills/reverse-engineer-anything` | `reverse-engineer-anything` | `third_party/morluto/rea` |
 | [claude-office-skills/skills](https://github.com/claude-office-skills/skills) | `spotify-automation` | `Spotify Automation` | `third_party/claude-office-skills/skills` |
 | [paki81/qwen-tts](https://github.com/paki81/qwen-tts) | `.` | `qwen-tts` | `third_party/paki81/qwen-tts` |
+
+| [vercel-labs/agent-browser](https://github.com/vercel-labs/agent-browser) | `skills/agent-browser` | `agent-browser` | `third_party/vercel-labs/agent-browser` |
+| [vercel-labs/opensrc](https://github.com/vercel-labs/opensrc) | `skills/opensrc` | `opensrc` | `third_party/vercel-labs/opensrc` |
+| [tasteskill/tasteskill](https://github.com/tasteskill/tasteskill) | `skills` | 12 skills | `third_party/tasteskill/tasteskill` |
+| [mvanhorn/cli-printing-press](https://github.com/mvanhorn/cli-printing-press) | `skills` | 9 skills | `third_party/mvanhorn/cli-printing-press` |
+| [teng-lin/notebooklm-py](https://github.com/teng-lin/notebooklm-py) | `.` | `notebooklm-py` (root skill) | `third_party/teng-lin/notebooklm-py` |
 
 For Locality, `extractor_file` is `apps/desktop/src-tauri/src/agent_guidance.rs`; `mount_path` controls the filesystem root rendered inside the generated skill.
 
