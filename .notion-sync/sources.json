@@ -12,7 +12,10 @@
         "skills/misc"
       ],
       "source_path_prefix": "skills",
-      "destination": "third_party/mattpocock/skills"
+      "destination": "third_party/mattpocock/skills",
+      "exclude_skill_paths": [
+        "in-progress/software-factory/SKILL.md"
+      ]
     },
     {
       "id": "third_party:obra/superpowers",
@@ -253,6 +256,17 @@
       "source_path_prefix": ".",
       "root_skill_name": "notebooklm-py",
       "destination": "third_party/teng-lin/notebooklm-py"
+    },
+    {
+      "id": "third_party:trycua/cua",
+      "label": "Cua Driver",
+      "repo": "https://github.com/trycua/cua.git",
+      "branch": "main",
+      "include": [
+        "libs/cua-driver/rust/Skills/cua-driver"
+      ],
+      "source_path_prefix": "libs/cua-driver/rust/Skills",
+      "destination": "third_party/trycua/cua"
     }
   ]
 }
