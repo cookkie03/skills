@@ -32,7 +32,7 @@ Add a new skill under one of these category folders (for example, `Packages/my-t
 
 | Upstream repository | `include` paths (upstream-relative) | Selected skill(s) | Local mirror |
 |---|---|---|---|
-| [mattpocock/skills](https://github.com/mattpocock/skills) | `skills/engineering`, `skills/productivity`, `skills/in-progress`, `skills/misc` | 39 skills across four categories | `third_party/mattpocock/skills` |
+| [mattpocock/skills](https://github.com/mattpocock/skills) | `skills/engineering`, `skills/productivity`, `skills/in-progress`, `skills/misc` | 38 skills across four categories (invalid upstream YAML in `software-factory` excluded) | `third_party/mattpocock/skills` |
 | [obra/superpowers](https://github.com/obra/superpowers) | `skills` | 15 skills | `third_party/obra/superpowers` |
 | [anthropics/skills](https://github.com/anthropics/skills) | `skills` | 19 skills | `third_party/anthropics/skills` |
 | [obsidianmd/obsidian-skills](https://github.com/obsidianmd/obsidian-skills) | `plugins/obsidian/skills` | 7 skills | `third_party/kepano/obsidian-skills` |
@@ -53,6 +53,7 @@ Add a new skill under one of these category folders (for example, `Packages/my-t
 | [tasteskill/tasteskill](https://github.com/tasteskill/tasteskill) | `skills` | 12 skills | `third_party/tasteskill/tasteskill` |
 | [mvanhorn/cli-printing-press](https://github.com/mvanhorn/cli-printing-press) | `skills` | 9 skills | `third_party/mvanhorn/cli-printing-press` |
 | [teng-lin/notebooklm-py](https://github.com/teng-lin/notebooklm-py) | `.` | `notebooklm-py` (root skill) | `third_party/teng-lin/notebooklm-py` |
+| [trycua/cua](https://github.com/trycua/cua) | `libs/cua-driver/rust/Skills/cua-driver` | `cua-driver` (complete cross-platform pack) | `third_party/trycua/cua` |
 
 For Locality, `extractor_file` is `apps/desktop/src-tauri/src/agent_guidance.rs`; `mount_path` controls the filesystem root rendered inside the generated skill.
 
