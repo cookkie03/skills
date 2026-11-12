@@ -170,14 +170,27 @@ def parse_skill(skill_file: Path) -> tuple[str, str, str]:
         try:
             metadata = yaml.safe_load(match.group(1)) or {}
         except yaml.YAMLError as exc:
-            # Upstream skill authors sometimes leave colons unquoted in plain
-            # description scalars. Recover that common formatting mistake
-            # without changing the upstream snapshot or weakening validation
-            # for the rest of the YAML document.
+            # Some upstream skills contain unquoted colons in description
+            # scalars. Quote only that scalar and retry; preserve strict YAML
+            # validation for every other field.
             repaired_lines = []
             repaired = False
             for line in match.group(1).splitlines():
-                field = re.match(r'^(\\s*description\\s*:\\s*)(.*)
+                field = re.match(r"^(\s*description\s*:\s*)(.*)$", line)
+                if field:
+                    value = field.group(2).strip()
+                    if value and value[0] not in "\"'|[{>&*!%@\`":
+                        line = field.group(1) + json.dumps(value, ensure_ascii=False)
+                        repaired = True
+                repaired_lines.append(line)
+            if repaired:
+                try:
+                    metadata = yaml.safe_load("\n".join(repaired_lines)) or {}
+                    print(f"WARNING: repaired description YAML in {skill_file}", file=sys.stderr)
+                except yaml.YAMLError:
+                    fail(f"Invalid YAML frontmatter in {skill_file}: {exc}")
+            else:
+                fail(f"Invalid YAML frontmatter in {skill_file}: {exc}")
         body = raw[match.end():]
     if not isinstance(metadata, dict):
         fail(f"Frontmatter in {skill_file} must be a YAML mapping.")
