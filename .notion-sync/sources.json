@@ -7,7 +7,9 @@
       "branch": "main",
       "include": [
         "skills/engineering",
-        "skills/productivity"
+        "skills/productivity",
+        "skills/in-progress",
+        "skills/misc"
       ],
       "source_path_prefix": "skills",
       "destination": "third_party/mattpocock/skills"
@@ -18,7 +20,7 @@
       "repo": "https://github.com/obra/superpowers.git",
       "branch": "main",
       "include": [
-        "skills/brainstorming"
+        "skills"
       ],
       "source_path_prefix": "skills",
       "destination": "third_party/obra/superpowers"
@@ -29,7 +31,7 @@
       "repo": "https://github.com/anthropics/skills.git",
       "branch": "main",
       "include": [
-        "skills/frontend-design"
+        "skills"
       ],
       "source_path_prefix": "skills",
       "destination": "third_party/anthropics/skills"
@@ -40,10 +42,7 @@
       "repo": "https://github.com/obsidianmd/obsidian-skills.git",
       "branch": "main",
       "include": [
-        "plugins/obsidian/skills/defuddle",
-        "plugins/obsidian/skills/json-canvas",
-        "plugins/obsidian/skills/obsidian-bases",
-        "plugins/obsidian/skills/obsidian-markdown"
+        "plugins/obsidian/skills"
       ],
       "source_path_prefix": "plugins/obsidian/skills",
       "destination": "third_party/kepano/obsidian-skills"
@@ -198,6 +197,62 @@
       ],
       "source_path_prefix": "skills",
       "destination": "third_party/github/awesome-copilot"
+    },
+    {
+      "id": "third_party:vercel-labs/agent-browser",
+      "label": "Vercel Agent Browser",
+      "repo": "https://github.com/vercel-labs/agent-browser.git",
+      "branch": "main",
+      "include": [
+        "skills/agent-browser"
+      ],
+      "source_path_prefix": "skills",
+      "destination": "third_party/vercel-labs/agent-browser"
+    },
+    {
+      "id": "third_party:vercel-labs/opensrc",
+      "label": "Vercel Open Source",
+      "repo": "https://github.com/vercel-labs/opensrc.git",
+      "branch": "main",
+      "include": [
+        "skills/opensrc"
+      ],
+      "source_path_prefix": "skills",
+      "destination": "third_party/vercel-labs/opensrc"
+    },
+    {
+      "id": "third_party:tasteskill/tasteskill",
+      "label": "TasteSkill",
+      "repo": "https://github.com/tasteskill/tasteskill.git",
+      "branch": "main",
+      "include": [
+        "skills"
+      ],
+      "source_path_prefix": "skills",
+      "destination": "third_party/tasteskill/tasteskill"
+    },
+    {
+      "id": "third_party:mvanhorn/cli-printing-press",
+      "label": "CLI Printing Press",
+      "repo": "https://github.com/mvanhorn/cli-printing-press.git",
+      "branch": "main",
+      "include": [
+        "skills"
+      ],
+      "source_path_prefix": "skills",
+      "destination": "third_party/mvanhorn/cli-printing-press"
+    },
+    {
+      "id": "third_party:teng-lin/notebooklm-py",
+      "label": "NotebookLM Python",
+      "repo": "https://github.com/teng-lin/notebooklm-py.git",
+      "branch": "main",
+      "include": [
+        "."
+      ],
+      "source_path_prefix": ".",
+      "root_skill_name": "notebooklm-py",
+      "destination": "third_party/teng-lin/notebooklm-py"
     }
   ]
 }
