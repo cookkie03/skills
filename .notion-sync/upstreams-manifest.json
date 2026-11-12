@@ -138,6 +138,18 @@
       "repo": "https://github.com/trycua/cua.git",
       "branch": "main",
       "destination": "third_party/trycua/cua"
+    },
+    {
+      "id": "third_party:vercel-labs/ui-agent-skills",
+      "repo": "https://github.com/vercel-labs/ui.git",
+      "branch": "main",
+      "destination": "third_party/vercel-labs/ui-agent-skills"
+    },
+    {
+      "id": "third_party:vercel-labs/ui-sdk",
+      "repo": "https://github.com/vercel-labs/ui.git",
+      "branch": "main",
+      "destination": "third_party/vercel-labs/ui-sdk"
     }
   ]
 }
