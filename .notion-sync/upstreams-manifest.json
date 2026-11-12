@@ -132,6 +132,12 @@
       "repo": "https://github.com/teng-lin/notebooklm-py.git",
       "branch": "main",
       "destination": "third_party/teng-lin/notebooklm-py"
+    },
+    {
+      "id": "third_party:trycua/cua",
+      "repo": "https://github.com/trycua/cua.git",
+      "branch": "main",
+      "destination": "third_party/trycua/cua"
     }
   ]
 }
