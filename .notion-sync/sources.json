@@ -12,10 +12,7 @@
         "skills/misc"
       ],
       "source_path_prefix": "skills",
-      "destination": "third_party/mattpocock/skills",
-      "exclude_skill_paths": [
-        "in-progress/software-factory/SKILL.md"
-      ]
+      "destination": "third_party/mattpocock/skills"
     },
     {
       "id": "third_party:obra/superpowers",
