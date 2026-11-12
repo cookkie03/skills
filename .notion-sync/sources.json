@@ -264,6 +264,28 @@
       ],
       "source_path_prefix": "libs/cua-driver/rust/Skills",
       "destination": "third_party/trycua/cua"
+    },
+    {
+      "id": "third_party:vercel-labs/ui-agent-skills",
+      "label": "Vercel UI",
+      "repo": "https://github.com/vercel-labs/ui.git",
+      "branch": "main",
+      "include": [
+        ".agents/skills"
+      ],
+      "source_path_prefix": ".agents/skills",
+      "destination": "third_party/vercel-labs/ui-agent-skills"
+    },
+    {
+      "id": "third_party:vercel-labs/ui-sdk",
+      "label": "Vercel UI",
+      "repo": "https://github.com/vercel-labs/ui.git",
+      "branch": "main",
+      "include": [
+        "packages/core/skills"
+      ],
+      "source_path_prefix": "packages/core/skills",
+      "destination": "third_party/vercel-labs/ui-sdk"
     }
   ]
 }
