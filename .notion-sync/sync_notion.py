@@ -170,16 +170,14 @@ def parse_skill(skill_file: Path) -> tuple[str, str, str]:
         try:
             metadata = yaml.safe_load(match.group(1)) or {}
         except yaml.YAMLError as exc:
-            # Some upstream skills contain unquoted colons in description
-            # scalars. Quote only that scalar and retry; preserve strict YAML
-            # validation for every other field.
+            # Recover common unquoted colons in upstream description scalars.
             repaired_lines = []
             repaired = False
             for line in match.group(1).splitlines():
                 field = re.match(r"^(\s*description\s*:\s*)(.*)$", line)
                 if field:
                     value = field.group(2).strip()
-                    if value and value[0] not in "\"'|[{>&*!%@\`":
+                    if value and not (value.startswith('"') or value.startswith("'") or value[0] in "|[{>&*!%@"):
                         line = field.group(1) + json.dumps(value, ensure_ascii=False)
                         repaired = True
                 repaired_lines.append(line)
