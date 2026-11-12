@@ -102,6 +102,36 @@
       "repo": "https://github.com/github/awesome-copilot.git",
       "branch": "main",
       "destination": "third_party/github/awesome-copilot"
+    },
+    {
+      "id": "third_party:vercel-labs/agent-browser",
+      "repo": "https://github.com/vercel-labs/agent-browser.git",
+      "branch": "main",
+      "destination": "third_party/vercel-labs/agent-browser"
+    },
+    {
+      "id": "third_party:vercel-labs/opensrc",
+      "repo": "https://github.com/vercel-labs/opensrc.git",
+      "branch": "main",
+      "destination": "third_party/vercel-labs/opensrc"
+    },
+    {
+      "id": "third_party:tasteskill/tasteskill",
+      "repo": "https://github.com/tasteskill/tasteskill.git",
+      "branch": "main",
+      "destination": "third_party/tasteskill/tasteskill"
+    },
+    {
+      "id": "third_party:mvanhorn/cli-printing-press",
+      "repo": "https://github.com/mvanhorn/cli-printing-press.git",
+      "branch": "main",
+      "destination": "third_party/mvanhorn/cli-printing-press"
+    },
+    {
+      "id": "third_party:teng-lin/notebooklm-py",
+      "repo": "https://github.com/teng-lin/notebooklm-py.git",
+      "branch": "main",
+      "destination": "third_party/teng-lin/notebooklm-py"
     }
   ]
 }
