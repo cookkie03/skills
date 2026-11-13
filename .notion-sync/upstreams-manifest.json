@@ -150,6 +150,12 @@
       "repo": "https://github.com/vercel-labs/ui.git",
       "branch": "main",
       "destination": "third_party/vercel-labs/ui-sdk"
+    },
+    {
+      "id": "third_party:addyosmani/agent-skills",
+      "repo": "https://github.com/addyosmani/agent-skills.git",
+      "branch": "main",
+      "destination": "third_party/addyosmani/agent-skills"
     }
   ]
 }
