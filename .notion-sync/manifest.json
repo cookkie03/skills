@@ -339,6 +339,13 @@
       "notion_last_edited_time": "2026-11-12T12:34:00.000Z",
       "repository_path": "third_party/mattpocock/skills/in-progress/setup-ts-deep-modules/SKILL.md"
     },
+    "github-skills:third_party:mattpocock/skills:software-factory": {
+      "page_id": "4172e441-b0e5-81a3-863b-c850bc0456e4",
+      "fingerprint": "c78cdcf1a601427e0b1d15550b147d64aa7ba16476b6a22b69ce1ad073a0e94c",
+      "files_hash": "491f0f69ad688d3877e0de41e5608fa68ae9cf23ffbb24d784514c83df11a46e",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
+      "repository_path": "third_party/mattpocock/skills/in-progress/software-factory/SKILL.md"
+    },
     "github-skills:third_party:mattpocock/skills:writing-beats": {
       "page_id": "4162e441-b0e5-8173-a10e-c2b3a81e6db0",
       "fingerprint": "5ac4b84f2af124ee7c08ec876e32b3bdd9bb4c33402e13dffa521f954a72eaae",
@@ -768,9 +775,9 @@
     },
     "github-skills:third_party:Graphify-Labs/graphify:graphify": {
       "page_id": "4152e441-b0e5-817e-9b4a-cb6d5333e37d",
-      "fingerprint": "b30ff69aa3d2de6be180e3f0887f773d1628eed4f0a5cc4579b7651eb7c762fc",
-      "files_hash": "909d15764203e28c9f84fc8e5abf01c6dea5bf79f00330aab2a8096022c689c0",
-      "notion_last_edited_time": "2026-11-11T21:26:00.000Z",
+      "fingerprint": "a7257be031ef42fd662a0dd8a5ff4370e4347278d7c1bdd37e854be76b73b6d9",
+      "files_hash": "2fcdad765bc77702455d974ac4c0f8ec2effb69593a673c61ba413f85b4452aa",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
       "repository_path": "third_party/Graphify-Labs/graphify/graphify/skill.md"
     },
     "github-skills:third_party:codeflash-ai/locality:locality": {
@@ -803,9 +810,9 @@
     },
     "github-skills:third_party:pbakaus/impeccable:impeccable": {
       "page_id": "4152e441-b0e5-819f-af15-d2a0e43c2450",
-      "fingerprint": "3cd2a451696f3680a7b4be62ecd9b73860b3237ddbc42fb59f9cfde3722ff247",
-      "files_hash": "decf47b486c6f0fcbfe8627db2d003d9cc2d8acfef8c991e3a0c4d998d751044",
-      "notion_last_edited_time": "2026-11-11T15:54:00.000Z",
+      "fingerprint": "23c94fcbf6d7737cb5e9aeddc718cfa63e737fd48983b8b4b63262980e0ae2ff",
+      "files_hash": "1a7f4dcdee3432b1f37fe44420c54ce926f8827c1674dfcc2319039a2f46022a",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
       "repository_path": "third_party/pbakaus/impeccable/impeccable/SKILL.md"
     },
     "github-skills:third_party:github/awesome-copilot:readme-blueprint-generator": {
@@ -817,9 +824,9 @@
     },
     "github-skills:third_party:vercel-labs/agent-browser:agent-browser": {
       "page_id": "4162e441-b0e5-8130-8273-d905cbf5deec",
-      "fingerprint": "2d6984d0210d5ecdc848a6ef10feacaca3edfd38d304106851a2476fb627a882",
+      "fingerprint": "db35c8bf61b46999282cb15217167a3c5068ba6c9be681e3c85773020bf19318",
       "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "notion_last_edited_time": "2026-11-12T12:37:00.000Z",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
       "repository_path": "third_party/vercel-labs/agent-browser/agent-browser/SKILL.md"
     },
     "github-skills:third_party:vercel-labs/opensrc:opensrc": {
@@ -915,23 +922,23 @@
     },
     "github-skills:third_party:mvanhorn/cli-printing-press:printing-press": {
       "page_id": "4162e441-b0e5-811a-a0af-cd4b7b1cb177",
-      "fingerprint": "944e219ec0f539f9de5241c39a9d5736f31e0bed9c9ea4ab9dc597391269c6d0",
-      "files_hash": "749a1843026c5317499cd82f54be6c4baf3ddb44118beee82a05637afe3bb38c",
-      "notion_last_edited_time": "2026-11-12T12:38:00.000Z",
+      "fingerprint": "d76d002f14ddd4d9d13276820fbfef0b9a90d37ac775d07cc04c8f2023e87edf",
+      "files_hash": "ed0d7073be34b31b7f1ea66e39526d50d90019e752bf41bba441aceb6b4018c3",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
       "repository_path": "third_party/mvanhorn/cli-printing-press/printing-press/SKILL.md"
     },
     "github-skills:third_party:mvanhorn/cli-printing-press:printing-press-amend": {
       "page_id": "4162e441-b0e5-813c-9d7c-e3d309e7be17",
-      "fingerprint": "afbe840d5f0e16c87539ebcf15b1e0cec863a5204326c6717a54cc6f39a1aeb5",
+      "fingerprint": "db2ca44b6cf5dd881e787998f9a5b58e9d19da54eb629ae4d405e650f7b28d6e",
       "files_hash": "359dbacfed571a493ecc989f3bb3334cc20a2803d46ca2ceb60f2947f9ec7300",
-      "notion_last_edited_time": "2026-11-12T12:38:00.000Z",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
       "repository_path": "third_party/mvanhorn/cli-printing-press/printing-press-amend/SKILL.md"
     },
     "github-skills:third_party:mvanhorn/cli-printing-press:printing-press-import": {
       "page_id": "4162e441-b0e5-81e4-88d7-f9ec59cbecbf",
-      "fingerprint": "1a81e910dc1f544619246463b9388abaa01b21494882ac9b9359babf2270d195",
+      "fingerprint": "03b6b0c4abe9f408f0c330654a5c98353ac39ed4f79f43c9b3bfc8abf2554dac",
       "files_hash": "e0ac38e54ef157da9a309b8160a6eb0a4abcd95a706a5677a00056f5d9e23be1",
-      "notion_last_edited_time": "2026-11-12T12:38:00.000Z",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
       "repository_path": "third_party/mvanhorn/cli-printing-press/printing-press-import/SKILL.md"
     },
     "github-skills:third_party:mvanhorn/cli-printing-press:printing-press-output-review": {
@@ -943,16 +950,16 @@
     },
     "github-skills:third_party:mvanhorn/cli-printing-press:printing-press-polish": {
       "page_id": "4162e441-b0e5-8176-8e5d-e0a8c3b2b3b3",
-      "fingerprint": "2041a09f14a073a062c325789b65ba4dc5dc24b6b5a16fef4dffb6385681825f",
+      "fingerprint": "11bff0385cbe4baff46b111fba74ed4071cc87315e6ef10b03ce898becacf4ab",
       "files_hash": "e646ed2843b758697bb98f5a00a1f8003f4e1233e4f115d11b9949cae26e2f40",
-      "notion_last_edited_time": "2026-11-12T12:38:00.000Z",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
       "repository_path": "third_party/mvanhorn/cli-printing-press/printing-press-polish/SKILL.md"
     },
     "github-skills:third_party:mvanhorn/cli-printing-press:printing-press-publish": {
       "page_id": "4162e441-b0e5-8164-a6b7-faef208d303d",
-      "fingerprint": "3dcf6c23c4b9cd2285ba2cbcb7f2fa4c70c7e501d51f1e5a2cad90737bc89d69",
+      "fingerprint": "b824af44112c1f19bd31c0b6bc5cecc44d6398264526e10e2ee10f9edac8fdb4",
       "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "notion_last_edited_time": "2026-11-12T12:38:00.000Z",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
       "repository_path": "third_party/mvanhorn/cli-printing-press/printing-press-publish/SKILL.md"
     },
     "github-skills:third_party:mvanhorn/cli-printing-press:printing-press-reprint": {
@@ -971,9 +978,9 @@
     },
     "github-skills:third_party:mvanhorn/cli-printing-press:printing-press-score": {
       "page_id": "4162e441-b0e5-8133-b4e4-d8bfe3f4e623",
-      "fingerprint": "a32248640d10a757edfbb8836013b7d48d6a24ee8bb9960efb924ebada4b4ca5",
+      "fingerprint": "d7029b36e168421781fdcb4bf938128d7035ad9ba2fc7336ba633bc2c7ba1f90",
       "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "notion_last_edited_time": "2026-11-12T12:38:00.000Z",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
       "repository_path": "third_party/mvanhorn/cli-printing-press/printing-press-score/SKILL.md"
     },
     "github-skills:third_party:teng-lin/notebooklm-py:notebooklm-py": {
@@ -985,11 +992,221 @@
     },
     "github-skills:third_party:trycua/cua:cua-driver": {
       "page_id": "4162e441-b0e5-810d-9e0f-c045696a4607",
-      "fingerprint": "c89f43d8c401e047e28a6fcef4ba199ee5ab6e80c4a58fdc9d9808c4f339dc35",
-      "files_hash": "1282fa1b643ccac5cadbb08b32eea587d5c5358fb38f13e5664a31534e09c576",
-      "notion_last_edited_time": "2026-11-12T12:39:00.000Z",
+      "fingerprint": "ed8a422f68b95df45e2f59c09bf00da9b117758dd1e35289da96f1efba87c573",
+      "files_hash": "638a91423a1e03009848ca1aeeb9b5c872b2b8801d60e5834eca80157acffe84",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
       "repository_path": "third_party/trycua/cua/cua-driver/SKILL.md"
+    },
+    "github-skills:third_party:vercel-labs/ui-agent-skills:ui-sdk-expert-review": {
+      "page_id": "4172e441-b0e5-815a-b20c-caf2092c3240",
+      "fingerprint": "3d1c5af4397fd3af0cb65ed1c5672bfcb924594c55aa2a6493af2e4e0e037f5d",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
+      "repository_path": "third_party/vercel-labs/ui-agent-skills/ui-sdk-expert-review/SKILL.md"
+    },
+    "github-skills:third_party:vercel-labs/ui-agent-skills:ui-sdk-unslop": {
+      "page_id": "4172e441-b0e5-819e-bed1-d808839e8f97",
+      "fingerprint": "d047730801029e34654ec82908e67598344858b4a56519dc9a2e77650668f58d",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
+      "repository_path": "third_party/vercel-labs/ui-agent-skills/ui-sdk-unslop/SKILL.md"
+    },
+    "github-skills:third_party:vercel-labs/ui-agent-skills:ui-sdk-write-code": {
+      "page_id": "4172e441-b0e5-8143-8665-d71bf53e0180",
+      "fingerprint": "798712f2ae7157637faffead668d832fd8c5668a7d75b0c862693ea7826f504a",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
+      "repository_path": "third_party/vercel-labs/ui-agent-skills/ui-sdk-write-code/SKILL.md"
+    },
+    "github-skills:third_party:vercel-labs/ui-agent-skills:ui-sdk-write-docs": {
+      "page_id": "4172e441-b0e5-81c9-9c9b-ef7fd4542ed0",
+      "fingerprint": "2bee833c5ffd31a22c8dc107e17a16079ebb37c0567d5dbe8077ea16f6a2c83f",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
+      "repository_path": "third_party/vercel-labs/ui-agent-skills/ui-sdk-write-docs/SKILL.md"
+    },
+    "github-skills:third_party:vercel-labs/ui-sdk:ui-sdk": {
+      "page_id": "4172e441-b0e5-813c-a7e0-e13d0c1c60b3",
+      "fingerprint": "36683857a216290fe42c08512177cb9a7d7e8d8950f3eb7473baee487e6b1b59",
+      "files_hash": "6f1b0fce454fc2c80339df8b20fe6ded7337fea7ec6f4646a72d0dd10e19eec0",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
+      "repository_path": "third_party/vercel-labs/ui-sdk/ui-sdk/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:api-and-interface-design": {
+      "page_id": "4172e441-b0e5-81e4-975f-d1192226a12a",
+      "fingerprint": "fd08a6585b71227558e182475f4968cfcc6be91c5838b23f2fde312e3f58a8ba",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/api-and-interface-design/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:browser-testing-with-devtools": {
+      "page_id": "4172e441-b0e5-816e-98c4-cc62e6761a85",
+      "fingerprint": "18986a4a6d2b0222f9a751d6adeb23fa09c7ee9b2e28f7dbc19e8150a2d05d26",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/browser-testing-with-devtools/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:ci-cd-and-automation": {
+      "page_id": "4172e441-b0e5-8184-9b58-ca1ac2338adc",
+      "fingerprint": "29afc1ed3ea493395eecc575eb704c733f369f96273392294af31cd6e66361c6",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/ci-cd-and-automation/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:code-review-and-quality": {
+      "page_id": "4172e441-b0e5-8195-85ac-f761c73462a6",
+      "fingerprint": "98410fef14c974b490631b7f20b6108e3b67a2806f86fb8e9f4d60ee5221e2b2",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/code-review-and-quality/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:code-simplification": {
+      "page_id": "4172e441-b0e5-817e-b0db-e3c0005a16b7",
+      "fingerprint": "3e92b8085230668ceb031b264bdf40fd89f4a78c83ec49d5a62b356ef301e206",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/code-simplification/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:constraint-driven-development": {
+      "page_id": "4172e441-b0e5-81a6-ae53-f0e962464376",
+      "fingerprint": "954cfff91dd072fb4e6b9b16a504cad43bb0545891662681a7f194bd3ef00e2d",
+      "files_hash": "48c8160a23a5a73071545c84ed57d9ba3a89a6d0106d19293306c19f3cd002e1",
+      "notion_last_edited_time": "2026-11-13T09:54:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/constraint-driven-development/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:context-engineering": {
+      "page_id": "4172e441-b0e5-813f-8538-ef1218df74a6",
+      "fingerprint": "1870c6387b9d1ad2a7c3805e2fb69194f1ee4f8aac3bd777b4596589f7d524d8",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/context-engineering/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:debugging-and-error-recovery": {
+      "page_id": "4172e441-b0e5-81e5-b7c1-f51b56488f6f",
+      "fingerprint": "f8d6308ddd833f47276d289e88c48698aeb4390d218ee3db6454d2e349fdcf96",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/debugging-and-error-recovery/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:deprecation-and-migration": {
+      "page_id": "4172e441-b0e5-8140-8ba5-f4f17d944a67",
+      "fingerprint": "58bfe365b4e007108afccc08a6001a134926342ddbb40c6b8321b342a873ded3",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/deprecation-and-migration/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:documentation-and-adrs": {
+      "page_id": "4172e441-b0e5-8114-a72b-e9a8446e8431",
+      "fingerprint": "69c36826b9ba6a3ff67253f32ef86ec99f3361d045e8442b156f74fe0896c705",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/documentation-and-adrs/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:doubt-driven-development": {
+      "page_id": "4172e441-b0e5-81dd-b47a-eeec9a98b6ed",
+      "fingerprint": "82222b815c63fba2f75fb383647b9741572bb04ddda1ab42e0020960bd83438a",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/doubt-driven-development/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:frontend-ui-engineering": {
+      "page_id": "4172e441-b0e5-815d-820a-c69dff9a23fd",
+      "fingerprint": "0cc59ae66989054bfde26b270193c6cb58f40bb986519c11d5d4d9866290d1d1",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/frontend-ui-engineering/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:git-workflow-and-versioning": {
+      "page_id": "4172e441-b0e5-812f-b216-c3345fe0c0d3",
+      "fingerprint": "c439215a26f747ff6b6f7a7dc45ccee85286bd2be06a5f74c05ec506bef69aba",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/git-workflow-and-versioning/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:idea-refine": {
+      "page_id": "4172e441-b0e5-8188-8d5b-e4f29f49cc96",
+      "fingerprint": "2dc9457c736d950e726817176908d9c1aa062fd506c5985be3bc9461efe8ed8f",
+      "files_hash": "fb7c58b5bd58aca80846e576abe7cfb8ec943fb92f80df6415c9d240574ce5c8",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/idea-refine/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:incremental-implementation": {
+      "page_id": "4172e441-b0e5-812e-bf01-e014d3ba9951",
+      "fingerprint": "d3abed4f8c44f64cd0721dbc71993944d2c7b011d93a3fc5bf700f94b47ee31a",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/incremental-implementation/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:interview-me": {
+      "page_id": "4172e441-b0e5-8104-904e-d00a55d193dd",
+      "fingerprint": "ea9dfbc7de2c9140ba2f1e9926378e918259668b5fc0eb391db66a7f1eeb5273",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/interview-me/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:observability-and-instrumentation": {
+      "page_id": "4172e441-b0e5-8134-a818-df071eb4db59",
+      "fingerprint": "9c5833bec90e8432a8e67287f0e606ca97efb512e3bc03360a9c8861c7017094",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/observability-and-instrumentation/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:performance-optimization": {
+      "page_id": "4172e441-b0e5-818b-81e5-ee05375426c3",
+      "fingerprint": "7389c1359f2d68e730d31ea39d40021dde330d10aeade268466b883b0672fb8d",
+      "files_hash": "cff1e890885a2abef2c43ca75e6d154f37baf80bcb0cf69b39135e3687a50144",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/performance-optimization/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:planning-and-task-breakdown": {
+      "page_id": "4172e441-b0e5-817e-a524-d1fd3b5fca17",
+      "fingerprint": "29de2a3b3d86d072da033a0f92238f4b8405bb6d5f0767632432c16c8af7cb7b",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/planning-and-task-breakdown/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:security-and-hardening": {
+      "page_id": "4172e441-b0e5-8127-b2c8-fbd55ca3fab6",
+      "fingerprint": "e59d0a8ae8093002b1eb892eaf49da9fefee4755dfd7960a428b9e47364fa1cb",
+      "files_hash": "3c90bdfd7aac217bcd951ecd203fd0597c319a74d8c8e79130068179a92cc970",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/security-and-hardening/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:shipping-and-launch": {
+      "page_id": "4172e441-b0e5-81be-8b65-c4a9eb044bea",
+      "fingerprint": "11bc53baffda0c7b4401a3b2cddf626b2447ada7fbf248988e9a560dd0838384",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/shipping-and-launch/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:source-driven-development": {
+      "page_id": "4172e441-b0e5-810d-8616-d28e7bc671de",
+      "fingerprint": "b4a2754d3aae73bf8a50f78f61ae1aa89e70185121953a0be4a9763f74780daa",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/source-driven-development/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:spec-driven-development": {
+      "page_id": "4172e441-b0e5-814d-84c7-f716fa9548f8",
+      "fingerprint": "55e9510cc9476848a32ebbd7cc535b65684e3af9d21ab636da4fdf73cd0516c5",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/spec-driven-development/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:test-driven-development": {
+      "page_id": "4172e441-b0e5-81a3-9163-d854ab9af9f7",
+      "fingerprint": "ade4f922cfe4d78d1b0b63257844fa0774d3298e7b4d43b41524f5a53113c24e",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:55:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/test-driven-development/SKILL.md"
+    },
+    "github-skills:third_party:addyosmani/agent-skills:using-agent-skills": {
+      "page_id": "4172e441-b0e5-8177-bec4-c556c0060421",
+      "fingerprint": "38c9aeb0e649a7b215a51e654126b8cec2b59cc65d84175ed65f190cf411a539",
+      "files_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notion_last_edited_time": "2026-11-13T09:56:00.000Z",
+      "repository_path": "third_party/addyosmani/agent-skills/using-agent-skills/SKILL.md"
     }
   },
-  "last_sync_utc": "2026-11-12T12:39:35Z"
+  "last_sync_utc": "2026-11-13T09:56:02Z"
 }
