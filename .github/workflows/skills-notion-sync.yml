@@ -81,6 +81,23 @@ jobs:
         if: steps.upstream_refresh.outcome == 'failure'
         run: echo "::warning::Upstream refresh failed; restored committed third_party snapshots and continuing with Notion sync."
 
+      - name: Validate sync parser and skill metadata
+        run: |
+          python -m py_compile .notion-sync/sync_notion.py .notion-sync/sync_upstreams.py
+          python - <<'PY'
+          import runpy
+          from pathlib import Path
+
+          parse_skill = runpy.run_path(".notion-sync/sync_notion.py")["parse_skill"]
+          files = sorted(
+              path for path in Path(".").rglob("SKILL.md")
+              if ".git" not in path.parts and ".venv" not in path.parts
+          )
+          for skill_file in files:
+              parse_skill(skill_file)
+          print(f"Validated {len(files)} SKILL.md frontmatter files.")
+          PY
+
       - name: Mirror repository skills into Notion
         run: python .notion-sync/sync_notion.py
 
