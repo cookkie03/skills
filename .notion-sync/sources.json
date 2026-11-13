@@ -286,6 +286,17 @@
       ],
       "source_path_prefix": "packages/core/skills",
       "destination": "third_party/vercel-labs/ui-sdk"
+    },
+    {
+      "id": "third_party:addyosmani/agent-skills",
+      "label": "Addy Osmani Agent Skills",
+      "repo": "https://github.com/addyosmani/agent-skills.git",
+      "branch": "main",
+      "include": [
+        "skills"
+      ],
+      "source_path_prefix": "skills",
+      "destination": "third_party/addyosmani/agent-skills"
     }
   ]
 }
