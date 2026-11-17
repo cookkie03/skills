@@ -3,6 +3,10 @@
   "paths": [
     "./Education Workflow",
     "./Packages",
-    "./third_party"
+    "./third_party",
+    "./third_party/mattpocock/skills/engineering",
+    "./third_party/mattpocock/skills/in-progress",
+    "./third_party/mattpocock/skills/misc",
+    "./third_party/mattpocock/skills/productivity"
   ]
 }
