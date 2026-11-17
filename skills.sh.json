@@ -1,0 +1,8 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "paths": [
+    "./Education Workflow",
+    "./Packages",
+    "./third_party"
+  ]
+}
